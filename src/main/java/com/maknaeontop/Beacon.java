@@ -6,6 +6,9 @@ public class Beacon implements Comparable<Beacon>{
     private byte[] major;
     private byte[] minor;
     private int txPower;
+    private float x;
+    private float y;
+
     private float distance;
 
     public Beacon(String uuid, int rssi, byte[] major, byte[] minor, int txPower){
@@ -34,6 +37,14 @@ public class Beacon implements Comparable<Beacon>{
 
     public int getTxPower() {
         return txPower;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 
     public float getDistance() {
