@@ -1,19 +1,33 @@
 package com.maknaeontop.location;
 
+import com.maknaeontop.Beacon;
+
+import java.util.List;
+
 public class Distance {
-    public Distance getInstance(){
+    private float PATH_LOSS_PARAMETER = 2.5f;
+
+    public static Distance getInstance(){
         return Holder.instance;
     }
 
     /**
      * Calculate the distance with Friis formula
-     * @param rssi                  the received RSSI from beacon
-     * @param txPower               the received TX-Power from beacon
-     * @param pathLossParameter     the Pre-defined path loss parameter
+     * @param beacon
+     * @return
      */
-    public float calculateDistance(int rssi, int txPower, float pathLossParameter){
+    public float calculateDistance(Beacon beacon){
+        int rssi = beacon.getRssi();
+        int txPower = beacon.getTxPower();
         int pathLoss = calculatePathLoss(rssi, txPower);
-        return (float) Math.pow(10,pathLoss/10*pathLossParameter);
+
+        return (float) Math.pow(10,pathLoss/10*PATH_LOSS_PARAMETER);
+    }
+
+    public void saveDistance(List<Beacon> beaconList){
+        for(Beacon beacon : beaconList){
+            beacon.setDistance(calculateDistance(beacon));
+        }
     }
 
     /**

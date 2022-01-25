@@ -20,8 +20,10 @@ public class ServerController {
     }
 
     @PostMapping("/test")
-    public List<HashMap<String, Object>> getUsers(@RequestBody Beacon[] beaconList){
-        String userLocation = location.findLocation();
+    public List<HashMap<String, Object>> getUsers(@RequestBody List<Beacon> beaconList){
+        float[] userLocation = location.findUserLocation(beaconList);
+        // TODO: save user location data on database
+        // TODO: return the map contains my location and others
         return userService.getUsers();
     }
 }
