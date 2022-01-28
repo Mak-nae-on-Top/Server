@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maknaeontop.communication.mapper.RoomMapper">
+    <select id="selectRoom" resultType="hashMap">
+        SELECT * from room;
+    </select>
+
+    <select id="selectLocationByUuidNRoomName" resultType="hashMap">
+        SELECT x,y,z FROM room WHERE (uuid = #{uuid} and room_name = #{roomName});
+    </select>
+    
+    <insert id="insertRoom">
+        INSERT INTO room VALUES #({uuid}, #{roomName}, #{x}, #{y}, #{z});
+    </insert>
+</mapper>

@@ -10,4 +10,11 @@ import java.util.List;
 @Repository
 public interface UserMapper {
     List<HashMap<String, Object>> selectUser();
+
+    List<HashMap<String, Object>> selectPwUsingId(String id);
+
+    List<HashMap<String, Object>> addUser(String id, String pw, String authority);
+
+    List<HashMap<String, Object>> selectIdUsingId(String id);
+
 }
