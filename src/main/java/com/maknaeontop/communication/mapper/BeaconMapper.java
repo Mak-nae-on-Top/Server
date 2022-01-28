@@ -15,5 +15,5 @@ public interface BeaconMapper {
 
     HashMap<String, Object> getLocation(String uuid, byte[] major, byte[] minor);
 
-    List<HashMap<String, Object>> addBeacon(String uuid, String major, String minor, float x, float y, float z);
+    List<HashMap<String, Object>> addBeacon(String uuid, byte[] major, byte[] minor, float x, float y, float z);
 }
