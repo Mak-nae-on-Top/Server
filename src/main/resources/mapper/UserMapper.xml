@@ -6,4 +6,16 @@
     <select id="selectUser" resultType="hashMap">
         SELECT * from user;
     </select>
+
+    <select id="selectPwUsingId" resultType="hashMap">
+        SELECT User_pw FROM user WHERE (User_id = #{id});
+    </select>
+
+    <select id="addUser" resultType="hashMap">
+        INSERT INTO user (User_id, User_pw, Authority) VALUES (#{id}, #{pw}, #{authority});
+    </select>
+
+    <select id="selectIdUsingId" resultType="hashMap">
+        SELECT User_id FROM user WHERE (User_id = #{id});
+    </select>
 </mapper>
