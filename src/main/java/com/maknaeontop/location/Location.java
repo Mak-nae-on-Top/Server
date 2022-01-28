@@ -14,7 +14,7 @@ public class Location {
     }
 
     public float[] findUserLocation(List<Beacon> beaconList){
-        distance.saveDistance(beaconList);
+        // distance.saveDistance(beaconList);
         Collections.sort(beaconList);
         return trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
     }
