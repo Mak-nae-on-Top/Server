@@ -3,8 +3,7 @@ package com.maknaeontop.communication;
 import com.maknaeontop.Beacon;
 import com.maknaeontop.User;
 import com.maknaeontop.communication.mapper.UserMapper;
-import com.maknaeontop.communication.sevice.BeaconService;
-import com.maknaeontop.communication.sevice.UserService;
+import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,15 +17,23 @@ import java.util.List;
 public class ServerController {
     private UserService userService;
     private BeaconService beaconService;
+    private PopulationService populationService;
+    private RoomService roomService;
+    private BuildingService buildingService;
     private Location location;
 
+    // Constructor
     public ServerController(UserService userService, BeaconService beaconService){
         this.userService = userService;
         this.beaconService = beaconService;
     }
 
     @PostMapping("/app/location")
-    public HashMap<String, Object> estimateLocation(@RequestBody List<Beacon> beaconList){
+    public float[] estimateLocation(@RequestBody List<Beacon> beaconList){
+        // TODO: get user id and uuid
+        String id = "";
+        String uuid = beaconList.get(0).getUuid();
+
         // load location using UUID, major and minor
         for(Beacon beacon : beaconList){
             HashMap<String, Object> location = beaconService.getLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
@@ -35,21 +42,25 @@ public class ServerController {
         // find user location
         float[] userLocation = location.findUserLocation(beaconList);
 
-        // TODO: save user location data on database
-        // TODO: return the user location list of the building
-        return null;
+        // save user location on DB
+        populationService.insertUserLocation(uuid, id, userLocation[0], userLocation[1], userLocation[2]);
+
+        // return the user location list of the building
+        return userLocation;
     }
 
     @PostMapping("/app/manager/saveMap")
     public boolean saveMap(@RequestBody Object obj){
-        // TODO: save the map on the storage
+        // TODO: convert to map and save the map on the storage
         return false;
     }
 
     @PostMapping("/app/manager/enterBeaconLocation")
     public boolean enterBeaconLocation(@RequestBody List<Beacon> beaconList){
-        // TODO: save the beacon location on database
-        return false;
+        for(Beacon beacon : beaconList){
+            beaconService.addBeacon(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), beacon.getZ());
+        }
+        return true;
     }
 
     @PostMapping("/app/login")
@@ -64,11 +75,13 @@ public class ServerController {
 
     @PostMapping("/app/event")
     private String event(String msg){
+        // TODO: send message to application
         return msg;
     }
 
     @PostMapping("/fireAlarm")
     public String communicateWithFireAlarm(@RequestBody String msg){
-        return event(msg);
+        // TODO: send message to application
+        return null;
     }
 }
