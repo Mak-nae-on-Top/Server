@@ -23,11 +23,11 @@ public class BeaconService {
         return beaconMapper.selectBeaconsUsingUUID(uuid);
     }
 
-    public HashMap<String, Object> getLocation(String uuid, byte[] major, byte[] minor){
+    public HashMap<String, Object> getLocation(String uuid, String major, String minor){
         return beaconMapper.getLocation(uuid, major, minor);
     }
 
-    public List<HashMap<String, Object>> addBeacon(String uuid, byte[] major, byte[] minor, float x, float y, float z){
+    public List<HashMap<String, Object>> addBeacon(String uuid, String major, String minor, float x, float y, float z){
         return beaconMapper.addBeacon(uuid, major, minor, x, y, z);
     }
 }

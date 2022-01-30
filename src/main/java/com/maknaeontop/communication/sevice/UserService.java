@@ -29,7 +29,7 @@ public class UserService {
         String pw = user.getPw();
         String authority = user.getAuthority();
 
-        if(selectIdUsingId(id).equals("")){
+        if(countSameId(id) == 0){
             userMapper.addUser(id, pw, authority);
             return true;
         }
@@ -37,10 +37,10 @@ public class UserService {
     }
 
     private String selectPwUsingId(String id){
-        return userMapper.selectPwUsingId(id).get(0).get("User_pw").toString();
+        return userMapper.selectPwUsingId(id);
     }
 
-    private String selectIdUsingId(String id){
-        return userMapper.selectIdUsingId(id).get(0).get("User_id").toString();
+    private int countSameId(String id){
+        return userMapper.countSameId(id);
     }
 }

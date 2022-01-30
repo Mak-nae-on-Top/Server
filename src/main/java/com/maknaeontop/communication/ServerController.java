@@ -6,10 +6,14 @@ import com.maknaeontop.communication.mapper.UserMapper;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.net.ssl.HandshakeCompletedEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,18 +24,19 @@ public class ServerController {
     private PopulationService populationService;
     private RoomService roomService;
     private BuildingService buildingService;
-    private Location location;
+    private Location location = Location.getInstance();
 
     // Constructor
-    public ServerController(UserService userService, BeaconService beaconService){
+    public ServerController(UserService userService, BeaconService beaconService, PopulationService populationService){
         this.userService = userService;
         this.beaconService = beaconService;
+        this.populationService = populationService;
     }
 
     @PostMapping("/app/location")
-    public float[] estimateLocation(@RequestBody List<Beacon> beaconList){
-        // TODO: get user id and uuid
-        String id = "";
+    public float[] estimateLocation(@RequestBody List<Beacon> beaconList, HttpSession session){
+        // TODO: change 2D to 3D
+        String id = String.valueOf(session.getAttribute("id"));
         String uuid = beaconList.get(0).getUuid();
 
         // load location using UUID, major and minor
@@ -43,10 +48,16 @@ public class ServerController {
         float[] userLocation = location.findUserLocation(beaconList);
 
         // save user location on DB
-        populationService.insertUserLocation(uuid, id, userLocation[0], userLocation[1], userLocation[2]);
+        populationService.insertUserLocation(id, uuid, userLocation[0], userLocation[1], 12.01f/* userLocation[2]*/);
 
         // return the user location list of the building
         return userLocation;
+    }
+
+    @PostMapping("/app/loadMap")
+    public String loadMap(@RequestBody Object obj){
+        // TODO: load and return map
+        return "";
     }
 
     @PostMapping("/app/manager/saveMap")
@@ -64,8 +75,19 @@ public class ServerController {
     }
 
     @PostMapping("/app/login")
-    public boolean login(@RequestBody User user){
-        return userService.validateUser(user);
+    public boolean login(HttpSession session, @RequestBody User user){
+        if( userService.validateUser(user)){
+             session.setAttribute("id", user.getId());
+             return true;
+        }
+        return false;
+    }
+
+    @PostMapping("/app/logout")
+    public boolean logout(HttpSession session, @RequestBody User user){
+        session.setAttribute("id", null);
+        return true;
+
     }
 
     @PostMapping("/app/join")

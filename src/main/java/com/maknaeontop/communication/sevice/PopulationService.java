@@ -26,7 +26,7 @@ public class PopulationService {
         return populationMapper.selectLocationById(id);
     }
 
-    public boolean insertUserLocation(String uuid, String id, float x, float y, float z){
-        return populationMapper.insertUserLocation();
+    public boolean insertUserLocation(String id, String uuid, float x, float y, float z){
+        return populationMapper.insertUserLocation(id, uuid, x, y, z);
     }
 }

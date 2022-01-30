@@ -11,7 +11,7 @@
         SELECT name from building WHERE uuid = #{uuid};
     </select>
 
-    <select id="selectManagerByUuid" resultType="Sting[]">
+    <select id="selectManagerByUuid" resultType="String">
         SELECT manager from building WHERE uuid = #{uuid};
     </select>
 
