@@ -8,14 +8,14 @@
     </select>
 
     <select id="selectPwUsingId" resultType="String">
-        SELECT User_pw FROM user WHERE (User_id = #{id});
+        SELECT pw FROM user WHERE (id = #{id});
     </select>
 
     <insert id="addUser">
-        INSERT INTO user (User_id, User_pw, Authority) VALUES (#{id}, #{pw}, #{authority});
+        INSERT INTO user (id, password, name) VALUES (#{id}, #{pw}, #{name});
     </insert>
 
     <select id="countSameId" resultType="int">
-        SELECT COUNT(*) FROM user WHERE (User_id = #{id});
+        SELECT COUNT(*) FROM user WHERE (id = #{id});
     </select>
 </mapper>
