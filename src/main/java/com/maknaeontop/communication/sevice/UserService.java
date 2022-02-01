@@ -27,10 +27,10 @@ public class UserService {
     public boolean addUser(User user){
         String id = user.getId();
         String pw = user.getPw();
-        String authority = user.getName();
+        String name = user.getName();
 
         if(countSameId(id) == 0){
-            userMapper.addUser(id, pw, authority);
+            userMapper.addUser(id, pw, name);
             return true;
         }
         return false;
