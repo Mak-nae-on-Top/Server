@@ -1,4 +1,4 @@
-package com.maknaeontop;
+package com.maknaeontop.dto;
 
 public class Beacon implements Comparable<Beacon>{
     private String uuid;

@@ -1,6 +1,6 @@
 package com.maknaeontop.communication.sevice;
 
-import com.maknaeontop.User;
+import com.maknaeontop.dto.User;
 import com.maknaeontop.communication.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
