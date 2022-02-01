@@ -13,7 +13,7 @@ public interface UserMapper {
 
     String selectPwUsingId(String id);
 
-    int addUser(String id, String pw, String authority);
+    int addUser(String id, String pw, String name);
 
     int countSameId(String id);
 
