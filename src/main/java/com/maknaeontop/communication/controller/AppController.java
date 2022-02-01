@@ -130,7 +130,10 @@ public class AppController {
 
     @PostMapping("/join")
     public boolean join(@RequestBody User user){
-        return userService.addUser(user);
+        if(user.getPw().equals(user.getPw2())){
+            return userService.addUser(user);
+        }
+        return false;
     }
 
     @PostMapping("/event")
