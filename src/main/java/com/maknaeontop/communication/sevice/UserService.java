@@ -27,7 +27,7 @@ public class UserService {
     public boolean addUser(User user){
         String id = user.getId();
         String pw = user.getPw();
-        String authority = user.getAuthority();
+        String authority = user.getName();
 
         if(countSameId(id) == 0){
             userMapper.addUser(id, pw, authority);
