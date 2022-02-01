@@ -2,6 +2,7 @@ package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.BeaconMapper;
 import com.maknaeontop.communication.mapper.UserMapper;
+import com.maknaeontop.dto.Beacon;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
