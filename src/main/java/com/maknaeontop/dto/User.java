@@ -3,7 +3,7 @@ package com.maknaeontop.dto;
 public class User {
     private String id;
     private String pw;
-    private String authority;
+    private String name;
 
     public String getId() {
         return id;
@@ -13,7 +13,7 @@ public class User {
         return pw;
     }
 
-    public String getAuthority() {
-        return authority;
+    public String getName() {
+        return name;
     }
 }

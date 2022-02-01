@@ -1,6 +1,7 @@
 package com.maknaeontop.communication.controller;
 
 import com.maknaeontop.dto.Beacon;
+import com.maknaeontop.dto.Device;
 import com.maknaeontop.dto.Room;
 import com.maknaeontop.dto.User;
 import com.maknaeontop.communication.sevice.*;
@@ -42,7 +43,7 @@ public class AppController {
     @PostMapping("/location")
     public float[] estimateLocation(@RequestBody List<Beacon> beaconList, HttpSession session){
         // TODO: change 2D to 3D
-        String id = String.valueOf(session.getAttribute("id"));
+        String id = String.valueOf(session.getAttribute("device"));
         String uuid = beaconList.get(0).getUuid();
 
         // load location using UUID, major and minor
@@ -91,7 +92,6 @@ public class AppController {
 
     @PostMapping("/enterRoomName")
     public String enterRoomName(List<Room> roomList){
-
         return "false";
     }
 
@@ -106,17 +106,21 @@ public class AppController {
     @PostMapping("/login")
     public boolean login(HttpSession session, @RequestBody User user){
         if( userService.validateUser(user)){
-             session.setAttribute("id", user.getId());
+             session.setAttribute("device", user.getId());
              return true;
         }
         return false;
     }
 
+    @PostMapping("/start")
+    public void start(HttpSession session, @RequestBody Device device){
+        session.setAttribute("device", device);
+    }
+
     @PostMapping("/logout")
     public boolean logout(HttpSession session, @RequestBody User user){
-        session.setAttribute("id", null);
+        session.setAttribute("device", null);
         return true;
-
     }
 
     @PostMapping("/join")
