@@ -1,9 +1,9 @@
-package com.maknaeontop;
+package com.maknaeontop.dto;
 
 public class Beacon implements Comparable<Beacon>{
     private String uuid;
-    private byte[] major;
-    private byte[] minor;
+    private String major;
+    private String minor;
     private float x;
     private float y;
     private float z;
@@ -13,7 +13,7 @@ public class Beacon implements Comparable<Beacon>{
     private int rssi;
     private int txPower;
 
-    public Beacon(String uuid, byte[] major, byte[] minor, int rssi, int txPower){
+    public Beacon(String uuid, String major, String minor, int rssi, int txPower){
         this.uuid = uuid;
         this.major = major;
         this.minor = minor;
@@ -26,11 +26,11 @@ public class Beacon implements Comparable<Beacon>{
         return uuid;
     }
 
-    public byte[] getMajor() {
+    public String getMajor() {
         return major;
     }
 
-    public byte[] getMinor() {
+    public String getMinor() {
         return minor;
     }
 

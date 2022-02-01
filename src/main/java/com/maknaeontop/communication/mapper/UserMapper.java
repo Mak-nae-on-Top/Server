@@ -11,10 +11,10 @@ import java.util.List;
 public interface UserMapper {
     List<HashMap<String, Object>> selectUser();
 
-    List<HashMap<String, Object>> selectPwUsingId(String id);
+    String selectPwUsingId(String id);
 
-    List<HashMap<String, Object>> addUser(String id, String pw, String authority);
+    int addUser(String id, String pw, String authority);
 
-    List<HashMap<String, Object>> selectIdUsingId(String id);
+    int countSameId(String id);
 
 }

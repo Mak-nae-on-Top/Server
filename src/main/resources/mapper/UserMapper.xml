@@ -7,15 +7,15 @@
         SELECT * from user;
     </select>
 
-    <select id="selectPwUsingId" resultType="hashMap">
+    <select id="selectPwUsingId" resultType="String">
         SELECT User_pw FROM user WHERE (User_id = #{id});
     </select>
 
-    <select id="addUser" resultType="hashMap">
+    <insert id="addUser">
         INSERT INTO user (User_id, User_pw, Authority) VALUES (#{id}, #{pw}, #{authority});
-    </select>
+    </insert>
 
-    <select id="selectIdUsingId" resultType="hashMap">
-        SELECT User_id FROM user WHERE (User_id = #{id});
+    <select id="countSameId" resultType="int">
+        SELECT COUNT(*) FROM user WHERE (User_id = #{id});
     </select>
 </mapper>

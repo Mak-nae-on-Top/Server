@@ -1,6 +1,6 @@
 package com.maknaeontop.location;
 
-import com.maknaeontop.Beacon;
+import com.maknaeontop.dto.Beacon;
 
 public class Trilateration {
     public static Trilateration getInstance(){

@@ -15,5 +15,5 @@ public interface PopulationMapper {
 
     HashMap<String, Object> selectLocationById(String id);
 
-    boolean insertUserLocation();
+    boolean insertUserLocation(String id, String uuid, float x, float y, float z);
 }

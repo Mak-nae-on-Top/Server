@@ -21,6 +21,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     implementation 'javax.servlet:jstl'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'org.springframework.session:spring-session-core'
 }
 
 test {
