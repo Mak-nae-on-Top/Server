@@ -106,7 +106,7 @@ public class AppController {
     @PostMapping("/login")
     public boolean login(HttpSession session, @RequestBody User user){
         if( userService.validateUser(user)){
-             session.setAttribute("device", user.getId());
+             session.setAttribute("id", user.getId());
              return true;
         }
         return false;
@@ -117,9 +117,14 @@ public class AppController {
         session.setAttribute("device", device);
     }
 
+    @PostMapping("/test")
+    public String test(HttpSession session){
+        return session.getAttribute("device").toString();
+    }
+
     @PostMapping("/logout")
     public boolean logout(HttpSession session, @RequestBody User user){
-        session.setAttribute("device", null);
+        session.setAttribute("id", null);
         return true;
     }
 
