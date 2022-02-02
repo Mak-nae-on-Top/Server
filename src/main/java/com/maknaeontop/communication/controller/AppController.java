@@ -129,11 +129,16 @@ public class AppController {
     }
 
     @PostMapping("/join")
-    public boolean join(@RequestBody User user){
-        if(user.getPw().equals(user.getPw2())){
-            return userService.addUser(user);
+    public String join(@RequestBody User user){
+        try{
+            if(user.getPw().equals(user.getPw2())){
+                return String.valueOf(userService.addUser(user));
+            }else{
+                return "false";
+            }
+        }catch (Exception e){
+            return e.toString();
         }
-        return false;
     }
 
     @PostMapping("/event")
