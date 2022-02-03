@@ -21,16 +21,16 @@ public class UserService {
 
     public boolean validateUser(User user){
         String pwInDatabase = selectPwUsingId(user.getId());
-        return pwInDatabase.equals(user.getPw());
+        return pwInDatabase.equals(user.getPassword());
     }
 
     public boolean addUser(User user){
         String id = user.getId();
-        String pw = user.getPw();
+        String password = user.getPassword();
         String name = user.getName();
 
         if(countSameId(id) == 0){
-            userMapper.addUser(id, pw, name);
+            userMapper.addUser(id, password, name);
             return true;
         }
         return false;

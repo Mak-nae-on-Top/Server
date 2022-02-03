@@ -2,10 +2,7 @@ package com.maknaeontop.communication.controller;
 
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("fireAlarm")
@@ -24,9 +21,9 @@ public class FireAlarmController {
         this.populationService = populationService;
     }
 
-    @PostMapping("")
-    public String communicateWithFireAlarm(@RequestBody String msg){
+    @GetMapping("")
+    public String communicateWithFireAlarm(@RequestParam String message){
         // TODO: send message to application
-        return null;
+        return message;
     }
 }

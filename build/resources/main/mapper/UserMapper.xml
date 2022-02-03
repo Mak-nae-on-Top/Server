@@ -8,11 +8,11 @@
     </select>
 
     <select id="selectPwUsingId" resultType="String">
-        SELECT pw FROM user WHERE (id = #{id});
+        SELECT password FROM user WHERE (id = #{id});
     </select>
 
     <insert id="addUser">
-        INSERT INTO user (id, password, name) VALUES (#{id}, #{pw}, #{name});
+        INSERT INTO user (id, password, name) VALUES (#{id}, #{password}, #{name});
     </insert>
 
     <select id="countSameId" resultType="int">
