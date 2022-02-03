@@ -129,16 +129,14 @@ public class AppController {
     }
 
     @PostMapping("/join")
-    public String join(@RequestBody User user){
-        try{
-            if(user.getPassword().equals(user.getPassword2())){
-                return String.valueOf(userService.addUser(user));
-            }else{
-                return "false";
+    public String join(@RequestBody User user) {
+        if (user.getPassword().equals(user.getPassword2())) {
+            if(userService.addUser(user)){
+                return "success";
             }
-        }catch (Exception e){
-            return e.toString();
+            return "fail: ID is already exist";
         }
+        return "fail: password and password2 do not match";
     }
 
     @PostMapping("/event")
