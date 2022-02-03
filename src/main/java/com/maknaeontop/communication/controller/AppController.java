@@ -1,5 +1,6 @@
 package com.maknaeontop.communication.controller;
 
+import com.maknaeontop.communication.JsonBuilder;
 import com.maknaeontop.dto.Beacon;
 import com.maknaeontop.dto.Device;
 import com.maknaeontop.dto.Room;
@@ -32,6 +33,7 @@ public class AppController {
     private RoomService roomService;
     private BuildingService buildingService;
     private final Location location = Location.getInstance();
+    private final JsonBuilder jsonBuilder = new JsonBuilder();
 
     // Constructor
     public AppController(UserService userService, BeaconService beaconService, PopulationService populationService){
@@ -104,12 +106,15 @@ public class AppController {
     }
 
     @PostMapping("/login")
-    public boolean login(HttpSession session, @RequestBody User user){
-        if( userService.validateUser(user)){
-             session.setAttribute("id", user.getId());
-             return true;
+    public String login(HttpSession session, @RequestBody User user){
+        String pwInDatabase = userService.selectPwUsingId(user.getId());
+        if(pwInDatabase != null){
+            if(pwInDatabase.equals(user.getPassword())){
+                return jsonBuilder.loginResponse("success","login complete","temp_token");
+            }
+            return jsonBuilder.loginResponse("fail","password does not match","");
         }
-        return false;
+        return jsonBuilder.loginResponse("fail","id does not exist","");
     }
 
     @PostMapping("/start")
@@ -132,11 +137,11 @@ public class AppController {
     public String join(@RequestBody User user) {
         if (user.getPassword().equals(user.getPassword2())) {
             if(userService.addUser(user)){
-                return "success";
+                    return jsonBuilder.joinResponse("success","registration complete");
             }
-            return "fail: ID is already exist";
+            return jsonBuilder.joinResponse("fail","id is already exist");
         }
-        return "fail: password and password2 do not match";
+        return jsonBuilder.joinResponse("fail","password and password2 do not match");
     }
 
     @PostMapping("/event")
