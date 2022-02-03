@@ -19,9 +19,15 @@ public class UserService {
         return userMapper.selectUser();
     }
 
-    public boolean validateUser(User user){
+    public String validateUser(User user){
         String pwInDatabase = selectPwUsingId(user.getId());
-        return pwInDatabase.equals(user.getPassword());
+        if(pwInDatabase.equals("")){
+            return "fail: no matching ID exist";
+        }
+        if(!pwInDatabase.equals(user.getPassword())){
+            return "fail: password does not match";
+        }
+        return null;
     }
 
     public boolean addUser(User user){
@@ -36,7 +42,7 @@ public class UserService {
         return false;
     }
 
-    private String selectPwUsingId(String id){
+    public String selectPwUsingId(String id){
         return userMapper.selectPwUsingId(id);
     }
 
