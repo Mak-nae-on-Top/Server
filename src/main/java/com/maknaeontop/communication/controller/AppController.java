@@ -85,7 +85,7 @@ public class AppController {
                 multipartFile.transferTo(newFileName);
             }
         }catch (Exception e){
-            return e.toString();
+            System.out.println(e.toString());
         }
         return "true";
     }
@@ -131,7 +131,7 @@ public class AppController {
     @PostMapping("/join")
     public String join(@RequestBody User user){
         try{
-            if(user.getPw().equals(user.getPw2())){
+            if(user.getPassword().equals(user.getPassword2())){
                 return String.valueOf(userService.addUser(user));
             }else{
                 return "false";
