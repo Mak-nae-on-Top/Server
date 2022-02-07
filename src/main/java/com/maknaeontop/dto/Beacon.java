@@ -1,12 +1,17 @@
 package com.maknaeontop.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Beacon implements Comparable<Beacon>{
     private String uuid;
     private String major;
     private String minor;
     private float x;
     private float y;
-    private float z;
+    private int floor;
     private float distance;
 
     // rssi and txpower can not be used
@@ -21,52 +26,9 @@ public class Beacon implements Comparable<Beacon>{
         this.txPower = txPower;
     }
 
-    // Getter
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getMajor() {
-        return major;
-    }
-
-    public String getMinor() {
-        return minor;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
-    }
-
-    public float getDistance() {
-        return distance;
-    }
-
-    public int getRssi() {
-        return rssi;
-    }
-
-    public int getTxPower() {
-        return txPower;
-    }
-
-    // Setter
-    public void setDistance(float distance) {
-        this.distance = distance;
-    }
-
-    public void setLocation(float x, float y, float z) {
+    public void setLocation(float x, float y) {
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     @Override

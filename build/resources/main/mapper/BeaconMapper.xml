@@ -16,6 +16,6 @@
     </select>
 
     <select id="addBeacon" resultType="hashMap">
-        INSERT INTO beacon VALUES (#{uuid}, #{major}, #{minor}, #{x}, #{y}, #{z});
+        INSERT INTO beacon VALUES (#{uuid}, #{major}, #{minor}, #{x}, #{y});
     </select>
 </mapper>

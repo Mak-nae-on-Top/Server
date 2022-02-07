@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("app")
 public class AppController {
-    private final String PATHPREFIX = "C:/Users/namu/Desktop/MaknaeOnTop/";
+    private final String PATHPREFIX = "~/Image/blueprint";
     private final String EXTENSION = ".jpg";
 
     private final UserService userService;
@@ -43,28 +43,27 @@ public class AppController {
     }
 
     @PostMapping("/location")
-    public float[] estimateLocation(@RequestBody List<Beacon> beaconList, HttpSession session){
-        // TODO: change 2D to 3D
+    public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpSession session){
         String id = String.valueOf(session.getAttribute("device"));
         String uuid = beaconList.get(0).getUuid();
 
         // load location using UUID, major and minor
         for(Beacon beacon : beaconList){
             HashMap<String, Object> location = beaconService.getLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
-            beacon.setLocation((float)location.get("x"), (float)location.get("y"), (float)location.get("z"));
+            beacon.setLocation((float)location.get("x"), (float)location.get("y"));
         }
         // find user location
         float[] userLocation = location.findUserLocation(beaconList);
 
         // save user location on DB
-        populationService.insertUserLocation(id, uuid, userLocation[0], userLocation[1], 12.01f/* userLocation[2]*/);
+        populationService.insertUserLocation(id, uuid, userLocation[0], userLocation[1], 0f/* userLocation[2]*/);
 
         // return the user location list of the building
-        return userLocation;
+        return jsonBuilder.locationResponse(userLocation);
     }
 
     @PostMapping(value = "/loadMap", produces = MediaType.IMAGE_PNG_VALUE)
-        public ResponseEntity<Resource> loadMap(@RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
+    public ResponseEntity<Resource> loadMap(@RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
         try{
             Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
             String contentType = Files.probeContentType(path);
@@ -80,29 +79,33 @@ public class AppController {
     }
 
     @PostMapping("/saveMap")
-    public String saveMap(@RequestPart List<MultipartFile> multipartFileList, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
+    public String saveMap(@RequestPart MultipartFile multipartFile, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
         try{
-            for(MultipartFile multipartFile : multipartFileList){
-                File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
-                multipartFile.transferTo(newFileName);
-            }
+            File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
+            multipartFile.transferTo(newFileName);
         }catch (Exception e){
-            System.out.println(e.toString());
+            return jsonBuilder.statusResponse("fail","try again");
         }
-        return "true";
+        return jsonBuilder.statusResponse("success","image save success");
     }
 
     @PostMapping("/enterRoomName")
-    public String enterRoomName(List<Room> roomList){
+    public String enterRoomName(Room room){
+
+        roomService.insertRoom(room);
         return "false";
     }
 
     @PostMapping("/enterBeaconLocation")
-    public boolean enterBeaconLocation(@RequestBody List<Beacon> beaconList){
-        for(Beacon beacon : beaconList){
-            beaconService.addBeacon(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), beacon.getZ());
+    public String enterBeaconLocation(@RequestBody List<Beacon> beaconList){
+        try{
+            for(Beacon beacon : beaconList){
+                beaconService.addBeacon(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), beacon.getFloor());
+            }
+            return jsonBuilder.statusResponse("success","");
+        }catch (Exception e){
+            return jsonBuilder.statusResponse("fail","try again");
         }
-        return true;
     }
 
     @PostMapping("/login")
@@ -110,11 +113,11 @@ public class AppController {
         String pwInDatabase = userService.selectPwUsingId(user.getId());
         if(pwInDatabase != null){
             if(pwInDatabase.equals(user.getPassword())){
-                return jsonBuilder.loginResponse("success","login complete","temp_token");
+                return jsonBuilder.tokenResponse("success","login complete","temp_token");
             }
-            return jsonBuilder.loginResponse("fail","password does not match","");
+            return jsonBuilder.tokenResponse("fail","password does not match","");
         }
-        return jsonBuilder.loginResponse("fail","id does not exist","");
+        return jsonBuilder.tokenResponse("fail","id does not exist","");
     }
 
     @PostMapping("/start")
@@ -137,11 +140,11 @@ public class AppController {
     public String join(@RequestBody User user) {
         if (user.getPassword().equals(user.getPassword2())) {
             if(userService.addUser(user)){
-                    return jsonBuilder.joinResponse("success","registration complete");
+                    return jsonBuilder.statusResponse("success","registration complete");
             }
-            return jsonBuilder.joinResponse("fail","id is already exist");
+            return jsonBuilder.statusResponse("fail","id is already exist");
         }
-        return jsonBuilder.joinResponse("fail","password and password2 do not match");
+        return jsonBuilder.statusResponse("fail","password and password2 do not match");
     }
 
     @PostMapping("/event")
