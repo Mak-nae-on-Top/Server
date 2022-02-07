@@ -8,7 +8,7 @@ public class JsonBuilder {
 
     public JsonBuilder(){}
 
-    public String joinResponse(String status, String message){
+    public String statusResponse(String status, String message){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("status", status);
         jsonObject.addProperty("message", message);
@@ -16,11 +16,20 @@ public class JsonBuilder {
         return gson.toJson(jsonObject);
     }
 
-    public String loginResponse(String status, String message, String token){
+    public String tokenResponse(String status, String message, String token){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("status", status);
         jsonObject.addProperty("message", message);
         jsonObject.addProperty("token", token);
+
+        return gson.toJson(jsonObject);
+    }
+
+    public String locationResponse(float[] location){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("x", location[0]);
+        jsonObject.addProperty("y", location[1]);
+        jsonObject.addProperty("floor", (int) location[2]);
 
         return gson.toJson(jsonObject);
     }

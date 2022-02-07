@@ -28,7 +28,7 @@ public class BeaconService {
         return beaconMapper.getLocation(uuid, major, minor);
     }
 
-    public List<HashMap<String, Object>> addBeacon(String uuid, String major, String minor, float x, float y, float z){
-        return beaconMapper.addBeacon(uuid, major, minor, x, y, z);
+    public List<HashMap<String, Object>> addBeacon(String uuid, String major, String minor, float x, float y, int floor){
+        return beaconMapper.addBeacon(uuid, major, minor, x, y, floor);
     }
 }

@@ -13,5 +13,5 @@ public interface RoomMapper {
 
     List<HashMap<String, Object>> selectLocationByUuidNRoomName(String uuid, String roomName);
 
-    boolean insertRoom(String uuid, String roomName, float x, float y, float z);
+    boolean insertRoom(String uuid, String roomName, float x, float y, int floor);
 }
