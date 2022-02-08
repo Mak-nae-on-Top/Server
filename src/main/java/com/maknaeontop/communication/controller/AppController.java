@@ -1,15 +1,19 @@
 package com.maknaeontop.communication.controller;
 
 import com.maknaeontop.communication.JsonBuilder;
+import com.maknaeontop.communication.jwt.JwtTokenUtil;
 import com.maknaeontop.dto.Beacon;
 import com.maknaeontop.dto.Device;
 import com.maknaeontop.dto.Room;
 import com.maknaeontop.dto.User;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
@@ -24,7 +28,8 @@ import java.util.List;
 @RestController
 @RequestMapping("app")
 public class AppController {
-    private final String PATHPREFIX = "~/Image/blueprint";
+    //private final String PATHPREFIX = "~/image/blueprint/";
+    private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
     private final String EXTENSION = ".jpg";
 
     private final UserService userService;
@@ -34,12 +39,46 @@ public class AppController {
     private BuildingService buildingService;
     private final Location location = Location.getInstance();
     private final JsonBuilder jsonBuilder = new JsonBuilder();
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     // Constructor
     public AppController(UserService userService, BeaconService beaconService, PopulationService populationService){
         this.userService = userService;
         this.beaconService = beaconService;
         this.populationService = populationService;
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user){
+        String pwInDatabase = userService.selectPwUsingId(user.getId());
+        if(pwInDatabase != null){
+            if(pwInDatabase.equals(user.getPassword())){
+                String token = jwtTokenUtil.generateToken(user);
+                return jsonBuilder.tokenResponse("success","login complete",token);
+            }
+            return jsonBuilder.tokenResponse("fail","password does not match","");
+        }
+        return jsonBuilder.tokenResponse("fail","id does not exist","");
+    }
+
+    @PostMapping("/logout")
+    public boolean logout(@RequestBody String id){
+        // TODO: Implement logout
+        return true;
+    }
+
+    @PostMapping("/join")
+    public String join(@RequestBody User user) {
+        if (user.getPassword().equals(user.getPassword2())) {
+            if(userService.addUser(user)){
+                return jsonBuilder.statusResponse("success","registration complete");
+            }
+            return jsonBuilder.statusResponse("fail","id is already exist");
+        }
+        return jsonBuilder.statusResponse("fail","password and password2 do not match");
     }
 
     @PostMapping("/location")
@@ -78,7 +117,7 @@ public class AppController {
         }
     }
 
-    @PostMapping("/saveMap")
+    @PostMapping("/manager/saveMap")
     public String saveMap(@RequestPart MultipartFile multipartFile, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
         try{
             File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
@@ -89,14 +128,13 @@ public class AppController {
         return jsonBuilder.statusResponse("success","image save success");
     }
 
-    @PostMapping("/enterRoomName")
+    @PostMapping("/manager/enterRoomName")
     public String enterRoomName(Room room){
-
         roomService.insertRoom(room);
         return "false";
     }
 
-    @PostMapping("/enterBeaconLocation")
+    @PostMapping("/manager/enterBeaconLocation")
     public String enterBeaconLocation(@RequestBody List<Beacon> beaconList){
         try{
             for(Beacon beacon : beaconList){
@@ -106,45 +144,6 @@ public class AppController {
         }catch (Exception e){
             return jsonBuilder.statusResponse("fail","try again");
         }
-    }
-
-    @PostMapping("/login")
-    public String login(HttpSession session, @RequestBody User user){
-        String pwInDatabase = userService.selectPwUsingId(user.getId());
-        if(pwInDatabase != null){
-            if(pwInDatabase.equals(user.getPassword())){
-                return jsonBuilder.tokenResponse("success","login complete","temp_token");
-            }
-            return jsonBuilder.tokenResponse("fail","password does not match","");
-        }
-        return jsonBuilder.tokenResponse("fail","id does not exist","");
-    }
-
-    @PostMapping("/start")
-    public void start(HttpSession session, @RequestBody Device device){
-        session.setAttribute("device", device);
-    }
-
-    @PostMapping("/test")
-    public String test(HttpSession session){
-        return session.getAttribute("device").toString();
-    }
-
-    @PostMapping("/logout")
-    public boolean logout(HttpSession session, @RequestBody User user){
-        session.setAttribute("id", null);
-        return true;
-    }
-
-    @PostMapping("/join")
-    public String join(@RequestBody User user) {
-        if (user.getPassword().equals(user.getPassword2())) {
-            if(userService.addUser(user)){
-                    return jsonBuilder.statusResponse("success","registration complete");
-            }
-            return jsonBuilder.statusResponse("fail","id is already exist");
-        }
-        return jsonBuilder.statusResponse("fail","password and password2 do not match");
     }
 
     @PostMapping("/event")

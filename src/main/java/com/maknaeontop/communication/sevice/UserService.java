@@ -2,13 +2,18 @@ package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.dto.User;
 import com.maknaeontop.communication.mapper.UserMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private static UserMapper userMapper;
 
     public UserService(UserMapper userMapper){
@@ -48,5 +53,11 @@ public class UserService {
 
     private int countSameId(String id){
         return userMapper.countSameId(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        String pw = selectPwUsingId(username);
+        return new org.springframework.security.core.userdetails.User(username, pw, new ArrayList<>());
     }
 }
