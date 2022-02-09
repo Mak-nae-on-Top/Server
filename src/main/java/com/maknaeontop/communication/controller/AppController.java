@@ -123,7 +123,8 @@ public class AppController {
             File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
             multipartFile.transferTo(newFileName);
         }catch (Exception e){
-            return jsonBuilder.statusResponse("fail","try again");
+            return e.toString();
+            //return jsonBuilder.statusResponse("fail","try again");
         }
         return jsonBuilder.statusResponse("success","image save success");
     }
