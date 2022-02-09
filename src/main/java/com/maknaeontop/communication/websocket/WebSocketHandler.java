@@ -26,7 +26,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         log.info("payload: {}", payload);
 
         Message msg = objectMapper.readValue(payload, Message.class);
-        MsgRoom room = msgService.findById(msg.getRoomId());
-        room.handleActions(session, msg, msgService);
+        //MsgRoom room = msgService.findById(msg.getRoomId());
+        //room.handleActions(session, msg, msgService);
     }
 }

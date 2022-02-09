@@ -7,11 +7,9 @@ import lombok.Setter;
 @Setter
 public class Message {
     public enum MessageType{
-        ENTER, COMM
+        FIRE, ERROR
     }
 
     private MessageType messageType;
-    private String roomId;
-    private String sender;
-    private String message;
+    private String uuid;
 }
