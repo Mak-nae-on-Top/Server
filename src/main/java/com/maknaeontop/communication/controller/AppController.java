@@ -131,8 +131,12 @@ public class AppController {
 
     @PostMapping("/manager/enterRoomName")
     public String enterRoomName(Room room){
-        roomService.insertRoom(room);
-        return "false";
+        try{
+            roomService.insertRoom(room);
+        }catch (Exception e){
+            return jsonBuilder.statusResponse("fail", e.toString());
+        }
+        return jsonBuilder.statusResponse("success", "saved successfully");
     }
 
     @PostMapping("/manager/enterBeaconLocation")
