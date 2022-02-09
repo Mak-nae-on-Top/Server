@@ -17,13 +17,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
-import java.io.File;
+import java.io.*;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("app")
@@ -117,7 +125,8 @@ public class AppController {
         }
     }
 
-    @PostMapping("/manager/saveMap")
+    //@PostMapping("/manager/saveMap")
+    @RequestMapping(path = "/manager/saveMap", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String saveMap(@RequestPart MultipartFile multipartFile/*, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor*/){
         String uuid = "testuuid";
         String floor = "testfloor";
@@ -156,5 +165,15 @@ public class AppController {
     private String event(String msg){
         // TODO: send message to application
         return msg;
+    }
+
+    @PostMapping("/test")
+    private String test(@RequestBody String uri) {
+        String path = "C:/Users/namu/Desktop/test/";
+        String filename = "tmpName.jpg";
+        Decoder decoder = Base64.getDecoder();
+
+        byte[] test = decoder.decode(uri.getBytes(StandardCharsets.UTF_8));
+        return test.toString();
     }
 }
