@@ -118,14 +118,11 @@ public class AppController {
     }
 
     @PostMapping("/manager/saveMap")
-    public String saveMap(@RequestPart MultipartFile multipartFile/*, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor*/){
-        String uuid = "tempUUID";
-        String floor = "tempFLOOR";
+    public String saveMap(@RequestPart MultipartFile multipartFile, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
         try{
             File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
             multipartFile.transferTo(newFileName);
         }catch (Exception e){
-            //return e.toString();
             return jsonBuilder.statusResponse("fail",e.toString());
         }
         return jsonBuilder.statusResponse("success","image save success");
