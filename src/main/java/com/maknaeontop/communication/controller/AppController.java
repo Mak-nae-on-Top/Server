@@ -102,7 +102,7 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<Resource> loadMap(@RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
+    public ResponseEntity<?> loadMap(@RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
         try{
             Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
             String contentType = Files.probeContentType(path);
@@ -112,8 +112,8 @@ public class AppController {
             Resource resource = new InputStreamResource(Files.newInputStream(path));
             return new ResponseEntity<>(resource, headers, HttpStatus.OK);
         }catch (Exception e){
-            // TODO: handle exception
-            return null;
+            String body = jsonBuilder.statusResponse("fail", e.toString());
+            return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.OK);
         }
     }
 
@@ -131,8 +131,12 @@ public class AppController {
 
     @PostMapping("/manager/enterRoomName")
     public String enterRoomName(Room room){
-        roomService.insertRoom(room);
-        return "false";
+        try{
+            roomService.insertRoom(room);
+        }catch (Exception e){
+            return jsonBuilder.statusResponse("fail", e.toString());
+        }
+        return jsonBuilder.statusResponse("success", "saved successfully");
     }
 
     @PostMapping("/manager/enterBeaconLocation")
