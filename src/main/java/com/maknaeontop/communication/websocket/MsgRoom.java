@@ -20,10 +20,18 @@ public class MsgRoom {
     }
 
     public void handleActions(WebSocketSession session, Message message, MsgService msgService){
+        switch (message.getMessageType()){
+            case FIRE:
+
+                break;
+            case ERROR:
+                break;
+        }/*
         if(message.getMessageType().equals(Message.MessageType.ENTER)){
             sessionSet.add(session);
             message.setMessage(message.getMessage() + "님이 입장했습니다.");
         }
+        */
         sendMessage(message, msgService);
     }
 

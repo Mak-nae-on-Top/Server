@@ -118,7 +118,9 @@ public class AppController {
     }
 
     @PostMapping("/manager/saveMap")
-    public String saveMap(@RequestPart MultipartFile multipartFile, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
+    public String saveMap(@RequestPart MultipartFile multipartFile/*, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor*/){
+        String uuid = "testuuid";
+        String floor = "testfloor";
         try{
             File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
             multipartFile.transferTo(newFileName);
