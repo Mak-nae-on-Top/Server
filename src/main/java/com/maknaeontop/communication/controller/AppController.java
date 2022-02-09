@@ -2,10 +2,7 @@ package com.maknaeontop.communication.controller;
 
 import com.maknaeontop.communication.JsonBuilder;
 import com.maknaeontop.communication.jwt.JwtTokenUtil;
-import com.maknaeontop.dto.Beacon;
-import com.maknaeontop.dto.Device;
-import com.maknaeontop.dto.Room;
-import com.maknaeontop.dto.User;
+import com.maknaeontop.dto.*;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,10 +106,10 @@ public class AppController {
         return jsonBuilder.locationResponse(userLocation);
     }
 
-    @PostMapping(value = "/loadMap", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<?> loadMap(@RequestParam("uuid") String uuid, @RequestParam("floor") String floor){
+    @PostMapping(value = "/loadMap")
+    public ResponseEntity<?> loadMap(@RequestBody FloorDto floorDto){
         try{
-            Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
+            Path path = Paths.get(PATHPREFIX + floorDto.getUuid() + "_" + floorDto.getFloor() + EXTENSION);
             String contentType = Files.probeContentType(path);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename", StandardCharsets.UTF_8).build());
