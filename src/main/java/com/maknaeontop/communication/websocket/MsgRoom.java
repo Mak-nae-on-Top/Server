@@ -22,7 +22,6 @@ public class MsgRoom {
     public void handleActions(WebSocketSession session, Message message, MsgService msgService){
         switch (message.getMessageType()){
             case FIRE:
-
                 break;
             case ERROR:
                 break;
