@@ -1,5 +1,6 @@
 package com.maknaeontop.communication.controller;
 
+import com.maknaeontop.blueprint.BlueprintUtil;
 import com.maknaeontop.communication.JsonBuilder;
 import com.maknaeontop.communication.jwt.JwtTokenUtil;
 import com.maknaeontop.dto.*;
@@ -13,7 +14,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -44,10 +48,9 @@ public class AppController {
     private BuildingService buildingService;
     private final Location location = Location.getInstance();
     private final JsonBuilder jsonBuilder = new JsonBuilder();
+    private final BlueprintUtil blueprintUtil = new BlueprintUtil();
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     // Constructor
     public AppController(UserService userService, BeaconService beaconService, PopulationService populationService){
@@ -122,17 +125,10 @@ public class AppController {
         }
     }
 
-    //@PostMapping("/manager/saveMap")
-    @RequestMapping(path = "/manager/saveMap", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public String saveMap(@RequestPart MultipartFile multipartFile/*, @RequestParam("uuid") String uuid, @RequestParam("floor") String floor*/){
-        String uuid = "testuuid";
-        String floor = "testfloor";
-        try{
-            File newFileName = new File(PATHPREFIX + uuid + "_" + floor + EXTENSION);
-            multipartFile.transferTo(newFileName);
-        }catch (Exception e){
-            return jsonBuilder.statusResponse("fail",e.toString());
-        }
+    @PostMapping("/manager/saveMap")
+    public String saveMap(@RequestBody Base64Image base64Image) throws IOException {
+        blueprintUtil.saveImage(base64Image);
+
         return jsonBuilder.statusResponse("success","image save success");
     }
 
@@ -162,15 +158,5 @@ public class AppController {
     private String event(String msg){
         // TODO: send message to application
         return msg;
-    }
-
-    @PostMapping("/test")
-    private String test(@RequestBody String uri) {
-        String path = "C:/Users/namu/Desktop/test/";
-        String filename = "tmpName.jpg";
-        Decoder decoder = Base64.getDecoder();
-
-        byte[] test = decoder.decode(uri.getBytes(StandardCharsets.UTF_8));
-        return test.toString();
     }
 }
