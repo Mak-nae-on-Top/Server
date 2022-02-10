@@ -11,11 +11,18 @@
         SELECT * from population WHERE uuid = #{uuid};
     </select>
 
-    <select id="selectLocationById" resultType="hashMap">
-        SELECT x, y, z from population WHERE id = #{id};
+    <select id="selectLocationByDeviceId" resultType="hashMap">
+        SELECT x, y, floor from population WHERE deviceId = #{deviceId};
+    </select>
+
+    <select id="selectUuidAndFloorByDeviceId" resultType="hashmap">
+        SELECT uuid, floor from population WHERE deviceId = #{deviceId};
     </select>
 
     <insert id="insertUserLocation">
-        INSERT INTO population VALUES (#{id}, #{uuid}, #{x}, #{y}, #{z});
+        INSERT INTO population
+        VALUES (#{deviceId}, #{uuid}, #{x}, #{y}, #{floor})
+        ON DUPLICATE KEY UPDATE
+        x=#{x}, y=#{y}, floor=#{floor};
     </insert>
 </mapper>

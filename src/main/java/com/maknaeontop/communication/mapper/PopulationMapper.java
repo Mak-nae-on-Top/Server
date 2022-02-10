@@ -13,7 +13,9 @@ public interface PopulationMapper {
 
     List<HashMap<String, Object>> selectByUuid(String uuid);
 
-    HashMap<String, Object> selectLocationById(String id);
+    HashMap<String, Object> selectLocationByDeviceId(String deviceId);
 
-    boolean insertUserLocation(String id, String uuid, float x, float y, float z);
+    HashMap<String,String> selectUuidAndFloorByDeviceId(String deviceId);
+
+    boolean insertUserLocation(String deviceId, String uuid, float x, float y, int floor);
 }

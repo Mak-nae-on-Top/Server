@@ -22,11 +22,15 @@ public class PopulationService {
         return populationMapper.selectByUuid(uuid);
     }
 
-    public HashMap<String, Object> selectLocationById(String id){
-        return populationMapper.selectLocationById(id);
+    public HashMap<String, Object> selectLocationById(String deviceId){
+        return populationMapper.selectLocationByDeviceId(deviceId);
     }
 
-    public boolean insertUserLocation(String id, String uuid, float x, float y, float z){
-        return populationMapper.insertUserLocation(id, uuid, x, y, z);
+    public HashMap<String, String> selectUuidAndFloorByDeviceId(String deviceId){
+        return populationMapper.selectUuidAndFloorByDeviceId(deviceId);
+    }
+
+    public boolean insertUserLocation(String deviceId, String uuid, float x, float y, int floor){
+        return populationMapper.insertUserLocation(deviceId, uuid, x, y, floor);
     }
 }
