@@ -72,12 +72,6 @@ public class AppController {
         return jsonBuilder.tokenResponse("fail","id does not exist","");
     }
 
-    @PostMapping("/logout")
-    public boolean logout(@RequestBody String id){
-        // TODO: Implement logout
-        return true;
-    }
-
     @PostMapping("/join")
     public String join(@RequestBody User user) {
         if (user.getPassword().equals(user.getPassword2())) {
@@ -95,12 +89,10 @@ public class AppController {
         String uuid = beaconList.get(0).getUuid();
 
         // load location using UUID, major and minor
-        for(Beacon beacon : beaconList){
-            HashMap<String, Object> location = beaconService.getLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
-            beacon.setLocation((float)location.get("x"), (float)location.get("y"));
-        }
+        List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList);
+
         // find user location
-        float[] userLocation = location.findUserLocation(beaconList);
+        float[] userLocation = location.findUserLocation(beaconListIncludeLocation);
 
         // save user location on DB
         populationService.insertUserLocation(id, uuid, userLocation[0], userLocation[1], 0f/* userLocation[2]*/);
@@ -110,48 +102,26 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap")
-    public ResponseEntity<?> loadMap(@RequestBody FloorDto floorDto){
-        try{
-            Path path = Paths.get(PATHPREFIX + floorDto.getUuid() + "_" + floorDto.getFloor() + EXTENSION);
-            String contentType = Files.probeContentType(path);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename", StandardCharsets.UTF_8).build());
-            headers.add(HttpHeaders.CONTENT_TYPE, contentType);
-            Resource resource = new InputStreamResource(Files.newInputStream(path));
-            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
-        }catch (Exception e){
-            String body = jsonBuilder.statusResponse("fail", e.toString());
-            return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.OK);
-        }
+    public ResponseEntity<?> loadMap(@RequestBody FloorDto floorDto) throws IOException {
+        return blueprintUtil.loadImage(floorDto);
     }
 
     @PostMapping("/manager/saveMap")
     public String saveMap(@RequestBody Base64Image base64Image) throws IOException {
         blueprintUtil.saveImage(base64Image);
-
         return jsonBuilder.statusResponse("success","image save success");
     }
 
     @PostMapping("/manager/enterRoomName")
     public String enterRoomName(Room room){
-        try{
-            roomService.insertRoom(room);
-        }catch (Exception e){
-            return jsonBuilder.statusResponse("fail", e.toString());
-        }
+        roomService.insertRoom(room);
         return jsonBuilder.statusResponse("success", "saved successfully");
     }
 
     @PostMapping("/manager/enterBeaconLocation")
     public String enterBeaconLocation(@RequestBody List<Beacon> beaconList){
-        try{
-            for(Beacon beacon : beaconList){
-                beaconService.addBeacon(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), beacon.getFloor());
-            }
-            return jsonBuilder.statusResponse("success","");
-        }catch (Exception e){
-            return jsonBuilder.statusResponse("fail","try again");
-        }
+        beaconService.addBeaconList(beaconList);
+        return jsonBuilder.statusResponse("success","saved beacon info");
     }
 
     @PostMapping("/event")

@@ -1,6 +1,13 @@
 package com.maknaeontop.blueprint;
 
 import com.maknaeontop.dto.Base64Image;
+import com.maknaeontop.dto.FloorDto;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -8,6 +15,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 public class BlueprintUtil {
@@ -21,5 +31,15 @@ public class BlueprintUtil {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(test);
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         ImageIO.write(bufferedImage, "png", new File(pathName));
+    }
+
+    public ResponseEntity<Resource> loadImage(FloorDto floorDto) throws IOException {
+        Path path = Paths.get(PATHPREFIX + floorDto.getUuid() + "_" + floorDto.getFloor() + EXTENSION);
+        String contentType = Files.probeContentType(path);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename", StandardCharsets.UTF_8).build());
+        headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }
