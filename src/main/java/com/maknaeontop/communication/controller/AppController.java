@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -60,26 +62,23 @@ public class AppController {
     }
 
     @PostMapping("/location")
-    public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request){
-        final String id = request.getHeader("Device");
-        String uuid = beaconList.get(0).getUuid();
-
-        // load location using UUID, major and minor
+    public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request) {
+        final String deviceId = request.getHeader("Device");
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList);
-
-        // find user location
         float[] userLocation = location.findUserLocation(beaconListIncludeLocation);
+        String uuid = beaconListIncludeLocation.get(0).getUuid();
+        int floor = beaconListIncludeLocation.get(0).getFloor();
+        populationService.insertUserLocation(deviceId, uuid, userLocation[0], userLocation[1], floor);
 
-        // save user location on DB
-        populationService.insertUserLocation(id, uuid, userLocation[0], userLocation[1], 0f/* userLocation[2]*/);
-
-        // return the user location list of the building
-        return jsonBuilder.locationResponse(userLocation);
+        return jsonBuilder.locationResponse(userLocation[0], userLocation[1], floor, uuid);
     }
 
-    @PostMapping(value = "/loadMap")
-    public ResponseEntity<?> loadMap(@RequestBody LoadMap loadMap) throws IOException {
-        return blueprintUtil.loadImage(loadMap);
+    @GetMapping(value = "/loadMap")
+    public ResponseEntity<?> loadMap(HttpServletRequest request) throws IOException {
+        final String deviceId = request.getHeader("Device");
+        HashMap<String, String> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
+
+        return blueprintUtil.loadImage(map.get("uuid"), Integer.parseInt(map.get("floor")));
     }
 
     @PostMapping("/manager/saveMap")

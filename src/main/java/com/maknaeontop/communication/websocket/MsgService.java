@@ -34,8 +34,7 @@ public class MsgService {
         return msgRoomMap.get(roomId);
     }
 
-    public MsgRoom createRoom(String name){
-        String roomId = name;
+    public MsgRoom createRoom(String roomId){
         MsgRoom newRoom = MsgRoom.builder().roomId(roomId).build();
         msgRoomMap.put(roomId,newRoom);
         return newRoom;

@@ -2,6 +2,7 @@ package com.maknaeontop.blueprint;
 
 import com.maknaeontop.dto.Base64Image;
 import com.maknaeontop.dto.LoadMap;
+import com.maknaeontop.dto.User;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -28,14 +29,14 @@ public class BlueprintUtil {
 
     public void saveImage(Base64Image base64Image) throws IOException {
         String pathName = PATHPREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
-        byte[] test = decoder.decode(base64Image.getBase64().getBytes(StandardCharsets.UTF_8));
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(test);
+        byte[] decodedImageByte = decoder.decode(base64Image.getBase64().getBytes(StandardCharsets.UTF_8));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedImageByte);
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         ImageIO.write(bufferedImage, "png", new File(pathName));
     }
 
-    public ResponseEntity<Resource> loadImage(LoadMap loadMap) throws IOException {
-        Path path = Paths.get(PATHPREFIX + loadMap.getUuid() + "_" + loadMap.getFloor() + EXTENSION);
+    public ResponseEntity<Resource> loadImage(String uuid, int floor) throws IOException {
+        Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
         String contentType = Files.probeContentType(path);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename", StandardCharsets.UTF_8).build());

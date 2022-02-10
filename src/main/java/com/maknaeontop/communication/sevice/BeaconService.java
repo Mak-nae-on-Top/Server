@@ -5,6 +5,7 @@ import com.maknaeontop.communication.mapper.UserMapper;
 import com.maknaeontop.dto.Beacon;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +37,10 @@ public class BeaconService {
         for(Beacon beacon : beaconList){
             addBeacon(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), beacon.getFloor());
         }
+    }
+
+    public int getFloor(Beacon beacon){
+        return beaconMapper.getFloor(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
     }
 
     public List<Beacon> loadBeaconLocation(List<Beacon> beaconList){

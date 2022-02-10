@@ -25,11 +25,12 @@ public class JsonBuilder {
         return gson.toJson(jsonObject);
     }
 
-    public String locationResponse(float[] location){
+    public String locationResponse(float x, float y, int floor, String uuid){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("x", location[0]);
-        jsonObject.addProperty("y", location[1]);
-        jsonObject.addProperty("floor", (int) location[2]);
+        jsonObject.addProperty("x", x);
+        jsonObject.addProperty("y", y);
+        jsonObject.addProperty("floor", floor);
+        jsonObject.addProperty("uuid", uuid);
 
         return gson.toJson(jsonObject);
     }
