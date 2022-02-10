@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FloorDto {
+public class LoadMap {
     private String uuid;
     private String floor;
 }

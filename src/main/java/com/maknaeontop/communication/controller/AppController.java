@@ -9,7 +9,8 @@ import com.maknaeontop.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpSession;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.List;
 
@@ -63,8 +64,8 @@ public class AppController {
     }
 
     @PostMapping("/location")
-    public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpSession session){
-        String id = String.valueOf(session.getAttribute("device"));
+    public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request){
+        final String id = request.getHeader("Device");
         String uuid = beaconList.get(0).getUuid();
 
         // load location using UUID, major and minor
@@ -81,8 +82,8 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap")
-    public ResponseEntity<?> loadMap(@RequestBody FloorDto floorDto) throws IOException {
-        return blueprintUtil.loadImage(floorDto);
+    public ResponseEntity<?> loadMap(@RequestBody LoadMap loadMap) throws IOException {
+        return blueprintUtil.loadImage(loadMap);
     }
 
     @PostMapping("/manager/saveMap")
@@ -92,7 +93,7 @@ public class AppController {
     }
 
     @PostMapping("/manager/enterRoomName")
-    public String enterRoomName(Room room){
+    public String enterRoomName(@RequestBody Room room){
         roomService.insertRoom(room);
         return jsonBuilder.statusResponse("success", "saved successfully");
     }

@@ -1,7 +1,7 @@
 package com.maknaeontop.blueprint;
 
 import com.maknaeontop.dto.Base64Image;
-import com.maknaeontop.dto.FloorDto;
+import com.maknaeontop.dto.LoadMap;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -33,8 +33,8 @@ public class BlueprintUtil {
         ImageIO.write(bufferedImage, "png", new File(pathName));
     }
 
-    public ResponseEntity<Resource> loadImage(FloorDto floorDto) throws IOException {
-        Path path = Paths.get(PATHPREFIX + floorDto.getUuid() + "_" + floorDto.getFloor() + EXTENSION);
+    public ResponseEntity<Resource> loadImage(LoadMap loadMap) throws IOException {
+        Path path = Paths.get(PATHPREFIX + loadMap.getUuid() + "_" + loadMap.getFloor() + EXTENSION);
         String contentType = Files.probeContentType(path);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename", StandardCharsets.UTF_8).build());
