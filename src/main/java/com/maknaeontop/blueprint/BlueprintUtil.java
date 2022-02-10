@@ -21,7 +21,8 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 public class BlueprintUtil {
-    private final String PATHPREFIX = "/home/ubuntu/image/blueprint/";
+    //private final String PATHPREFIX = "/home/ubuntu/image/blueprint/";
+    private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
     private final String EXTENSION = ".jpg";
     private final Base64.Decoder decoder = Base64.getDecoder();
 

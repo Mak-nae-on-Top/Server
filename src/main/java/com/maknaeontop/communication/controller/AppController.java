@@ -17,10 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("app")
 public class AppController {
-    private final String PATHPREFIX = "/home/ubuntu/image/blueprint/";
-    //private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
-    private final String EXTENSION = ".jpg";
-
     private final UserService userService;
     private final BeaconService beaconService;
     private final PopulationService populationService;
