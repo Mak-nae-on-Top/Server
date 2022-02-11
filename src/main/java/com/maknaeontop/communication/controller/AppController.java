@@ -80,7 +80,7 @@ public class AppController {
         return jsonBuilder.locationResponse(population);
     }
 
-    @GetMapping(value = "/loadMap")
+    @PostMapping(value = "/loadMap")
     public ResponseEntity<?> loadMap(HttpServletRequest request) throws IOException {
         final String deviceId = request.getHeader("Device");
         HashMap<String,Object> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
