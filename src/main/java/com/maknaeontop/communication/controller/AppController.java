@@ -65,12 +65,19 @@ public class AppController {
     public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request) {
         final String deviceId = request.getHeader("Device");
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList);
-        float[] userLocation = location.findUserLocation(beaconListIncludeLocation);
+        HashMap<String, Float> userLocation = location.findUserLocation(beaconListIncludeLocation);
         String uuid = beaconListIncludeLocation.get(0).getUuid();
         int floor = beaconListIncludeLocation.get(0).getFloor();
-        populationService.insertUserLocation(deviceId, uuid, userLocation[0], userLocation[1], floor);
 
-        return jsonBuilder.locationResponse(userLocation[0], userLocation[1], floor, uuid);
+        List<HashMap<String, Float>> locationList = populationService.selectLocationByUuid(uuid, deviceId);
+        locationList.add(0,userLocation);
+
+        Population population = new Population(uuid, floor);
+        population.setLocationList(locationList);
+
+        populationService.insertUserLocation(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
+
+        return jsonBuilder.locationResponse(population);
     }
 
     @GetMapping(value = "/loadMap")

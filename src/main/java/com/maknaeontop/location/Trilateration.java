@@ -2,14 +2,14 @@ package com.maknaeontop.location;
 
 import com.maknaeontop.dto.Beacon;
 
+import java.util.HashMap;
+
 public class Trilateration {
     public static Trilateration getInstance(){
         return Holder.instance;
     }
 
-    public float[] calculateTrilateration(Beacon beacon1, Beacon beacon2, Beacon beacon3){
-        // TODO: calculate 3D trilateration
-
+    public HashMap<String, Float> calculateTrilateration(Beacon beacon1, Beacon beacon2, Beacon beacon3){
         float x1 = beacon1.getX();
         float y1 = beacon1.getY();
         float d1 = beacon1.getAccuracy();
@@ -31,7 +31,14 @@ public class Trilateration {
                         - ((y3 - y2) * (x2 - x1))));
         float x = (float) (((y * (y1 - y2)) - tmp1) / (x2 - x1));
 
-        return new float[]{x, y};
+        return createHashMap(x,y);
+    }
+
+    private HashMap<String, Float> createHashMap(float x, float y){
+        return new HashMap<String,Float>(){{
+            put("x",x);
+            put("y",y);
+        }};
     }
 
     private Trilateration(){}

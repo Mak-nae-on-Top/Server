@@ -2,6 +2,7 @@ package com.maknaeontop.location;
 
 import com.maknaeontop.dto.Beacon;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Location {
@@ -12,7 +13,7 @@ public class Location {
         return Holder.instance;
     }
 
-    public float[] findUserLocation(List<Beacon> beaconList){
+    public HashMap<String, Float> findUserLocation(List<Beacon> beaconList){
         return trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
     }
 

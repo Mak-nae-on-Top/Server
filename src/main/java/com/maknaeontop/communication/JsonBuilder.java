@@ -2,6 +2,9 @@ package com.maknaeontop.communication;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.maknaeontop.dto.Population;
+
+import java.util.HashMap;
 
 public class JsonBuilder {
     Gson gson = new Gson();
@@ -25,13 +28,7 @@ public class JsonBuilder {
         return gson.toJson(jsonObject);
     }
 
-    public String locationResponse(float x, float y, int floor, String uuid){
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("x", x);
-        jsonObject.addProperty("y", y);
-        jsonObject.addProperty("floor", floor);
-        jsonObject.addProperty("uuid", uuid);
-
-        return gson.toJson(jsonObject);
+    public String locationResponse(Population population){
+        return gson.toJson(population);
     }
 }

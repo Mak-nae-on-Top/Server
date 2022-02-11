@@ -19,6 +19,10 @@
         SELECT uuid, floor from population WHERE deviceId = #{deviceId};
     </select>
 
+    <select id="selectLocationByUuidWithoutDeviceId" resultType="hashmap">
+        SELECT x, y from population WHERE (uuid = #{uuid} and deviceId NOT IN (#{deviceId}));
+    </select>
+
     <insert id="insertUserLocation">
         INSERT INTO population
         VALUES (#{deviceId}, #{uuid}, #{x}, #{y}, #{floor})
