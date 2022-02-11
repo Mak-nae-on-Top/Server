@@ -12,7 +12,7 @@
     </select>
 
     <select id="getLocation" resultType="hashMap">
-        SELECT major, minor, x, y, floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
+        SELECT x, y, floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
     </select>
 
     <select id="addBeacon" resultType="hashMap">

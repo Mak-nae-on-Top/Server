@@ -46,6 +46,7 @@ public class BeaconService {
     public List<Beacon> loadBeaconLocation(List<Beacon> beaconList){
         for(Beacon beacon : beaconList){
             HashMap<String, Object> location = getLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
+            beacon.setFloor((int)location.get("floor"));
             beacon.setLocation((float)location.get("x"), (float)location.get("y"));
         }
         return beaconList;
