@@ -31,4 +31,12 @@ public class JsonBuilder {
     public String locationResponse(Population population){
         return gson.toJson(population);
     }
+
+    public String base64Response(String status, String base64){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("status", status);
+        jsonObject.addProperty("base64", base64);
+
+        return gson.toJson(jsonObject);
+    }
 }

@@ -3,6 +3,7 @@ package com.maknaeontop.blueprint;
 import com.maknaeontop.dto.Base64Image;
 import com.maknaeontop.dto.LoadMap;
 import com.maknaeontop.dto.User;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -12,9 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +26,7 @@ public class BlueprintUtil {
     private final String EXTENSION = ".jpg";
     private final Base64.Decoder decoder = Base64.getDecoder();
 
+    /*
     public void saveImage(Base64Image base64Image) throws IOException {
         String pathName = PATHPREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
         byte[] decodedImageByte = decoder.decode(base64Image.getBase64().getBytes(StandardCharsets.UTF_8));
@@ -34,7 +34,20 @@ public class BlueprintUtil {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         ImageIO.write(bufferedImage, "png", new File(pathName));
     }
+     */
 
+    public void saveImage(Base64Image base64Image) throws IOException{
+        String pathName = PATHPREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
+        File file = new File(pathName);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter writer = new BufferedWriter(fw);
+        writer.write(base64Image.getBase64());
+        writer.close();
+    }
+/*
     public ResponseEntity<Resource> loadImage(String uuid, int floor) throws IOException {
         Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
         String contentType = Files.probeContentType(path);
@@ -43,5 +56,10 @@ public class BlueprintUtil {
         headers.add(HttpHeaders.CONTENT_TYPE, contentType);
         Resource resource = new InputStreamResource(Files.newInputStream(path));
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+*/
+    public String loadImage(String uuid, int floor) throws IOException {
+        Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
+        return new String(Files.readAllBytes(path));
     }
 }

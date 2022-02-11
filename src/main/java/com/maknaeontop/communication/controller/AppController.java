@@ -81,10 +81,11 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap")
-    public ResponseEntity<?> loadMap(HttpServletRequest request) throws IOException {
+    public /*ResponseEntity<?>*/String loadMap(HttpServletRequest request) throws IOException {
         final String deviceId = request.getHeader("Device");
         HashMap<String,Object> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
-        return blueprintUtil.loadImage((String)map.get("uuid"), (int)map.get("floor"));
+        /*return*/ String base64Image = blueprintUtil.loadImage((String)map.get("uuid"), (int)map.get("floor"));
+        return jsonBuilder.base64Response("success",base64Image);
     }
 
     @PostMapping("/manager/saveMap")
