@@ -29,8 +29,8 @@ public class BeaconService {
         return beaconMapper.getLocation(uuid, major, minor);
     }
 
-    public List<HashMap<String, Object>> addBeacon(String uuid, String major, String minor, float x, float y, int floor){
-        return beaconMapper.addBeacon(uuid, major, minor, x, y, floor);
+    public void addBeacon(String uuid, String major, String minor, float x, float y, int floor){
+        beaconMapper.addBeacon(uuid, major, minor, x, y, floor);
     }
 
     public void addBeaconList(List<Beacon> beaconList){
@@ -50,5 +50,9 @@ public class BeaconService {
             beacon.setLocation((float)location.get("x"), (float)location.get("y"));
         }
         return beaconList;
+    }
+
+    public HashMap<String, Float> selectMaxXYByUuidAndFloor(String uuid, int floor){
+        return beaconMapper.selectMaxXYByUuidAndFloor(uuid, floor);
     }
 }

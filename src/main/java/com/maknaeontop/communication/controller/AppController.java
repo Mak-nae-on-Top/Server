@@ -7,12 +7,10 @@ import com.maknaeontop.dto.*;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -81,11 +79,10 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap")
-    public /*ResponseEntity<?>*/String loadMap(HttpServletRequest request) throws IOException {
-        final String deviceId = request.getHeader("Device");
-        HashMap<String,Object> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
-        /*return*/ String base64Image = blueprintUtil.loadImage((String)map.get("uuid"), (int)map.get("floor"));
-        return jsonBuilder.base64Response("success",base64Image);
+    public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
+        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+        HashMap<String, Float> maxXY = beaconService.selectMaxXYByUuidAndFloor(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+        return jsonBuilder.base64Response("success", maxXY.get("x"), maxXY.get("y"), base64Image);
     }
 
     @PostMapping("/manager/saveMap")

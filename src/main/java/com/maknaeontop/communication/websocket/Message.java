@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Message {
     public enum MessageType{
-        FIRE, ERROR
+        ADD, FIRE, ERROR
     }
 
     private MessageType messageType;

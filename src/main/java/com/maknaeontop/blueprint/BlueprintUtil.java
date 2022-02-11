@@ -1,20 +1,8 @@
 package com.maknaeontop.blueprint;
 
 import com.maknaeontop.dto.Base64Image;
-import com.maknaeontop.dto.LoadMap;
-import com.maknaeontop.dto.User;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

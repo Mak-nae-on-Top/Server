@@ -15,11 +15,15 @@
         SELECT x, y, floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
     </select>
 
-    <select id="addBeacon" resultType="hashMap">
+    <insert id="addBeacon">
         INSERT INTO beacon VALUES (#{uuid}, #{major}, #{minor}, #{x}, #{y}, #{floor});
-    </select>
+    </insert>
 
     <select id="getFloor" resultType="hashMap">
         SELECT floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
+    </select>
+
+    <select id="selectMaxXYByUuidAndFloor" resultType="hashMap">
+        SELECT MAX(x), MAX(y) FROM beacon WHERE (uuid = #{uuid} and floor = #{floor});
     </select>
 </mapper>
