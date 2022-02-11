@@ -69,7 +69,7 @@ public class AppController {
         String uuid = beaconListIncludeLocation.get(0).getUuid();
         int floor = beaconListIncludeLocation.get(0).getFloor();
 
-        List<HashMap<String, Float>> locationList = populationService.selectLocationByUuid(uuid, deviceId);
+        List<HashMap<String, Float>> locationList = populationService.selectLocationByUuid(uuid, floor, deviceId);
         locationList.add(0,userLocation);
 
         Population population = new Population(uuid, floor);

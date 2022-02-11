@@ -20,7 +20,8 @@
     </select>
 
     <select id="selectLocationByUuidWithoutDeviceId" resultType="hashmap">
-        SELECT x, y from population WHERE (uuid = #{uuid} and deviceId NOT IN (#{deviceId}));
+        SELECT x, y from population
+        WHERE (uuid = #{uuid} and floor = #{floor} and deviceId NOT IN (#{deviceId}));
     </select>
 
     <insert id="insertUserLocation">
