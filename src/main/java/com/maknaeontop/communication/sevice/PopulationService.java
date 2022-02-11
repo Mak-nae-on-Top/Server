@@ -26,7 +26,7 @@ public class PopulationService {
         return populationMapper.selectLocationByDeviceId(deviceId);
     }
 
-    public HashMap<String,?> selectUuidAndFloorByDeviceId(String deviceId){
+    public HashMap<String,Object> selectUuidAndFloorByDeviceId(String deviceId){
         return populationMapper.selectUuidAndFloorByDeviceId(deviceId);
     }
 

@@ -76,8 +76,7 @@ public class AppController {
     @GetMapping(value = "/loadMap")
     public ResponseEntity<?> loadMap(HttpServletRequest request) throws IOException {
         final String deviceId = request.getHeader("Device");
-        HashMap<String,?> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
-        int tmp = (int) map.get("floor");
+        HashMap<String,Object> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
         return blueprintUtil.loadImage((String)map.get("uuid"), (int)map.get("floor"));
     }
 
