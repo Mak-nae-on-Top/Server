@@ -14,8 +14,8 @@ public class MsgController {
     private final MsgService msgService;
 
     @PostMapping
-    public MsgRoom createRoom(@RequestParam String name){
-        return msgService.createRoom(name);
+    public MsgRoom createRoom(@RequestParam String uuid){
+        return msgService.createRoom(uuid);
     }
 
     @GetMapping
