@@ -76,9 +76,9 @@ public class AppController {
     @GetMapping(value = "/loadMap")
     public ResponseEntity<?> loadMap(HttpServletRequest request) throws IOException {
         final String deviceId = request.getHeader("Device");
-        HashMap<String, String> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
-
-        return blueprintUtil.loadImage(map.get("uuid"), Integer.parseInt(map.get("floor")));
+        HashMap<String,?> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
+        int tmp = (int) map.get("floor");
+        return blueprintUtil.loadImage((String)map.get("uuid"), (int)map.get("floor"));
     }
 
     @PostMapping("/manager/saveMap")

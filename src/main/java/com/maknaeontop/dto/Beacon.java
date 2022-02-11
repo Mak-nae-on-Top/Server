@@ -12,7 +12,7 @@ public class Beacon implements Comparable<Beacon>{
     private float x;
     private float y;
     private int floor;
-    private float distance;
+    private float accuracy;
 
     // rssi and txpower can not be used
     private int rssi;
