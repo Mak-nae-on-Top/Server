@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maknaeontop.communication.mapper.PopulationMapper">
+    <select id="selectAllUserLocation" resultType="hashMap">
+        SELECT * from population;
+    </select>
+
+    <select id="selectByUuid" resultType="hashMap">
+        SELECT * from population WHERE uuid = #{uuid};
+    </select>
+
+    <select id="selectLocationByDeviceId" resultType="hashMap">
+        SELECT x, y, floor from population WHERE deviceId = #{deviceId};
+    </select>
+
+    <select id="selectUuidAndFloorByDeviceId" resultType="hashmap">
+        SELECT uuid, floor from population WHERE deviceId = #{deviceId};
+    </select>
+
+    <insert id="insertUserLocation">
+        INSERT INTO population
+        VALUES (#{deviceId}, #{uuid}, #{x}, #{y}, #{floor})
+        ON DUPLICATE KEY UPDATE
+        x=#{x}, y=#{y}, floor=#{floor};
+    </insert>
+</mapper>
