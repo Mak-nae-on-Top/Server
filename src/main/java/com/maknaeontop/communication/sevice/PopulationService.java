@@ -30,6 +30,10 @@ public class PopulationService {
         return populationMapper.selectUuidAndFloorByDeviceId(deviceId);
     }
 
+    public List<HashMap<String, Float>> selectLocationByUuid(String uuid, String deviceId){
+        return populationMapper.selectLocationByUuidWithoutDeviceId(uuid, deviceId);
+    }
+
     public boolean insertUserLocation(String deviceId, String uuid, float x, float y, int floor){
         return populationMapper.insertUserLocation(deviceId, uuid, x, y, floor);
     }
