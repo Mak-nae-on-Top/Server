@@ -26,7 +26,7 @@ public class Distance {
 
     public void saveDistance(List<Beacon> beaconList){
         for(Beacon beacon : beaconList){
-            beacon.setDistance(calculateDistance(beacon));
+            beacon.setAccuracy(calculateDistance(beacon));
         }
     }
 

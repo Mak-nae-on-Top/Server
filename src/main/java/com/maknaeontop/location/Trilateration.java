@@ -12,15 +12,15 @@ public class Trilateration {
 
         float x1 = beacon1.getX();
         float y1 = beacon1.getY();
-        float d1 = beacon1.getDistance();
+        float d1 = beacon1.getAccuracy();
 
         float x2 = beacon2.getX();
         float y2 = beacon2.getY();
-        float d2 = beacon2.getDistance();
+        float d2 = beacon2.getAccuracy();
 
         float x3 = beacon3.getX();
         float y3 = beacon3.getY();
-        float d3 = beacon3.getDistance();
+        float d3 = beacon3.getAccuracy();
 
         double tmp1 = (Math.pow(x3,2) - Math.pow(x2,2) + Math.pow(y3,2) - Math.pow(y2,2)
                 + Math.pow(d3,2) - Math.pow(d2,2)) / 2;
