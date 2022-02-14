@@ -3,6 +3,8 @@ package com.maknaeontop.communication.controller;
 import com.maknaeontop.blueprint.BlueprintUtil;
 import com.maknaeontop.communication.JsonBuilder;
 import com.maknaeontop.communication.jwt.JwtTokenUtil;
+import com.maknaeontop.communication.websocket.MessageRepository;
+import com.maknaeontop.communication.websocket.WebSocketRoom;
 import com.maknaeontop.dto.*;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
@@ -25,6 +27,7 @@ public class AppController {
     private final Location location = Location.getInstance();
     private final JsonBuilder jsonBuilder = new JsonBuilder();
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
+    private static final MessageRepository messageRepository = new MessageRepository();
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -79,9 +82,9 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap")
-    public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
-        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
-        HashMap<String, Float> maxXY = beaconService.selectMaxXYByUuidAndFloor(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+    public String loadMap(@RequestBody LoadMapDto loadMapDto) throws IOException {
+        String base64Image = blueprintUtil.loadImage(loadMapDto.getUuid(), loadMapDto.getFloor());
+        HashMap<String, Float> maxXY = beaconService.selectMaxXYByUuidAndFloor(loadMapDto.getUuid(), loadMapDto.getFloor());
         return jsonBuilder.base64Response("success", maxXY.get("x"), maxXY.get("y"), base64Image);
     }
 
@@ -103,9 +106,9 @@ public class AppController {
         return jsonBuilder.statusResponse("success","saved beacon info");
     }
 
-    @PostMapping("/event")
-    private String event(String msg){
-        // TODO: send message to application
-        return msg;
+    @GetMapping("/createWebsocketRoom")
+    public void createRoom(@RequestParam String uuid){
+        WebSocketRoom webSocketRoom = new WebSocketRoom();
+        messageRepository.createRoom(uuid, webSocketRoom);
     }
 }
