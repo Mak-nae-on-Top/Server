@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maknaeontop.communication.mapper.FloorMapper">
+    <select id="selectHeightsAndWidthsByFloor" resultType="hashMap">
+        SELECT image_height, image_width, blueprint_height, blueprint_width from floor WHERE (floor = #{floor} and uuid = #{uuid});
+    </select>
+
+    <insert id="insertImageInfo">
+        INSERT INTO floor (uuid, floor, image_height, image_width)
+        VALUES (#{uuid}, #{floor}, #{imageHeight}, #{imageWidth})
+        ON DUPLICATE KEY UPDATE image_height = #{imageHeight}, image_width = #{imageWidth};
+    </insert>
+
+    <insert id="updateBlueprintInfo">
+        UPDATE floor SET blueprint_height = #{blueprintHeight}, blueprint_width = #{blueprintWidth} WHERE (uuid = #{uuid} and floor = #{floor});
+    </insert>
+</mapper>

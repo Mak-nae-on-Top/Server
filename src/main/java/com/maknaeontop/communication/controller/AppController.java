@@ -1,23 +1,26 @@
 package com.maknaeontop.communication.controller;
 
 import com.maknaeontop.blueprint.BlueprintUtil;
-import com.maknaeontop.communication.JsonBuilder;
+import com.maknaeontop.communication.Response;
 import com.maknaeontop.communication.jwt.JwtTokenUtil;
+import com.maknaeontop.communication.mapper.FloorMapper;
+import com.maknaeontop.communication.websocket.MessageRepository;
+import com.maknaeontop.communication.websocket.WebSocketRoom;
 import com.maknaeontop.dto.*;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("app")
+@AllArgsConstructor
 public class AppController {
     private final UserService userService;
     private final BeaconService beaconService;
@@ -25,17 +28,12 @@ public class AppController {
     private RoomService roomService;
     private BuildingService buildingService;
     private final Location location = Location.getInstance();
-    private final JsonBuilder jsonBuilder = new JsonBuilder();
+    private final Response response = new Response();
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
+    private final FloorService floorService;
+    private static final MessageRepository messageRepository = new MessageRepository();
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-    // Constructor
-    public AppController(UserService userService, BeaconService beaconService, PopulationService populationService){
-        this.userService = userService;
-        this.beaconService = beaconService;
-        this.populationService = populationService;
-    }
 
     @PostMapping("/login")
     public String login(@RequestBody User user){
@@ -43,22 +41,22 @@ public class AppController {
         if(pwInDatabase != null){
             if(pwInDatabase.equals(user.getPassword())){
                 String token = jwtTokenUtil.generateToken(user);
-                return jsonBuilder.tokenResponse("success","login complete",token);
+                return response.tokenResponse("success","login complete",token);
             }
-            return jsonBuilder.tokenResponse("fail","password does not match","");
+            return response.tokenResponse("fail","password does not match","");
         }
-        return jsonBuilder.tokenResponse("fail","id does not exist","");
+        return response.tokenResponse("fail","id does not exist","");
     }
 
     @PostMapping("/join")
     public String join(@RequestBody User user) {
         if (user.getPassword().equals(user.getPassword2())) {
             if(userService.addUser(user)){
-                return jsonBuilder.statusResponse("success","registration complete");
+                return response.statusResponse("success","registration complete");
             }
-            return jsonBuilder.statusResponse("fail","id is already exist");
+            return response.statusResponse("fail","id is already exist");
         }
-        return jsonBuilder.statusResponse("fail","password and password2 do not match");
+        return response.statusResponse("fail","password and password2 do not match");
     }
 
     @PostMapping("/location")
@@ -77,38 +75,38 @@ public class AppController {
 
         populationService.insertUserLocation(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
-        return jsonBuilder.locationResponse(population);
+        return response.locationResponse(population);
     }
 
     @PostMapping(value = "/loadMap")
-    public /*ResponseEntity<?>*/String loadMap(HttpServletRequest request) throws IOException {
-        final String deviceId = request.getHeader("Device");
-        HashMap<String,Object> map = populationService.selectUuidAndFloorByDeviceId(deviceId);
-        /*return*/ String base64Image = blueprintUtil.loadImage((String)map.get("uuid"), (int)map.get("floor"));
-        return jsonBuilder.base64Response("success",base64Image);
+    public String loadMap(@RequestBody LoadMapDto loadMapDto) throws IOException {
+        String base64Image = blueprintUtil.loadImage(loadMapDto.getUuid(), loadMapDto.getFloor());
+        HashMap<String, Integer> heightAndWidth = floorService.selectHeightsAndWidthsByFloor(loadMapDto.getUuid(), loadMapDto.getFloor());
+        return response.base64Response("success", heightAndWidth, base64Image);
     }
 
     @PostMapping("/manager/saveMap")
     public String saveMap(@RequestBody Base64Image base64Image) throws IOException {
         blueprintUtil.saveImage(base64Image);
-        return jsonBuilder.statusResponse("success","image save success");
+        floorService.insertImageInfo(base64Image.getUuid(), base64Image.getFloor(), base64Image.getImageHeight(), base64Image.getImageWidth());
+        return response.statusResponse("success","image save success");
     }
 
     @PostMapping("/manager/enterRoomName")
     public String enterRoomName(@RequestBody Room room){
         roomService.insertRoom(room);
-        return jsonBuilder.statusResponse("success", "saved successfully");
+        return response.statusResponse("success", "saved successfully");
     }
 
     @PostMapping("/manager/enterBeaconLocation")
     public String enterBeaconLocation(@RequestBody List<Beacon> beaconList){
         beaconService.addBeaconList(beaconList);
-        return jsonBuilder.statusResponse("success","saved beacon info");
+        return response.statusResponse("success","saved beacon info");
     }
 
-    @PostMapping("/event")
-    private String event(String msg){
-        // TODO: send message to application
-        return msg;
+    @GetMapping("/createWebsocketRoom")
+    public void createRoom(@RequestParam String uuid){
+        WebSocketRoom webSocketRoom = new WebSocketRoom();
+        messageRepository.createRoom(uuid, webSocketRoom);
     }
 }

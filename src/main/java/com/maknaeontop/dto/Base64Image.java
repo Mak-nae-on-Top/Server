@@ -9,4 +9,6 @@ public class Base64Image {
     private String uuid;
     private String floor;
     private String base64;
+    private int imageWidth;
+    private int imageHeight;
 }

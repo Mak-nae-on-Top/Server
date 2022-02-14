@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class PopulationService {
-    PopulationMapper populationMapper;
+    private PopulationMapper populationMapper;
 
     public PopulationService(PopulationMapper populationMapper){
         this.populationMapper = populationMapper;

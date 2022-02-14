@@ -1,38 +1,21 @@
 package com.maknaeontop.communication.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
+import com.maknaeontop.dto.Message;
+import com.maknaeontop.communication.websocket.MessageRepository;
+import com.maknaeontop.communication.websocket.WebSocketRoom;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 
-//@RequestMapping("fireAlarm")
-@RestController
-//@EnableWebSocketMessageBroker
-//@Configuration
-//@Component
+@Controller
+@AllArgsConstructor
 public class FireAlarmController {
 
-    private SimpMessagingTemplate messagingTemplate;
+    MessageRepository messageRepository;
 
-    //@MessageMapping("/fireAlarm")
-    //@SendTo("/app/event/{roomId}")
-    @GetMapping("/fireAlarm")
-    public String communicateWithFireAlarm(@DestinationVariable("roomId") String roomId){
-        /*
-        // TODO: Change address and try-catch to exception handler
-        try{
-            messagingTemplate.convertAndSend("/sub/app/event/" + roomId, roomId);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-         */
-        return roomId;
+    @PostMapping("/fireAlarm/{uuid}")
+    public void test(@RequestBody Message message, @PathVariable String uuid){
+        WebSocketRoom webSocketRoom = messageRepository.getWebSocketRoomHashMap().get(uuid);
+        webSocketRoom.httpCommunication(message.getType(), messageRepository);
     }
 }
