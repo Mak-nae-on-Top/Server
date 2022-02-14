@@ -7,7 +7,5 @@ import lombok.Setter;
 @Setter
 public class LoadMapDto {
     private String uuid;
-    private int floor;
-    private int width;
-    private int height;
+    private String floor;
 }

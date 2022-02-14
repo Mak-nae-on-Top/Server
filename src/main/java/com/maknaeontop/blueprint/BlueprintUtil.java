@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 public class BlueprintUtil {
-    private final String PATHPREFIX = "/home/ubuntu/image/blueprint/";
-    //private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
+    //private final String PATHPREFIX = "/home/ubuntu/image/blueprint/";
+    private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
     private final String EXTENSION = ".txt";
     private final Base64.Decoder decoder = Base64.getDecoder();
 
@@ -46,7 +46,7 @@ public class BlueprintUtil {
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 */
-    public String loadImage(String uuid, int floor) throws IOException {
+    public String loadImage(String uuid, String floor) throws IOException {
         Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
         return new String(Files.readAllBytes(path));
     }
