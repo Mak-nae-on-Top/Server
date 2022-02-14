@@ -73,7 +73,7 @@ public class AppController {
         Population population = new Population(uuid, floor);
         population.setLocationList(locationList);
 
-        populationService.insertUserLocation(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
+        //populationService.insertUserLocation(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
         return response.locationResponse(population);
     }
