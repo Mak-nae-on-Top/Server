@@ -5,6 +5,7 @@ import com.maknaeontop.dto.Beacon;
 import java.util.HashMap;
 
 public class Trilateration {
+    /*
     public static Trilateration getInstance(){
         return Holder.instance;
     }
@@ -33,7 +34,60 @@ public class Trilateration {
 
         return createHashMap(x,y);
     }
+    public HashMap<String, Float> calculateMeanXY(){
+        // 100번 측정하였을 때 Mean값 구하기 (2회 측정 필요)
 
+        float xData = 0; // 측정 x 위치 평균 구하기 위한 변수
+        float yData = 0; // 측정 y 위치 평균 구하기 위한 변수
+
+        n = 0;
+        while (n<100) {
+            xData += createHashMap().get("x");
+            yData += createHashMap().get("y");
+            n += 1;
+        }
+        xData = xData/100;
+        yData = yData/100;
+
+        return new HashMap<String,Float>(){{
+            put("xMean", xMean);
+            put("yMean", yMean);
+        }};
+    }
+
+    public HashMap<String, Float> createModel(float realX, float realY){
+        // xMean 값과 yMean값 두개를 이용하여 모델 만들기(측정 평균 값을 실제 값과 맞추기 위하여)
+        // * f(x) = realX, x = x1, f(y) = realY, y = y1
+        // 1. realX == ax1 + b , realY == ay1 + b
+        // 2. realX-realY == a(x1 - y1)
+        // 3. a == (realX - realY)/(x1 - y1)
+        // 4. b == realX - ax1
+        // 5. f(x) == (realX - realY)/(x1 - y1)*x + realX - ax1
+
+        float x1 = calculateMeanXY().get("xMean");
+        float y1 = calculateMeanXY().get("yMean");
+
+        float a = (realX - realY)/(x1 - y1);
+        float b  = realX - ax1;
+
+        return new HashMap<String,Float>(){{
+            put("a",a);
+            put("b",b);
+        }};
+    }
+
+    public useModel(float x, float y){
+        float a = createModel().get("a");
+        float b  = createMode().get("b");
+
+        finalX = x*a + b;
+        finalY = y*a + b;
+
+        return new HashMap<String,Float>(){{
+            put("finalX",finalX);
+            put("finalY",finalY);
+        }}
+    }
     private HashMap<String, Float> createHashMap(float x, float y){
         return new HashMap<String,Float>(){{
             put("x",x);
@@ -46,4 +100,6 @@ public class Trilateration {
     private static class Holder{
         private static final Trilateration instance = new Trilateration();
     }
+
+     */
 }

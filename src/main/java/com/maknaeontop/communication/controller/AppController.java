@@ -3,7 +3,6 @@ package com.maknaeontop.communication.controller;
 import com.maknaeontop.blueprint.BlueprintUtil;
 import com.maknaeontop.communication.Response;
 import com.maknaeontop.communication.jwt.JwtTokenUtil;
-import com.maknaeontop.communication.mapper.FloorMapper;
 import com.maknaeontop.communication.websocket.MessageRepository;
 import com.maknaeontop.communication.websocket.WebSocketRoom;
 import com.maknaeontop.dto.*;
@@ -102,6 +101,13 @@ public class AppController {
     public String enterBeaconLocation(@RequestBody List<Beacon> beaconList){
         beaconService.addBeaconList(beaconList);
         return response.statusResponse("success","saved beacon info");
+    }
+
+    @PostMapping("/manager/loadAllMap")
+    public List<MapDto> loadAllMap(HttpServletRequest request) throws IOException {
+        String id = jwtTokenUtil.getIdFromToken(request);
+        List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);
+        return blueprintUtil.loadAllMap(buildingList);
     }
 
     @GetMapping("/createWebsocketRoom")

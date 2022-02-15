@@ -16,7 +16,7 @@
     </select>
 
     <select id="selectByManager" resultType="hashMap">
-        SELECT * from building WHERE manager = #{manager};
+        SELECT uuid, name, lowest_floor, highest_floor from building WHERE manager = #{manager};
     </select>
 
     <insert id="insertBuilding">

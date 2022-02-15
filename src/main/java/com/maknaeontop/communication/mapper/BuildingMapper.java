@@ -15,7 +15,7 @@ public interface BuildingMapper {
 
     String[] selectManagerByUuid();
 
-    List<HashMap<String, Object>> selectByManager();
+    List<HashMap<String, Object>> selectByManager(String manager);
 
     boolean insertBuilding();
 }

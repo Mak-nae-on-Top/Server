@@ -22,8 +22,8 @@ public class BuildingService {
         return buildingMapper.selectManagerByUuid();
     }
 
-    public List<HashMap<String, Object>> getAllByManager(){
-        return buildingMapper.selectByManager();
+    public List<HashMap<String, Object>> selectByManager(String manager){
+        return buildingMapper.selectByManager(manager);
     }
 
     public boolean insertBuilding(){
