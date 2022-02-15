@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,5 +77,16 @@ public class JwtTokenUtil implements Serializable {
     //validate token
     public Boolean validateToken(String token) {
         return !isTokenExpired(token);
+    }
+
+    public String getIdFromToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String userId = null;
+
+        // 헤더가 존재하고 Bearer로 시작하면 username 추출
+        if (header != null && header.startsWith("Bearer ")) {
+            userId = getIdByToken(header.substring(7));
+        }
+        return userId;
     }
 }

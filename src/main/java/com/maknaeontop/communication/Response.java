@@ -2,9 +2,11 @@ package com.maknaeontop.communication;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.maknaeontop.dto.MapDto;
 import com.maknaeontop.dto.Population;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Response {
     Gson gson = new Gson();
