@@ -86,6 +86,13 @@ public class AppController {
 
     @PostMapping("/manager/saveMap")
     public String saveMap(@RequestBody Base64Image base64Image) throws IOException {
+        HashMap<String, Integer> floorRange = buildingService.selectFloorRangeByUuid(base64Image.getUuid());
+        if(floorRange.get("lowest_floor") > Integer.parseInt(base64Image.getFloor())){
+            buildingService.updateLowestFloor(base64Image.getUuid(), base64Image.getFloor());
+        }
+        if(floorRange.get("highest_floor") < Integer.parseInt(base64Image.getFloor())){
+            buildingService.updateHighestFloor(base64Image.getUuid(), base64Image.getFloor());
+        }
         blueprintUtil.saveImage(base64Image);
         floorService.insertImageInfo(base64Image.getUuid(), base64Image.getFloor(), base64Image.getImageHeight(), base64Image.getImageWidth());
         return response.statusResponse("success","image save success");
