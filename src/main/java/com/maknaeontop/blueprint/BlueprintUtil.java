@@ -13,13 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BlueprintUtil {
-    private final String PATHPREFIX = "/home/ubuntu/image/blueprint/";
+    private final String PATH_PREFIX = "/home/ubuntu/image/blueprint/";
     //private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
     private final String EXTENSION = ".txt";
-    private final Base64.Decoder decoder = Base64.getDecoder();
+
+    private final PythonProcessBuilder pythonProcessBuilder = new PythonProcessBuilder();
 
     public void saveImage(Base64Image base64Image) throws IOException{
-        String pathName = PATHPREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
+        String pathName = PATH_PREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
         File file = new File(pathName);
         if (!file.exists()) {
             file.createNewFile();
@@ -31,7 +32,7 @@ public class BlueprintUtil {
     }
 
     public String loadImage(String uuid, String floor) throws IOException {
-        Path path = Paths.get(PATHPREFIX + uuid + "_" + floor + EXTENSION);
+        Path path = Paths.get(PATH_PREFIX + uuid + "_" + floor + EXTENSION);
         return new String(Files.readAllBytes(path));
     }
 
@@ -49,10 +50,15 @@ public class BlueprintUtil {
                     MapDto mapDto = new MapDto(uuid,buildingName, Integer.toString(i), loadImage(uuid, Integer.toString(i)));
                     mapList.add(mapDto);
                 }
-            }catch (Exception e){
+            }catch (NullPointerException e){
                 continue;
             }
         }
         return mapList;
+    }
+
+    // TODO:
+    public void buildMap(String fileName) throws IOException, InterruptedException {
+        pythonProcessBuilder.executeMapBuilder(fileName);
     }
 }
