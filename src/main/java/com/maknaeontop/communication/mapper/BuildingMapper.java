@@ -17,5 +17,11 @@ public interface BuildingMapper {
 
     List<HashMap<String, Object>> selectByManager(String manager);
 
+    HashMap<String, Integer> selectFloorRangeByUuid(String uuid);
+
+    void updateHighestFloor(String uuid, String highestFloor);
+
+    void updateLowestFloor(String uuid, String lowestFloor);
+
     boolean insertBuilding();
 }

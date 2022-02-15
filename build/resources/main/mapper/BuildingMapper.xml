@@ -19,6 +19,18 @@
         SELECT uuid, name, lowest_floor, highest_floor from building WHERE manager = #{manager};
     </select>
 
+    <select id="selectFloorRangeByUuid" resultType="hashMap">
+        SELECT lowest_floor, highest_floor from building WHERE uuid = #{uuid};
+    </select>
+
+    <update id="updateHighestFloor">
+        UPDATE building SET highest_floor = #{highestFloor} WHERE uuid = #{uuid};
+    </update>
+
+    <update id="updateLowestFloor">
+        UPDATE building SET lowest_floor = #{lowest_floor} WHERE uuid = #{uuid};
+    </update>
+
     <insert id="insertBuilding">
         INSERT INTO building VALUES (#{uuid}, #{name}, #{manager});
     </insert>

@@ -26,6 +26,18 @@ public class BuildingService {
         return buildingMapper.selectByManager(manager);
     }
 
+    public HashMap<String, Integer> selectFloorRangeByUuid(String uuid){
+        return buildingMapper.selectFloorRangeByUuid(uuid);
+    }
+
+    public void updateHighestFloor(String uuid, String highestFloor){
+        buildingMapper.updateHighestFloor(uuid, highestFloor);
+    }
+
+    public void updateLowestFloor(String uuid, String lowestFloor){
+        buildingMapper.updateLowestFloor(uuid, lowestFloor);
+    }
+
     public boolean insertBuilding(){
         return buildingMapper.insertBuilding();
     }
