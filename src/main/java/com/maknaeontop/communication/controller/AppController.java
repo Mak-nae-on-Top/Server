@@ -93,7 +93,7 @@ public class AppController {
         if(floorRange.get("highest_floor") < Integer.parseInt(base64Image.getFloor())){
             buildingService.updateHighestFloor(base64Image.getUuid(), base64Image.getFloor());
         }
-        if(blueprintUtil.saveImage(base64Image)){
+        if(!blueprintUtil.saveImage(base64Image)){
             return response.statusResponse("fail","fail to convert image to map");
         }
         floorService.insertImageInfo(base64Image.getUuid(), base64Image.getFloor(), base64Image.getImageHeight(), base64Image.getImageWidth());
