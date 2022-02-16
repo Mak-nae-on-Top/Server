@@ -18,7 +18,7 @@ public class BlueprintUtil {
 
     private final PythonProcessBuilder pythonProcessBuilder = new PythonProcessBuilder();
 
-    public void saveImage(Base64Image base64Image) throws IOException{
+    public boolean saveImage(Base64Image base64Image) throws IOException{
         String pathName = PATH_PREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
         File file = new File(pathName);
         if (!file.exists()) {
@@ -31,7 +31,9 @@ public class BlueprintUtil {
 
         if(!createMap(pathName)){
             file.delete();
+            return false;
         }
+        return true;
     }
 
     public String loadImage(String uuid, String floor) throws IOException {
