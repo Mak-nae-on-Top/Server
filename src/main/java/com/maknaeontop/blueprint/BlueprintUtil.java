@@ -13,7 +13,6 @@ import java.util.List;
 
 public class BlueprintUtil {
     private final String PATH_PREFIX = "/home/ubuntu/image/blueprint/";
-    //private final String PATHPREFIX = "C:/Users/namu/Desktop/test/";
     private final String EXTENSION = ".txt";
 
     private final PythonProcessBuilder pythonProcessBuilder = new PythonProcessBuilder();
@@ -84,8 +83,7 @@ public class BlueprintUtil {
 
     public boolean createMap(String pathName) {
         try {
-            String response = pythonProcessBuilder.executeConvertImageToMapModule(pathName);
-            System.out.println(response);
+            pythonProcessBuilder.executeConvertImageToMapModule(pathName);
         }catch (Exception e){
             System.out.println("create map error: "+e.toString());
             return false;
