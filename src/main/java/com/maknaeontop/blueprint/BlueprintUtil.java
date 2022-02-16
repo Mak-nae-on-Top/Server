@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +28,8 @@ public class BlueprintUtil {
         BufferedWriter writer = new BufferedWriter(fw);
         writer.write(base64Image.getBase64());
         writer.close();
+
+        createMap(pathName);
     }
 
     public String loadImage(String uuid, String floor) throws IOException {
@@ -57,8 +58,11 @@ public class BlueprintUtil {
         return mapList;
     }
 
-    // TODO:
-    public void buildMap(String fileName) throws IOException, InterruptedException {
-        pythonProcessBuilder.executeMapBuilder(fileName);
+    public void createMap(String pathName) {
+        try {
+            pythonProcessBuilder.executeConvertImageToMapModule(pathName);
+        }catch (Exception e){
+            System.out.println("create map error");
+        }
     }
 }

@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class PythonProcessBuilder {
-    private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/";
+    private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/build/";
+    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/build/";
 
-    public String executeMapBuilder(String arg) throws IOException, InterruptedException {
-        return executeProcess(PYTHON_MODULE_PATH+"mapBuilder.exe", arg);
+    public String executeConvertImageToMapModule(String arg) throws IOException, InterruptedException {
+        return executeProcess( "sudo " + PYTHON_MODULE_PATH + "convertImageToMap.exe", arg);
     }
 
     private String executeProcess(String command, String arg) throws IOException, InterruptedException {
@@ -22,7 +23,7 @@ public class PythonProcessBuilder {
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }if(exitVal != 0) {
-            System.out.println("서브 프로세스가 비정상 종료되었다.");
+            System.out.println("process terminated abnormally");
         }
 
         return sb.toString();
