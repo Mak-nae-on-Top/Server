@@ -29,7 +29,9 @@ public class BlueprintUtil {
         writer.write(base64Image.getBase64());
         writer.close();
 
-        createMap(pathName);
+        if(!createMap(pathName)){
+            file.delete();
+        }
     }
 
     public String loadImage(String uuid, String floor) throws IOException {
@@ -58,11 +60,14 @@ public class BlueprintUtil {
         return mapList;
     }
 
-    public void createMap(String pathName) {
+    public boolean createMap(String pathName) {
         try {
             pythonProcessBuilder.executeConvertImageToMapModule(pathName);
         }catch (Exception e){
             System.out.println("create map error: "+e.toString());
+            return false;
         }
+
+        return true;
     }
 }
