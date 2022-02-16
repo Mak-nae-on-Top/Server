@@ -3,6 +3,7 @@ package com.maknaeontop.communication.sevice;
 import com.maknaeontop.communication.mapper.RoomMapper;
 import com.maknaeontop.dto.RoomListOnFloor;
 import com.maknaeontop.dto.Room;
+import com.maknaeontop.dto.UuidAndFloor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,5 +29,9 @@ public class RoomService {
         for(Room room : roomListOnFloor.getRoomList()){
             roomMapper.insertRoom(roomListOnFloor.getUuid(), Integer.parseInt(roomListOnFloor.getFloor()), room.getRoomName(), room.getX(), room.getY());
         }
+    }
+
+    public void deleteByUuidAndFloor(UuidAndFloor uuidAndFloor){
+        roomMapper.deleteByUuidAndFloor(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
     }
 }

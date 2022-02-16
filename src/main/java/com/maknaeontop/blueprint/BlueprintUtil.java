@@ -35,6 +35,16 @@ public class BlueprintUtil {
         return true;
     }
 
+    public boolean deleteMap(String uuid, String floor){
+        String pathName = PATH_PREFIX + uuid + "_" + floor + EXTENSION;
+        File file = new File(pathName);
+        if(file.exists()){
+            file.delete();
+            return true;
+        }
+        return false;
+    }
+
     public String loadImage(String uuid, String floor) throws IOException {
         Path path = Paths.get(PATH_PREFIX + uuid + "_" + floor + EXTENSION);
         return new String(Files.readAllBytes(path));

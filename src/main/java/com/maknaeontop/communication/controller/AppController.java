@@ -78,9 +78,9 @@ public class AppController {
     }
 
     @PostMapping(value = "/loadMap")
-    public String loadMap(@RequestBody LoadMapDto loadMapDto) throws IOException {
-        String base64Image = blueprintUtil.loadImage(loadMapDto.getUuid(), loadMapDto.getFloor());
-        HashMap<String, Integer> heightAndWidth = floorService.selectHeightsAndWidthsByFloor(loadMapDto.getUuid(), loadMapDto.getFloor());
+    public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
+        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+        HashMap<String, Integer> heightAndWidth = floorService.selectHeightsAndWidthsByFloor(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
         return response.base64Response("success", heightAndWidth, base64Image);
     }
 
@@ -96,7 +96,7 @@ public class AppController {
         if(!blueprintUtil.saveImage(base64Image)){
             return response.statusResponse("fail","fail to convert image to map");
         }
-        floorService.insertImageInfo(base64Image.getUuid(), base64Image.getFloor(), base64Image.getImageHeight(), base64Image.getImageWidth());
+        floorService.insertImageInfo(base64Image.getUuid(), Integer.parseInt(base64Image.getFloor()), base64Image.getImageHeight(), base64Image.getImageWidth());
         return response.statusResponse("success","image save success");
     }
 
@@ -104,6 +104,19 @@ public class AppController {
     public String enterRoomName(@RequestBody RoomListOnFloor roomListOnFloor){
         roomService.insertRoom(roomListOnFloor);
         return response.statusResponse("success", "saved successfully");
+    }
+
+    @PostMapping("/manager/deleteFloor")
+    public String deleteFloor(@RequestBody UuidAndFloor uuidAndFloor){
+        // 이미지 찾아서 지우기
+        blueprintUtil.deleteMap(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+        // 디비에서 지우기
+        beaconService.deleteByUuidAndFloor(uuidAndFloor);       // beacon table
+        buildingService.deleteFloor(uuidAndFloor);              // building table
+        floorService.deleteFloorByUuidAndFloor(uuidAndFloor);   // floor table
+        roomService.deleteByUuidAndFloor(uuidAndFloor);         // room table
+
+        return response.statusResponse("sucess", "floor data is deleted");
     }
 
     @PostMapping("/manager/enterBeaconLocation")
