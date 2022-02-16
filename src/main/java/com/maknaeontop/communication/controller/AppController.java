@@ -128,7 +128,7 @@ public class AppController {
     }
 
     @PostMapping("/manager/loadAllMap")
-    public List<MapDto> loadAllMap(HttpServletRequest request) throws IOException {
+    public String loadAllMap(HttpServletRequest request) {
         String id = jwtTokenUtil.getIdFromToken(request);
         List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);   // 빌딩 리스트 가져오기
         List<MapDto> mapList = new ArrayList<>();
@@ -146,13 +146,13 @@ public class AppController {
                     String base64Image = blueprintUtil.loadImage(uuid, floor);
                     MapDto mapDto = new MapDto(uuid, buildingName, Integer.toString(floor), base64Image, hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
                     mapList.add(mapDto);
-                }catch (NullPointerException e){
+                }catch (NullPointerException | IOException e){
                     continue;
                 }
             }
         }
 
-        return mapList;
+        return response.allMapResponse(mapList);
     }
 
     @GetMapping("/createWebsocketRoom")

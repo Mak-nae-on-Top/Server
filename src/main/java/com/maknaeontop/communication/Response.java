@@ -34,6 +34,10 @@ public class Response {
         return gson.toJson(population);
     }
 
+    public String allMapResponse(List<MapDto> mapList){
+        return gson.toJson(mapList);
+    }
+
     public String base64Response(String status, HashMap<String, Integer> heightAndWidth, String base64){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("status", status);
