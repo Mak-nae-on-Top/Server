@@ -101,8 +101,8 @@ public class AppController {
     }
 
     @PostMapping("/manager/enterRoomName")
-    public String enterRoomName(@RequestBody Room room){
-        roomService.insertRoom(room);
+    public String enterRoomName(@RequestBody RoomListOnFloor roomListOnFloor){
+        roomService.insertRoom(roomListOnFloor);
         return response.statusResponse("success", "saved successfully");
     }
 
