@@ -7,14 +7,14 @@ import java.util.List;
 
 public class Location {
     private Distance distance = Distance.getInstance();
-    //private Trilateration trilateration = Trilateration.getInstance();
+    private Trilateration trilateration = Trilateration.getInstance();
 
     public static Location getInstance() {
         return Holder.instance;
     }
 
     public HashMap<String, Float> findUserLocation(List<Beacon> beaconList){
-        return null;//trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
+        return trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
     }
 
     private Location(){}

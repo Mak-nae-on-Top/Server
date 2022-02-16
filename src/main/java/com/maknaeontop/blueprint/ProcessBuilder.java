@@ -4,16 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class PythonProcessBuilder {
+public class ProcessBuilder {
     private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
-    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/";
 
     public String executeConvertImageToMapModule(String arg) throws IOException, InterruptedException {
-        return executeProcess( PYTHON_MODULE_PATH + "convertImageToMap.py", arg);
+        return buildProcess( PYTHON_MODULE_PATH + "convertImageToMap.py", arg);
     }
 
-    private String executeProcess(String command, String arg) throws IOException, InterruptedException {
-        ProcessBuilder builder = new ProcessBuilder(command, arg);
+    private String buildProcess(String command, String arg) throws IOException, InterruptedException {
+        java.lang.ProcessBuilder builder = new java.lang.ProcessBuilder(command, arg);
         Process process = builder.start();
         int exitVal = process.waitFor();
         BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), "euc-kr"));
