@@ -3,9 +3,9 @@ package com.maknaeontop.location;
 import com.maknaeontop.dto.Beacon;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Trilateration {
-    /*
     public static Trilateration getInstance(){
         return Holder.instance;
     }
@@ -34,20 +34,20 @@ public class Trilateration {
 
         return createHashMap(x,y);
     }
-    public HashMap<String, Float> calculateMeanXY(){
+    public HashMap<String, Float> calculateMeanXY(float x, float y){
         // 100번 측정하였을 때 Mean값 구하기 (2회 측정 필요)
 
         float xData = 0; // 측정 x 위치 평균 구하기 위한 변수
         float yData = 0; // 측정 y 위치 평균 구하기 위한 변수
 
-        n = 0;
+        int n = 0;
         while (n<100) {
-            xData += createHashMap().get("x");
-            yData += createHashMap().get("y");
+            xData += createHashMap(x, y).get("x");
+            yData += createHashMap(x, y).get("y");
             n += 1;
         }
-        xData = xData/100;
-        yData = yData/100;
+        float xMean = xData/100;
+        float yMean = yData/100;
 
         return new HashMap<String,Float>(){{
             put("xMean", xMean);
@@ -64,11 +64,11 @@ public class Trilateration {
         // 4. b == realX - ax1
         // 5. f(x) == (realX - realY)/(x1 - y1)*x + realX - ax1
 
-        float x1 = calculateMeanXY().get("xMean");
-        float y1 = calculateMeanXY().get("yMean");
+        float x1 = calculateMeanXY(realX, realY).get("xMean");
+        float y1 = calculateMeanXY(realX, realY).get("yMean");
 
         float a = (realX - realY)/(x1 - y1);
-        float b  = realX - ax1;
+        float b  = realX - a * x1;
 
         return new HashMap<String,Float>(){{
             put("a",a);
@@ -76,17 +76,17 @@ public class Trilateration {
         }};
     }
 
-    public useModel(float x, float y){
-        float a = createModel().get("a");
-        float b  = createMode().get("b");
+    public Map<String, Float> useModel(float x, float y){
+        float a = createModel(x, y).get("a");
+        float b  = createModel(x, y).get("b");
 
-        finalX = x*a + b;
-        finalY = y*a + b;
+        float finalX = x*a + b;
+        float finalY = y*a + b;
 
         return new HashMap<String,Float>(){{
             put("finalX",finalX);
             put("finalY",finalY);
-        }}
+        }};
     }
     private HashMap<String, Float> createHashMap(float x, float y){
         return new HashMap<String,Float>(){{
@@ -100,6 +100,4 @@ public class Trilateration {
     private static class Holder{
         private static final Trilateration instance = new Trilateration();
     }
-
-     */
 }

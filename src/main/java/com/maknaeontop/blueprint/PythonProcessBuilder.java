@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class PythonProcessBuilder {
     private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
-    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/build/";
+    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/";
 
     public String executeConvertImageToMapModule(String arg) throws IOException, InterruptedException {
         return executeProcess( PYTHON_MODULE_PATH + "convertImageToMap.py", arg);
