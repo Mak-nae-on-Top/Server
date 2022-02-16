@@ -28,11 +28,31 @@ public class BlueprintUtil {
         BufferedWriter writer = new BufferedWriter(fw);
         writer.write(base64Image.getBase64());
         writer.close();
+        /*
+        if(!createMap(pathName)){
+            file.delete();
+            return false;
+        }
+        */
+        return true;
+    }
+
+    public boolean saveImageTest(Base64Image base64Image) throws IOException{
+        String pathName = PATH_PREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
+        File file = new File(pathName);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter writer = new BufferedWriter(fw);
+        writer.write(base64Image.getBase64());
+        writer.close();
 
         if(!createMap(pathName)){
             file.delete();
             return false;
         }
+
         return true;
     }
 

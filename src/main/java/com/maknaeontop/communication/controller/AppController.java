@@ -126,7 +126,7 @@ public class AppController {
     }
 
     @PostMapping("/test")
-    public void test(String fileName) {
-        blueprintUtil.createMap(fileName);
+    public void test(@RequestBody Base64Image base64Image) throws IOException {
+        blueprintUtil.saveImageTest(base64Image);
     }
 }
