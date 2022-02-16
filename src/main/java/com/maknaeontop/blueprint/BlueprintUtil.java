@@ -62,7 +62,7 @@ public class BlueprintUtil {
         try {
             pythonProcessBuilder.executeConvertImageToMapModule(pathName);
         }catch (Exception e){
-            System.out.println("create map error");
+            System.out.println("create map error: "+e.toString());
         }
     }
 }

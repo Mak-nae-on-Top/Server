@@ -9,7 +9,7 @@ public class PythonProcessBuilder {
     //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/build/";
 
     public String executeConvertImageToMapModule(String arg) throws IOException, InterruptedException {
-        return executeProcess( "sudo " + PYTHON_MODULE_PATH + "convertImageToMap.exe", arg);
+        return executeProcess( PYTHON_MODULE_PATH + "convertImageToMap.exe", arg);
     }
 
     private String executeProcess(String command, String arg) throws IOException, InterruptedException {
