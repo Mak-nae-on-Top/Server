@@ -34,4 +34,8 @@ public class RoomService {
     public void deleteByUuidAndFloor(UuidAndFloor uuidAndFloor){
         roomMapper.deleteByUuidAndFloor(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
     }
+
+    public List<HashMap<String, Object>> selectByUuidNFloor(String uuid, int floor){
+        return roomMapper.selectByUuidAndFloor(uuid, floor);
+    }
 }

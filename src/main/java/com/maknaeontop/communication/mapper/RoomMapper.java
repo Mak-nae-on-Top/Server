@@ -16,4 +16,6 @@ public interface RoomMapper {
     boolean insertRoom(String uuid, int floor, String roomName, float x, float y);
 
     void deleteByUuidAndFloor(String uuid, int floor);
+
+    List<HashMap<String, Object>> selectByUuidAndFloor(String uuid, int floor);
 }

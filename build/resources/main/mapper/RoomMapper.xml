@@ -10,6 +10,10 @@
     <select id="selectLocationByUuidNRoomName" resultType="hashMap">
         SELECT x,y,z FROM room WHERE (uuid = #{uuid} and room_name = #{roomName});
     </select>
+
+    <select id="selectByUuidAndFloor" resultType="hashMap">
+        SELECT x, y, roomName FROM room WHERE (uuid = #{uuid} and floor = #{floor});
+    </select>
     
     <insert id="insertRoom">
         INSERT INTO room VALUES #({uuid}, #{floor}, #{roomName}, #{x}, #{y});
