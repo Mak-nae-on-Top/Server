@@ -122,4 +122,9 @@ public class AppController {
         WebSocketRoom webSocketRoom = new WebSocketRoom();
         messageRepository.createRoom(uuid, webSocketRoom);
     }
+
+    @PostMapping("/test")
+    public void test(String fileName) {
+        blueprintUtil.createMap(fileName);
+    }
 }
