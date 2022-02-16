@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class AppController {
 
     @PostMapping(value = "/loadMap")
     public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
-        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
         HashMap<String, Integer> heightAndWidth = floorService.selectHeightsAndWidthsByFloor(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
         return response.base64Response("success", heightAndWidth, base64Image);
     }
@@ -128,8 +129,28 @@ public class AppController {
     @PostMapping("/manager/loadAllMap")
     public List<MapDto> loadAllMap(HttpServletRequest request) throws IOException {
         String id = jwtTokenUtil.getIdFromToken(request);
-        List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);
-        return blueprintUtil.loadAllMap(buildingList);
+        List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);   // 빌딩 리스트 가져오기
+        List<MapDto> mapList = new ArrayList<>();
+
+        for(HashMap<String, Object> buildingHashMap : buildingList){    // 빌딩 돌면서 uuid, 건물이름, 가장 낮은층, 가장 높은층 가져오기
+            String uuid = buildingHashMap.get("uuid").toString();
+            String buildingName = buildingHashMap.get("name").toString();
+            int lowestFloor = (int) buildingHashMap.get("lowest_floor");
+            int highestFloor = (int) buildingHashMap.get("highest_floor");
+
+            try{
+                for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
+                    HashMap<String, Integer> hw = floorService.selectHeightsAndWidthsByFloor(uuid, floor);  // width, height 가져오기
+                    List<HashMap<String, Object>> roomInfo = roomService.selectByUuidNFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName) 가져오기
+                    MapDto mapDto = new MapDto(uuid, buildingName, Integer.toString(floor), blueprintUtil.loadImage(uuid, floor), hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
+                    mapList.add(mapDto);
+                }
+            }catch (NullPointerException e){
+                continue;
+            }
+        }
+
+        return mapList;
     }
 
     @GetMapping("/createWebsocketRoom")

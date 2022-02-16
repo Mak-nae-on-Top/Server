@@ -40,35 +40,14 @@ public class BlueprintUtil {
         File file = new File(pathName);
         if(file.exists()){
             file.delete();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    public String loadImage(String uuid, String floor) throws IOException {
+    public String loadImage(String uuid, int floor) throws IOException {
         Path path = Paths.get(PATH_PREFIX + uuid + "_" + floor + EXTENSION);
         return new String(Files.readAllBytes(path));
-    }
-
-    public List<MapDto> loadAllMap(List<HashMap<String, Object>> buildingList) throws IOException {
-        List<MapDto> mapList = new ArrayList<>();
-
-        for(HashMap<String, Object> buildingHashMap : buildingList){
-            String uuid = buildingHashMap.get("uuid").toString();
-            String buildingName = buildingHashMap.get("name").toString();
-            int lowestFloor = (int) buildingHashMap.get("lowest_floor");
-            int highestFloor = (int) buildingHashMap.get("highest_floor");
-
-            try{
-                for(int i=lowestFloor; i<=highestFloor;i++){
-                    MapDto mapDto = new MapDto(uuid,buildingName, Integer.toString(i), loadImage(uuid, Integer.toString(i)));
-                    mapList.add(mapDto);
-                }
-            }catch (NullPointerException e){
-                continue;
-            }
-        }
-        return mapList;
     }
 
     public boolean createMap(String pathName) {
