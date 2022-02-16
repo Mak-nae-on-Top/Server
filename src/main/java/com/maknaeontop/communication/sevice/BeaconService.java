@@ -3,6 +3,7 @@ package com.maknaeontop.communication.sevice;
 import com.maknaeontop.communication.mapper.BeaconMapper;
 import com.maknaeontop.communication.mapper.UserMapper;
 import com.maknaeontop.dto.Beacon;
+import com.maknaeontop.dto.UuidAndFloor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -54,5 +55,9 @@ public class BeaconService {
 
     public HashMap<String, Float> selectMaxXYByUuidAndFloor(String uuid, int floor){
         return beaconMapper.selectMaxXYByUuidAndFloor(uuid, floor);
+    }
+
+    public void deleteByUuidAndFloor(UuidAndFloor uuidAndFloor){
+        beaconMapper.deleteByUuidAndFloor(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
     }
 }

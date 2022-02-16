@@ -14,4 +14,8 @@
     <insert id="insertRoom">
         INSERT INTO room VALUES #({uuid}, #{floor}, #{roomName}, #{x}, #{y});
     </insert>
+    
+    <delete id="deleteByUuidAndFloor">
+        DELETE FROM room WHERE (uuid = #{uuid} and floor = #{floor})
+    </delete>
 </mapper>

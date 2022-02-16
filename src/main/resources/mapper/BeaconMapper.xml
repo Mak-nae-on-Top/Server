@@ -26,4 +26,8 @@
     <select id="selectMaxXYByUuidAndFloor" resultType="hashMap">
         SELECT MAX(x), MAX(y) FROM beacon WHERE (uuid = #{uuid} and floor = #{floor});
     </select>
+    
+    <delete id="deleteByUuidAndFloor">
+        DELETE FROM beacon WHERE(uuid = #{uuid} and floor = #{floor});
+    </delete>
 </mapper>

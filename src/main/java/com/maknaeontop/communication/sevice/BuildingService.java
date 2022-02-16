@@ -1,6 +1,7 @@
 package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.BuildingMapper;
+import com.maknaeontop.dto.UuidAndFloor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -36,6 +37,19 @@ public class BuildingService {
 
     public void updateLowestFloor(String uuid, String lowestFloor){
         buildingMapper.updateLowestFloor(uuid, lowestFloor);
+    }
+
+    public void deleteFloor(UuidAndFloor uuidAndFloor){
+        HashMap<String, Integer> lowestAndHighest = selectFloorRangeByUuid(uuidAndFloor.getUuid());
+
+        if(lowestAndHighest.get("lowest_floor").equals(uuidAndFloor.getFloor())){
+            int newLowestFloor = Integer.parseInt(uuidAndFloor.getFloor()) + 1;
+            updateLowestFloor(uuidAndFloor.getUuid(), Integer.toString(newLowestFloor));
+        }
+        else if(lowestAndHighest.get("highest_floor").equals(uuidAndFloor.getFloor())){
+            int newHighestFloor = Integer.parseInt(uuidAndFloor.getFloor()) - 1;
+            updateHighestFloor(uuidAndFloor.getUuid(), Integer.toString(newHighestFloor));
+        }
     }
 
     public boolean insertBuilding(){
