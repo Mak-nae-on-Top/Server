@@ -42,7 +42,8 @@ def convert_image_to_map(file_path):
     dst = cv.fastNlMeansDenoising(im_uint8, None, 40.0, 7, 21)
     dst = cv.pyrDown(dst)
     dst = cv.pyrDown(dst)
-    dst_base64 = base64.b64encode(dst)
+
+    dst_base64 = base64.b64encode(cv.imencode('.jpg', dst)[1]).decode()
     dst_file = open(file_path, 'w')
     dst_file.write(str(dst_base64))
     dst_file.close()
