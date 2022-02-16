@@ -12,6 +12,6 @@
     </select>
     
     <insert id="insertRoom">
-        INSERT INTO room VALUES #({uuid}, #{roomName}, #{x}, #{y}, #{z});
+        INSERT INTO room VALUES #({uuid}, #{floor}, #{roomName}, #{x}, #{y});
     </insert>
 </mapper>
