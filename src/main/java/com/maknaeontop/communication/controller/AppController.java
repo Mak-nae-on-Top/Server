@@ -124,9 +124,4 @@ public class AppController {
         WebSocketRoom webSocketRoom = new WebSocketRoom();
         messageRepository.createRoom(uuid, webSocketRoom);
     }
-
-    @PostMapping("/test")
-    public void test(@RequestBody Base64Image base64Image) throws IOException {
-        blueprintUtil.saveImageTest(base64Image);
-    }
 }
