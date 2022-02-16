@@ -9,6 +9,7 @@ import com.maknaeontop.dto.*;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
 import lombok.AllArgsConstructor;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -138,15 +139,16 @@ public class AppController {
             int lowestFloor = (int) buildingHashMap.get("lowest_floor");
             int highestFloor = (int) buildingHashMap.get("highest_floor");
 
-            try{
-                for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
+            for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
+                try {
                     HashMap<String, Integer> hw = floorService.selectHeightsAndWidthsByFloor(uuid, floor);  // width, height 가져오기
                     List<HashMap<String, Object>> roomInfo = roomService.selectByUuidNFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName) 가져오기
-                    MapDto mapDto = new MapDto(uuid, buildingName, Integer.toString(floor), blueprintUtil.loadImage(uuid, floor), hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
+                    String base64Image = blueprintUtil.loadImage(uuid, floor);
+                    MapDto mapDto = new MapDto(uuid, buildingName, Integer.toString(floor), base64Image, hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
                     mapList.add(mapDto);
+                }catch (NullPointerException e){
+                    continue;
                 }
-            }catch (NullPointerException e){
-                continue;
             }
         }
 
