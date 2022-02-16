@@ -64,7 +64,8 @@ public class BlueprintUtil {
 
     public boolean createMap(String pathName) {
         try {
-            pythonProcessBuilder.executeConvertImageToMapModule(pathName);
+            String response = pythonProcessBuilder.executeConvertImageToMapModule(pathName);
+            System.out.println(response);
         }catch (Exception e){
             System.out.println("create map error: "+e.toString());
             return false;
