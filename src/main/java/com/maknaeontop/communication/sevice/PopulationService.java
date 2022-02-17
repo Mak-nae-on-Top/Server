@@ -22,7 +22,7 @@ public class PopulationService {
         return populationMapper.selectByUuid(uuid);
     }
 
-    public HashMap<String, Object> selectLocationById(String deviceId){
+    public HashMap<String, Object> selectLocationByDeviceId(String deviceId){
         return populationMapper.selectLocationByDeviceId(deviceId);
     }
 
@@ -30,8 +30,12 @@ public class PopulationService {
         return populationMapper.selectUuidAndFloorByDeviceId(deviceId);
     }
 
-    public List<HashMap<String, Float>> selectLocationByUuid(String uuid, int floor, String deviceId){
-        return populationMapper.selectLocationByUuidWithoutDeviceId(uuid, floor, deviceId);
+    public List<HashMap<String, Float>> selectLocationAfterInsert(String deviceId, String uuid, float x, float y, int floor){
+        return populationMapper.selectLocationAfterInsert(deviceId, uuid, x, y, floor);
+    }
+
+    public List<HashMap<String, Float>> selectLocationInSameFloor(String uuid, int floor, String deviceId){
+        return populationMapper.selectLocationInSameFloor(uuid, floor, deviceId);
     }
 
     public boolean insertUserLocation(String deviceId, String uuid, float x, float y, int floor){
