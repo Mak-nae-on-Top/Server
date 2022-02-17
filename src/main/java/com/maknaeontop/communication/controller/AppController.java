@@ -9,7 +9,6 @@ import com.maknaeontop.dto.*;
 import com.maknaeontop.communication.sevice.*;
 import com.maknaeontop.location.Location;
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +25,8 @@ public class AppController {
     private final UserService userService;
     private final BeaconService beaconService;
     private final PopulationService populationService;
-    private RoomService roomService;
-    private BuildingService buildingService;
+    private final RoomService roomService;
+    private final BuildingService buildingService;
     private final Location location = Location.getInstance();
     private final Response response = new Response();
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
@@ -63,20 +62,27 @@ public class AppController {
     @PostMapping("/location")
     public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request) {
         final String deviceId = request.getHeader("Device");
+
+        // 비콘들의 xy정보 가져와서 저장 및 uuid, floor 추출
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList);
-        HashMap<String, Float> userLocation = location.findUserLocation(beaconListIncludeLocation);
         String uuid = beaconListIncludeLocation.get(0).getUuid();
         int floor = beaconListIncludeLocation.get(0).getFloor();
 
-        List<HashMap<String, Float>> locationList = populationService.selectLocationByUuid(uuid, floor, deviceId);
-        locationList.add(0,userLocation);
+        // 사용자 위치 계산
+        HashMap<String, Float> userLocation = location.findUserLocation(beaconListIncludeLocation);
+        // 사용자 위치 저장 후 같은 층 사람들 위치 반환 (사용자 위치가 0번째)
+        List<HashMap<String, Float>> locationList = populationService.selectLocationAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
         Population population = new Population(uuid, floor);
         population.setLocationList(locationList);
 
-        //populationService.insertUserLocation(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
-
         return response.locationResponse(population);
+    }
+
+    @GetMapping("/createWebsocketRoom")
+    public void createRoom(@RequestParam String uuid){
+        WebSocketRoom webSocketRoom = new WebSocketRoom();
+        messageRepository.createRoom(uuid, webSocketRoom);
     }
 
     @PostMapping(value = "/loadMap")
@@ -131,7 +137,7 @@ public class AppController {
     public String loadAllMap(HttpServletRequest request) {
         String id = jwtTokenUtil.getIdFromToken(request);
         List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);   // 빌딩 리스트 가져오기
-        List<MapDto> mapList = new ArrayList<>();
+        List<FloorInfo> mapList = new ArrayList<>();
 
         for(HashMap<String, Object> buildingHashMap : buildingList){    // 빌딩 돌면서 uuid, 건물이름, 가장 낮은층, 가장 높은층 가져오기
             String uuid = buildingHashMap.get("uuid").toString();
@@ -142,22 +148,27 @@ public class AppController {
             for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
                 try {
                     HashMap<String, Integer> hw = floorService.selectHeightsAndWidthsByFloor(uuid, floor);  // width, height 가져오기
-                    List<HashMap<String, Object>> roomInfo = roomService.selectByUuidNFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName) 가져오기
+                    List<HashMap<String, Object>> roomInfo = roomService.selectByUuidAndFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName, id) 가져오기
                     String base64Image = blueprintUtil.loadImage(uuid, floor);
-                    MapDto mapDto = new MapDto(uuid, buildingName, Integer.toString(floor), base64Image, hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
-                    mapList.add(mapDto);
+                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
+                    mapList.add(floorInfo);
                 }catch (NullPointerException | IOException e){
                     continue;
                 }
             }
         }
-
         return response.allMapResponse(mapList);
     }
 
-    @GetMapping("/createWebsocketRoom")
-    public void createRoom(@RequestParam String uuid){
-        WebSocketRoom webSocketRoom = new WebSocketRoom();
-        messageRepository.createRoom(uuid, webSocketRoom);
+    @PostMapping("/loadRoute")
+    public String loadRoute(@RequestBody RouteRequest routeRequest, HttpServletRequest request) throws IOException, InterruptedException {
+        final String deviceId = request.getHeader("Device");
+
+        // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
+        List<HashMap<String, Float>> location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
+        // TODO: 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
+        List<HashMap<String, Object>> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
+
+        return blueprintUtil.getRoute(location, roomList);
     }
 }

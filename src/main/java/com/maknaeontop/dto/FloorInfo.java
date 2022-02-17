@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MapDto {
+public class FloorInfo {
     private String uuid;
     private String buildingName;
     private String floor;

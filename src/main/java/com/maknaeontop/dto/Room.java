@@ -9,4 +9,5 @@ public class Room {
     private String roomName;
     private float x;
     private float y;
+    private long id;
 }

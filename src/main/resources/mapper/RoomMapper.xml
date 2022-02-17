@@ -7,16 +7,18 @@
         SELECT * from room;
     </select>
 
-    <select id="selectLocationByUuidNRoomName" resultType="hashMap">
-        SELECT x,y,z FROM room WHERE (uuid = #{uuid} and room_name = #{roomName});
+    <select id="selectLocationByUuidAndFloorAndRoomName" resultType="hashMap">
+        SELECT x,y FROM room WHERE (uuid = #{uuid} AND floor = #{floor} AND room_name = #{roomName});
     </select>
 
     <select id="selectByUuidAndFloor" resultType="hashMap">
-        SELECT x, y, roomName FROM room WHERE (uuid = #{uuid} and floor = #{floor});
+        SELECT x, y, room_name, id FROM room WHERE (uuid = #{uuid} and floor = #{floor});
     </select>
     
     <insert id="insertRoom">
-        INSERT INTO room VALUES #({uuid}, #{floor}, #{roomName}, #{x}, #{y});
+        INSERT INTO room(uuid, floor, roomName, x, y)
+        VALUES (#{uuid}, #{floor}, #{roomName}, #{x}, #{y})
+            ON DUPLICATE KEY UPDATE room_name = #{roomName}, x = #{x}, y = #{y};
     </insert>
     
     <delete id="deleteByUuidAndFloor">
