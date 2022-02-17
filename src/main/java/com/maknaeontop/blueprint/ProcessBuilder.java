@@ -8,10 +8,15 @@ public class ProcessBuilder {
     private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
 
     public boolean executeConvertImageToMapModule(String arg) throws IOException, InterruptedException {
-        return buildProcess( PYTHON_MODULE_PATH + "convertImageToMap.py", arg);
+        String response = buildProcess( PYTHON_MODULE_PATH + "convertImageToMap.py", arg);
+        return response == null ?  false : true;
     }
 
-    private boolean buildProcess(String command, String arg) throws IOException, InterruptedException {
+    public String executeFindRouteModule(String arg1, String arg2) throws IOException, InterruptedException {
+        return buildProcess( PYTHON_MODULE_PATH + "findRoute.py", arg1 + " " + arg2);
+    }
+
+    private String buildProcess(String command, String arg) throws IOException, InterruptedException {
         java.lang.ProcessBuilder builder = new java.lang.ProcessBuilder(command, arg);
         Process process = builder.start();
         int exitVal = process.waitFor();
@@ -24,9 +29,9 @@ public class ProcessBuilder {
         }
         if(exitVal != 0) {
             System.out.println("process terminated abnormally");
-            return false;
+            return null;
         }
 
-        return true;
+        return sb.toString();
     }
 }

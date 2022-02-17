@@ -2,7 +2,7 @@ package com.maknaeontop.communication;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.maknaeontop.dto.MapDto;
+import com.maknaeontop.dto.FloorInfo;
 import com.maknaeontop.dto.Population;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class Response {
         return gson.toJson(population);
     }
 
-    public String allMapResponse(List<MapDto> mapList){
+    public String allMapResponse(List<FloorInfo> mapList){
         return gson.toJson(mapList);
     }
 

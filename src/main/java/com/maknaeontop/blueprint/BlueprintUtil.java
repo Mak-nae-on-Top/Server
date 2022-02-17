@@ -1,13 +1,11 @@
 package com.maknaeontop.blueprint;
 
 import com.maknaeontop.dto.Base64Image;
-import com.maknaeontop.dto.MapDto;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,7 +55,12 @@ public class BlueprintUtil {
             System.out.println("create map error: "+e.toString());
             return false;
         }
-
         return true;
+    }
+
+    public String getRoute(List<HashMap<String, Float>> location, List<HashMap<String, Object>> roomList) throws IOException, InterruptedException {
+        String locationString = location.toString().trim();
+        String roomListString = roomList.toString().trim();
+        return processBuilder.executeFindRouteModule(locationString, roomListString);
     }
 }
