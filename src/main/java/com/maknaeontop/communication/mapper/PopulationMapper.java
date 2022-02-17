@@ -17,7 +17,9 @@ public interface PopulationMapper {
 
     HashMap<String,Object> selectUuidAndFloorByDeviceId(String deviceId);
 
-    List<HashMap<String, Float>> selectLocationByUuidWithoutDeviceId(String uuid, int floor, String deviceId);
+    List<HashMap<String, Float>> selectLocationAfterInsert(String deviceId, String uuid, float x, float y, int floor);
+
+    List<HashMap<String, Float>> selectLocationInSameFloor(String uuid, int floor, String deviceId);
 
     boolean insertUserLocation(String deviceId, String uuid, float x, float y, int floor);
 }

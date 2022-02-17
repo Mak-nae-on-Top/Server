@@ -11,9 +11,9 @@ import java.util.List;
 public interface RoomMapper {
     List<HashMap<String, Object>> selectRoom();
 
-    List<HashMap<String, Object>> selectLocationByUuidNRoomName(String uuid, String roomName);
+    List<HashMap<String, Object>> selectLocationByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
 
-    boolean insertRoom(String uuid, int floor, String roomName, float x, float y);
+    boolean insertRoom(Long id, String uuid, int floor, String roomName, float x, float y);
 
     void deleteByUuidAndFloor(String uuid, int floor);
 
