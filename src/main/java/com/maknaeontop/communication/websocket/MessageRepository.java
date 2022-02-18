@@ -10,6 +10,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,16 +18,6 @@ import java.util.HashMap;
 @Service
 public class MessageRepository {
     private static HashMap<String, WebSocketRoom> webSocketRoomHashMap = new HashMap<>();
-
-    public <T> void sendMessage(WebSocketSession session, String message) {
-        try{
-            if(session.isOpen()){
-                session.sendMessage(new TextMessage(message));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void createRoom(String uuid, WebSocketRoom webSocketRoom){
         webSocketRoomHashMap.put(uuid, webSocketRoom);
