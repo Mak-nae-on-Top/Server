@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class FireAlarmController {
 
     MessageRepository messageRepository;
-    Response response;
 
     @GetMapping("/fireAlarm/{uuid}")
     public String test(@PathVariable String uuid){
         WebSocketRoom webSocketRoom = messageRepository.getWebSocketRoomHashMap().get(uuid);
         webSocketRoom.httpCommunication(Message.MessageType.FIRE, messageRepository);
 
-        return response.statusResponse("success", "message is sent successfully");
+        return "success";
     }
 }
