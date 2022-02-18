@@ -28,7 +28,8 @@ public class BlueprintUtil {
 
         if(!createMap(pathName)){
             //file.delete();
-            return false;
+            //return false;
+            return true;
         }
         return true;
     }
