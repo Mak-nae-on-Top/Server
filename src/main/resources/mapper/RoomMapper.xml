@@ -16,8 +16,8 @@
     </select>
     
     <insert id="insertRoom">
-        INSERT INTO room(uuid, floor, room_name, x, y)
-        VALUES (#{uuid}, #{floor}, #{roomName}, #{x}, #{y})
+        INSERT INTO room(id, uuid, floor, room_name, x, y)
+        VALUES (#{id}, #{uuid}, #{floor}, #{roomName}, #{x}, #{y})
             ON DUPLICATE KEY UPDATE room_name = #{roomName}, x = #{x}, y = #{y};
     </insert>
     
