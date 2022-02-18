@@ -11,7 +11,7 @@
         SELECT * FROM beacon WHERE (uuid = #{uuid});
     </select>
 
-    <select id="getLocation" resultType="hashMap">
+    <select id="selectLocation" resultType="hashMap">
         SELECT x, y, floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
     </select>
 
@@ -19,7 +19,7 @@
         INSERT INTO beacon VALUES (#{uuid}, #{major}, #{minor}, #{x}, #{y}, #{floor});
     </insert>
 
-    <select id="getFloor" resultType="hashMap">
+    <select id="selectFloor" resultType="hashMap">
         SELECT floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
     </select>
 

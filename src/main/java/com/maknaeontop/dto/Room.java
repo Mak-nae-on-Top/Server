@@ -6,7 +6,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Room {
-    private String roomName;
+    private String room_name;
     private float x;
     private float y;
     private long id;

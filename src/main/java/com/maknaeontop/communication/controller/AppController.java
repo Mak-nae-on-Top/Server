@@ -81,7 +81,7 @@ public class AppController {
         List<HashMap<String, Float>> locationList = populationService.selectLocationAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
         Population population = new Population(uuid, floor);
-        population.setLocationList(locationList);
+        population.setLocation_list(locationList);
 
         return response.locationResponse(population);
     }
@@ -111,7 +111,7 @@ public class AppController {
         if(!blueprintUtil.saveImage(base64Image)){
             return response.statusResponse("fail","fail to convert image to map");
         }
-        floorService.insertImageInfo(base64Image.getUuid(), Integer.parseInt(base64Image.getFloor()), base64Image.getImageHeight(), base64Image.getImageWidth());
+        floorService.insertImageInfo(base64Image.getUuid(), Integer.parseInt(base64Image.getFloor()), base64Image.getImage_height(), base64Image.getImage_width());
         return response.statusResponse("success","image save success");
     }
 

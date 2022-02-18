@@ -11,7 +11,7 @@ import java.util.List;
 public class Population {
     private String uuid;
     private int floor;
-    List<HashMap<String, Float>> locationList;
+    List<HashMap<String, Float>> location_list;
 
     public Population(String uuid, int floor){
         this.uuid = uuid;
