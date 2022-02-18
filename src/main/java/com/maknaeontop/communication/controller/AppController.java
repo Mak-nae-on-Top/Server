@@ -63,17 +63,14 @@ public class AppController {
     public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request) {
         final String deviceId = request.getHeader("Device");
 
-        // 리스트 사이즈가 3보다 작으면 fail
-        if(beaconList.size() < 3){
-            return response.statusResponse("fail", "beacon wasn't searched enough");
-        }
+        String uuid = beaconList.get(0).getUuid();
+        int floor = beaconList.get(0).getFloor();
 
         // 비콘들의 xy정보 가져와서 저장 및 uuid, floor 추출
-        // TODO: 현재는 리스트의 모든 비콘들의 좌표를 가져오는데, 0번째 비콘과 같은 층의 비콘들의 좌표만 가져오면 될듯
-        // TODO: DB에서 가져올때, 3개만 가져오게 하기. 이 과정에서 에러 발생시 계산하기 위한 충분한 비콘이 부족하므로 fail 전송
-        List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList);
-        String uuid = beaconListIncludeLocation.get(0).getUuid();
-        int floor = beaconListIncludeLocation.get(0).getFloor();
+        // 0번째 비콘과 같은 층의 비콘들의 좌표 3개만 가져옴. 3개 미만이면 null 반환
+        List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(uuid, beaconList);
+        // 리스트 사이즈가 3보다 작으면 fail
+        if(beaconListIncludeLocation == null) return response.statusResponse("fail", "beacon wasn't searched enough");
 
         // 사용자 위치 계산
         HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
@@ -86,6 +83,7 @@ public class AppController {
         return response.locationResponse(population);
     }
 
+    // 빌딩 등록할때
     @GetMapping("/createWebsocketRoom")
     public void createRoom(@RequestParam String uuid){
         WebSocketRoom webSocketRoom = new WebSocketRoom();

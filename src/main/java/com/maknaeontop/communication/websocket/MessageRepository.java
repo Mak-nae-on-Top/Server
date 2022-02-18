@@ -21,10 +21,8 @@ public class MessageRepository {
     public <T> void sendMessage(WebSocketSession session, String message) {
         try{
             session.sendMessage(new TextMessage(message));
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 
