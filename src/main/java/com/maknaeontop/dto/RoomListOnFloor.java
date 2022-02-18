@@ -10,5 +10,5 @@ import java.util.List;
 public class RoomListOnFloor {
     private String uuid;
     private String floor;
-    private List<Room> roomList;
+    private List<Room> coordinates;
 }

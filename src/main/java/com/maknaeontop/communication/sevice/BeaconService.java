@@ -45,6 +45,7 @@ public class BeaconService {
     }
 
     public List<Beacon> loadBeaconLocation(List<Beacon> beaconList){
+        // TODO: 3개 미만이면 fail 알리기
         for(Beacon beacon : beaconList){
             HashMap<String, Object> location = getLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
             beacon.setFloor((int)location.get("floor"));
