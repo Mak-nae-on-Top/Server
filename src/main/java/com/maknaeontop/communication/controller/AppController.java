@@ -100,12 +100,15 @@ public class AppController {
     @PostMapping("/manager/saveMap")
     public String saveMap(@RequestBody Base64Image base64Image) throws IOException {
         HashMap<String, Integer> floorRange = buildingService.selectFloorRangeByUuid(base64Image.getUuid());
-        if(floorRange.get("lowest_floor") > Integer.parseInt(base64Image.getFloor())){
-            buildingService.updateLowestFloor(base64Image.getUuid(), base64Image.getFloor());
+        if(floorRange != null){
+            if(floorRange.get("lowest_floor") > Integer.parseInt(base64Image.getFloor())){
+                buildingService.updateLowestFloor(base64Image.getUuid(), base64Image.getFloor());
+            }
+            if(floorRange.get("highest_floor") < Integer.parseInt(base64Image.getFloor())){
+                buildingService.updateHighestFloor(base64Image.getUuid(), base64Image.getFloor());
+            }
         }
-        if(floorRange.get("highest_floor") < Integer.parseInt(base64Image.getFloor())){
-            buildingService.updateHighestFloor(base64Image.getUuid(), base64Image.getFloor());
-        }
+
         if(!blueprintUtil.saveImage(base64Image)){
             return response.statusResponse("fail","fail to convert image to map");
         }
