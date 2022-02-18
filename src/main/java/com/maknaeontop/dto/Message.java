@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Setter
 public class Message {
     public enum MessageType{
-        ENTER, FIRE, ERROR
+        ENTER, FIRE, EXIT
     }
 
     private String uuid;
