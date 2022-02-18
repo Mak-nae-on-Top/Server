@@ -63,6 +63,11 @@ public class AppController {
     public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request) {
         final String deviceId = request.getHeader("Device");
 
+        // 리스트 사이즈가 3보다 작으면 fail
+        if(beaconList.size() < 3){
+            return response.statusResponse("fail", "beacon wasn't searched enough");
+        }
+
         // 비콘들의 xy정보 가져와서 저장 및 uuid, floor 추출
         // TODO: 현재는 리스트의 모든 비콘들의 좌표를 가져오는데, 0번째 비콘과 같은 층의 비콘들의 좌표만 가져오면 될듯
         // TODO: DB에서 가져올때, 3개만 가져오게 하기. 이 과정에서 에러 발생시 계산하기 위한 충분한 비콘이 부족하므로 fail 전송

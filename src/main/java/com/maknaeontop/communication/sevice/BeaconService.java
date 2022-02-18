@@ -1,12 +1,10 @@
 package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.BeaconMapper;
-import com.maknaeontop.communication.mapper.UserMapper;
 import com.maknaeontop.dto.Beacon;
 import com.maknaeontop.dto.UuidAndFloor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,8 +24,8 @@ public class BeaconService {
         return beaconMapper.selectBeaconsUsingUUID(uuid);
     }
 
-    public HashMap<String, Object> getLocation(String uuid, String major, String minor){
-        return beaconMapper.getLocation(uuid, major, minor);
+    public HashMap<String, Object> selectLocation(String uuid, String major, String minor){
+        return beaconMapper.selectLocation(uuid, major, minor);
     }
 
     public void addBeacon(String uuid, String major, String minor, float x, float y, int floor){
@@ -40,14 +38,13 @@ public class BeaconService {
         }
     }
 
-    public int getFloor(Beacon beacon){
-        return beaconMapper.getFloor(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
+    public int selectFloor(Beacon beacon){
+        return beaconMapper.selectFloor(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
     }
 
     public List<Beacon> loadBeaconLocation(List<Beacon> beaconList){
-        // TODO: 3개 미만이면 fail 알리기
         for(Beacon beacon : beaconList){
-            HashMap<String, Object> location = getLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
+            HashMap<String, Object> location = selectLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
             beacon.setFloor((int)location.get("floor"));
             beacon.setLocation((float)location.get("x"), (float)location.get("y"));
         }
