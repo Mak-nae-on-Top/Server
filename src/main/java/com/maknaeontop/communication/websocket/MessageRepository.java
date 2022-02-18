@@ -20,7 +20,9 @@ public class MessageRepository {
 
     public <T> void sendMessage(WebSocketSession session, String message) {
         try{
-            session.sendMessage(new TextMessage(message));
+            if(session.isOpen()){
+                session.sendMessage(new TextMessage(message));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

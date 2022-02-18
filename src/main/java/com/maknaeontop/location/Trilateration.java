@@ -10,7 +10,15 @@ public class Trilateration {
         return Holder.instance;
     }
 
-    public double[] test(float[] P1, float[] P2, float[] P3, double d1, double d2, double d3) {
+    public HashMap<String, Float> calculateTrilateration(Beacon beacon1, Beacon beacon2, Beacon beacon3){
+        float[] P1 = {beacon1.getX(), beacon1.getY()};
+        float d1 = beacon1.getAccuracy();
+
+        float[] P2 = {beacon2.getX(), beacon2.getY()};
+        float d2 = beacon2.getAccuracy();
+
+        float[] P3 = {beacon3.getX(), beacon3.getY()};
+        float d3 = beacon3.getAccuracy();
 
         double[] ex   = new double[2];
         double[] ey   = new double[2];
@@ -19,8 +27,6 @@ public class Trilateration {
         double temp  = 0;
         double ival  = 0;
         double p3p1i = 0;
-        double triptx;
-        double tripty;
         double xval;
         double yval;
         double t1;
@@ -80,35 +86,16 @@ public class Trilateration {
         t1 = P1[0];
         t2 = ex[0] * xval;
         t3 = ey[0] * yval;
-        triptx = (t1 + t2 + t3);
+        float triptx = (float) (t1 + t2 + t3);
 
         t1 = P1[1];
         t2 = ex[1] * xval;
         t3 = ey[1] * yval;
-        tripty = ( t1 + t2 + t3);
+        float tripty = (float) (t1 + t2 + t3);
 
-
-        double result[]={triptx,tripty};
-        return  result;
-
+        return createHashMap(triptx,tripty);
     }
 
-    public HashMap<String, Float> calculateTrilateration(Beacon beacon1, Beacon beacon2, Beacon beacon3){
-        float[] P1 = {beacon1.getX(), beacon1.getY()};
-        float d1 = beacon1.getAccuracy();
-
-        float[] P2 = {beacon2.getX(), beacon2.getY()};
-        float d2 = beacon2.getAccuracy();
-
-        float[] P3 = {beacon3.getX(), beacon3.getY()};
-        float d3 = beacon3.getAccuracy();
-
-        double[] temp = test(P1, P2, P3, d1, d2, d3);
-        float x = (float) temp[0];
-        float y = (float) temp[1];
-
-        return createHashMap(x,y);
-    }
     public HashMap<String, Float> calculateMeanXY(float x, float y){
         // 100번 측정하였을 때 Mean값 구하기 (2회 측정 필요)
 
@@ -124,10 +111,7 @@ public class Trilateration {
         float xMean = xData/100;
         float yMean = yData/100;
 
-        return new HashMap<String,Float>(){{
-            put("xMean", xMean);
-            put("yMean", yMean);
-        }};
+        return createHashMap(xMean, yMean);
     }
 
     public HashMap<String, Float> createModel(float realX, float realY){
