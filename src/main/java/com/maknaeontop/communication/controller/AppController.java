@@ -64,20 +64,20 @@ public class AppController {
         final String deviceId = request.getHeader("Device");
 
         String uuid = beaconList.get(0).getUuid();
-        int floor = beaconList.get(0).getFloor();
 
         // 비콘들의 xy정보 가져와서 저장 및 uuid, floor 추출
         // 0번째 비콘과 같은 층의 비콘들의 좌표 3개만 가져옴. 3개 미만이면 null 반환
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(uuid, beaconList);
         // 리스트 사이즈가 3보다 작으면 fail
-        if(beaconListIncludeLocation == null) return null;
+        if(beaconListIncludeLocation == null) return response.statusResponse("fail", "beacon wasn't searched enough");
+        int floor = beaconListIncludeLocation.get(0).getFloor();
 
         // 사용자 위치 계산
         HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
         // 사용자 위치 저장 후 같은 층 사람들 위치 반환 (사용자 위치가 0번째)
         List<HashMap<String, Float>> locationList = populationService.selectLocationAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
-        Population population = new Population(uuid, floor);
+        Population population = new Population("success", uuid, floor);
         population.setLocation_list(locationList);
 
         return response.locationResponse(population);
