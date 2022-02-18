@@ -42,13 +42,17 @@ public class BeaconService {
         return beaconMapper.selectFloor(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
     }
 
-    public List<Beacon> loadBeaconLocation(List<Beacon> beaconList){
+    public List<Beacon> loadBeaconLocation(String uuid, List<Beacon> beaconList){
+        int count = 0;
         for(Beacon beacon : beaconList){
-            HashMap<String, Object> location = selectLocation(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
-            beacon.setFloor((int)location.get("floor"));
-            beacon.setLocation((float)location.get("x"), (float)location.get("y"));
+            HashMap<String, Object> location = selectLocation(uuid, beacon.getMajor(), beacon.getMinor());
+            if(!location.isEmpty()){
+                beacon.setFloor((int)location.get("floor"));
+                beacon.setLocation((float)location.get("x"), (float)location.get("y"));
+            }
+            if(++count == 3) return beaconList;
         }
-        return beaconList;
+        return null;
     }
 
     public HashMap<String, Float> selectMaxXYByUuidAndFloor(String uuid, int floor){
