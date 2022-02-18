@@ -64,12 +64,14 @@ public class AppController {
         final String deviceId = request.getHeader("Device");
 
         // 비콘들의 xy정보 가져와서 저장 및 uuid, floor 추출
+        // TODO: 현재는 리스트의 모든 비콘들의 좌표를 가져오는데, 0번째 비콘과 같은 층의 비콘들의 좌표만 가져오면 될듯
+        // TODO: DB에서 가져올때, 3개만 가져오게 하기. 이 과정에서 에러 발생시 계산하기 위한 충분한 비콘이 부족하므로 fail 전송
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList);
         String uuid = beaconListIncludeLocation.get(0).getUuid();
         int floor = beaconListIncludeLocation.get(0).getFloor();
 
         // 사용자 위치 계산
-        HashMap<String, Float> userLocation = location.findUserLocation(beaconListIncludeLocation);
+        HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
         // 사용자 위치 저장 후 같은 층 사람들 위치 반환 (사용자 위치가 0번째)
         List<HashMap<String, Float>> locationList = populationService.selectLocationAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
@@ -87,7 +89,7 @@ public class AppController {
 
     @PostMapping(value = "/loadMap")
     public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
-        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
+        String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
         HashMap<String, Integer> heightAndWidth = floorService.selectHeightsAndWidthsByFloor(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
         return response.base64Response("success", heightAndWidth, base64Image);
     }
@@ -108,7 +110,7 @@ public class AppController {
         return response.statusResponse("success","image save success");
     }
 
-    @PostMapping("/manager/enterRoomName")
+    @PostMapping("/manager/modifyCoordinates")
     public String enterRoomName(@RequestBody RoomListOnFloor roomListOnFloor){
         roomService.insertRoom(roomListOnFloor);
         return response.statusResponse("success", "saved successfully");
@@ -149,7 +151,7 @@ public class AppController {
                 try {
                     HashMap<String, Integer> hw = floorService.selectHeightsAndWidthsByFloor(uuid, floor);  // width, height 가져오기
                     List<HashMap<String, Object>> roomInfo = roomService.selectByUuidAndFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName, id) 가져오기
-                    String base64Image = blueprintUtil.loadImage(uuid, floor);
+                    String base64Image = blueprintUtil.loadImage(uuid, Integer.toString(floor));
                     FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
                     mapList.add(floorInfo);
                 }catch (NullPointerException | IOException e){

@@ -13,7 +13,7 @@ public class Location {
         return Holder.instance;
     }
 
-    public HashMap<String, Float> findUserLocation(List<Beacon> beaconList){
+    public HashMap<String, Float> calculateUserLocation(List<Beacon> beaconList){
         return trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
     }
 

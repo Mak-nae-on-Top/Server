@@ -43,7 +43,7 @@ public class BlueprintUtil {
         return true;
     }
 
-    public String loadImage(String uuid, int floor) throws IOException {
+    public String loadImage(String uuid, String floor) throws IOException {
         Path path = Paths.get(PATH_PREFIX + uuid + "_" + floor + EXTENSION);
         return new String(Files.readAllBytes(path));
     }
