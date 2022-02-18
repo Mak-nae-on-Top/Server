@@ -70,7 +70,7 @@ public class AppController {
         // 0번째 비콘과 같은 층의 비콘들의 좌표 3개만 가져옴. 3개 미만이면 null 반환
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(uuid, beaconList);
         // 리스트 사이즈가 3보다 작으면 fail
-        if(beaconListIncludeLocation == null) return response.statusResponse("fail", "beacon wasn't searched enough");
+        if(beaconListIncludeLocation == null) return null;
 
         // 사용자 위치 계산
         HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
