@@ -38,9 +38,9 @@ public class BlueprintUtil {
         File file = new File(pathName);
         if(file.exists()){
             file.delete();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public String loadImage(String uuid, String floor) throws IOException {

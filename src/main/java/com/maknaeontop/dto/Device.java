@@ -1,10 +1,10 @@
 package com.maknaeontop.dto;
 
 public class Device {
-    private String deviceId;
+    private String device_id;
 
-    public String getDeviceId() {
-        return deviceId;
+    public String getDevice_id() {
+        return device_id;
     }
 
     public Device(){

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class FloorInfo {
     private String uuid;
-    private String buildingName;
+    private String building_name;
     private String floor;
     private String base64;
     private int image_width, image_height, blueprint_width, blueprint_height;

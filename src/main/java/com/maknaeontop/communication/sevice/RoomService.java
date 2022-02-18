@@ -28,7 +28,7 @@ public class RoomService {
 
     public void insertRoom(RoomListOnFloor roomListOnFloor){
         for(Room room : roomListOnFloor.getCoordinates()){
-            roomMapper.insertRoom(room.getId(), roomListOnFloor.getUuid(), Integer.parseInt(roomListOnFloor.getFloor()), room.getRoomName(), room.getX(), room.getY());
+            roomMapper.insertRoom(room.getId(), roomListOnFloor.getUuid(), Integer.parseInt(roomListOnFloor.getFloor()), room.getRoom_name(), room.getX(), room.getY());
         }
     }
 
