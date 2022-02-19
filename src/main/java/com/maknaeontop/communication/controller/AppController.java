@@ -98,7 +98,8 @@ public class AppController {
     }
 
     @PostMapping("/manager/saveMap")
-    public String saveMap(@RequestBody Base64Image base64Image) throws IOException {
+    public String saveMap(@RequestBody Base64Image base64Image, HttpServletRequest request) throws IOException {
+        String id = jwtTokenUtil.getIdFromToken(request);
         HashMap<String, Integer> floorRange = buildingService.selectFloorRangeByUuid(base64Image.getUuid());
         if(floorRange != null){
             if(floorRange.get("lowest_floor") > Integer.parseInt(base64Image.getFloor())){
@@ -113,6 +114,7 @@ public class AppController {
             return response.statusResponse("fail","fail to convert image to map");
         }
         floorService.insertImageInfo(base64Image.getUuid(), Integer.parseInt(base64Image.getFloor()), base64Image.getImage_height(), base64Image.getImage_width());
+        buildingService.insertBuilding(base64Image, id);
         return response.statusResponse("success","image save success");
     }
 
