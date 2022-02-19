@@ -32,6 +32,6 @@
     </update>
 
     <insert id="insertBuilding">
-        INSERT INTO building VALUES (#{uuid}, #{name}, #{manager});
+        INSERT INTO building VALUES (#{uuid}, #{name}, #{manager}, #{lowest_floor}, #{highest_floor});
     </insert>
 </mapper>
