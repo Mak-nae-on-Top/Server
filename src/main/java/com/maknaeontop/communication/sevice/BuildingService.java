@@ -1,6 +1,7 @@
 package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.BuildingMapper;
+import com.maknaeontop.dto.Base64Image;
 import com.maknaeontop.dto.UuidAndFloor;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +53,11 @@ public class BuildingService {
         }
     }
 
-    public boolean insertBuilding(){
-        return buildingMapper.insertBuilding();
+    public boolean insertBuilding(String uuid, String name, String manager, int lowest_floor, int highest_floor){
+        return buildingMapper.insertBuilding(uuid, name, manager, lowest_floor, highest_floor);
+    }
+
+    public boolean insertBuilding(Base64Image base64Image, String id) {
+        return insertBuilding(base64Image.getUuid(), base64Image.getBuilding_name(), id, Integer.parseInt(base64Image.getFloor()), Integer.parseInt(base64Image.getFloor()));
     }
 }
