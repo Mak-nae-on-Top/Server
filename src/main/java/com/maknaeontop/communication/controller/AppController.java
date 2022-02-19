@@ -82,13 +82,6 @@ public class AppController {
         return response.locationResponse(population);
     }
 
-    // 빌딩 등록할때
-    @GetMapping("/createWebsocketRoom")
-    public void createRoom(@RequestParam String uuid){
-        WebSocketRoom webSocketRoom = new WebSocketRoom();
-        messageRepository.createRoom(uuid, webSocketRoom);
-    }
-
     @PostMapping(value = "/loadMap")
     public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
         String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
@@ -99,14 +92,15 @@ public class AppController {
     public String saveMap(@RequestBody Base64Image base64Image, HttpServletRequest request) throws IOException {
         String id = jwtTokenUtil.getIdFromToken(request);
         HashMap<String, Integer> floorRange = buildingService.selectFloorRangeByUuid(base64Image.getUuid());
-        if(floorRange != null){
+        if(floorRange == null){ // 새로 등록하는 빌딩인 경우
+            messageRepository.createRoom(base64Image.getUuid(), new WebSocketRoom());
+        }else { // 기존에 존재하는 빌딩을 수정하는 경우
             if(floorRange.get("lowest_floor") > Integer.parseInt(base64Image.getFloor())){
                 buildingService.updateLowestFloor(base64Image.getUuid(), base64Image.getFloor());
             }
             if(floorRange.get("highest_floor") < Integer.parseInt(base64Image.getFloor())){
                 buildingService.updateHighestFloor(base64Image.getUuid(), base64Image.getFloor());
             }
-            
         }
 
         if(!blueprintUtil.saveImage(base64Image)){
