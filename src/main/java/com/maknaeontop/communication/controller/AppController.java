@@ -30,7 +30,6 @@ public class AppController {
     private final Location location = Location.getInstance();
     private final Response response = new Response();
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
-    private final FloorService floorService;
     private static final MessageRepository messageRepository = new MessageRepository();
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -93,8 +92,7 @@ public class AppController {
     @PostMapping(value = "/loadMap")
     public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
         String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
-        HashMap<String, Integer> heightAndWidth = floorService.selectHeightsAndWidthsByFloor(uuidAndFloor.getUuid(), Integer.parseInt(uuidAndFloor.getFloor()));
-        return response.base64Response("success", heightAndWidth, base64Image);
+        return response.base64Response("success", base64Image);
     }
 
     @PostMapping("/manager/saveMap")
@@ -108,12 +106,12 @@ public class AppController {
             if(floorRange.get("highest_floor") < Integer.parseInt(base64Image.getFloor())){
                 buildingService.updateHighestFloor(base64Image.getUuid(), base64Image.getFloor());
             }
+            
         }
 
         if(!blueprintUtil.saveImage(base64Image)){
             return response.statusResponse("fail","fail to convert image to map");
         }
-        floorService.insertImageInfo(base64Image.getUuid(), Integer.parseInt(base64Image.getFloor()), base64Image.getImage_height(), base64Image.getImage_width());
         buildingService.insertBuilding(base64Image, id);
         return response.statusResponse("success","image save success");
     }
@@ -131,7 +129,6 @@ public class AppController {
         // 디비에서 지우기
         beaconService.deleteByUuidAndFloor(uuidAndFloor);       // beacon table
         buildingService.deleteFloor(uuidAndFloor);              // building table
-        floorService.deleteFloorByUuidAndFloor(uuidAndFloor);   // floor table
         roomService.deleteByUuidAndFloor(uuidAndFloor);         // room table
 
         return response.statusResponse("sucess", "floor data is deleted");
@@ -157,10 +154,9 @@ public class AppController {
 
             for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
                 try {
-                    HashMap<String, Integer> hw = floorService.selectHeightsAndWidthsByFloor(uuid, floor);  // width, height 가져오기
-                    List<HashMap<String, Object>> roomInfo = roomService.selectByUuidAndFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName, id) 가져오기
+                    List<HashMap<String, Object>> coordinate = roomService.selectByUuidAndFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName, id) 가져오기
                     String base64Image = blueprintUtil.loadImage(uuid, Integer.toString(floor));
-                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, hw.get("image_width"), hw.get("image_height"), hw.get("blueprint_width"), hw.get("blueprint_height"), roomInfo); // 싹 다 저장
+                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, coordinate); // 싹 다 저장
                     mapList.add(floorInfo);
                 }catch (NullPointerException | IOException e){
                     continue;

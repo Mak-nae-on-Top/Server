@@ -38,13 +38,9 @@ public class Response {
         return gson.toJson(mapList);
     }
 
-    public String base64Response(String status, HashMap<String, Integer> heightAndWidth, String base64){
+    public String base64Response(String status, String base64){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("status", status);
-        jsonObject.addProperty("image_height", heightAndWidth.get("image_height"));
-        jsonObject.addProperty("image_width", heightAndWidth.get("image_width"));
-        jsonObject.addProperty("blueprint_height", heightAndWidth.get("blueprint_height"));
-        jsonObject.addProperty("blueprint_width", heightAndWidth.get("blueprint_width"));
         jsonObject.addProperty("base64", base64);
 
         return gson.toJson(jsonObject);
