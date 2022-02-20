@@ -45,4 +45,12 @@ public class Response {
 
         return gson.toJson(jsonObject);
     }
+
+    public String routeResponse(String status, String route){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("status", status);
+        jsonObject.addProperty("coordinates", route);
+
+        return gson.toJson(jsonObject);
+    }
 }
