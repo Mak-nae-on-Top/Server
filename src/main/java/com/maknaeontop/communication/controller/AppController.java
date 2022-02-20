@@ -98,7 +98,9 @@ public class AppController {
         // 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
         List<HashMap<String, Object>> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
 
-        return blueprintUtil.getRoute(location, roomList);
+        String coordinates = blueprintUtil.getRoute(location, roomList);
+
+        return response.routeResponse("success", coordinates);
     }
 
     @PostMapping("/manager/saveMap")
@@ -126,6 +128,7 @@ public class AppController {
     @PostMapping("/manager/modifyCoordinates")
     public String enterRoomName(@RequestBody RoomListOnFloor roomListOnFloor){
         roomService.insertRoom(roomListOnFloor);
+
         return response.statusResponse("success", "saved successfully");
     }
 
@@ -138,12 +141,13 @@ public class AppController {
         buildingService.deleteFloor(uuidAndFloor);              // building table
         roomService.deleteByUuidAndFloor(uuidAndFloor);         // room table
 
-        return response.statusResponse("sucess", "floor data is deleted");
+        return response.statusResponse("success", "floor data is deleted");
     }
 
     @PostMapping("/manager/enterBeaconLocation")
     public String enterBeaconLocation(@RequestBody EnterBeaconRequest enterBeaconRequest){
         beaconService.addBeaconList(enterBeaconRequest);
+
         return response.statusResponse("success","saved beacon info");
     }
 
@@ -176,9 +180,11 @@ public class AppController {
 
     // a, b 계산을 위한 init, 앱에서 데이터 n번 모아서 보내줘야 함 
     @PostMapping("/manager/init")
-    public void initBeacon(List<List<Beacon>> beaconList, float realX, float realY){
+    public String initBeacon(List<List<Beacon>> beaconList, float realX, float realY){
         String uuid = beaconList.get(0).get(0).getUuid();
         HashMap<String, Float> modelConstant = location.createModel(beaconList, realX, realY);
         trilaterationModelService.insertConstants(uuid, modelConstant.get("a"), modelConstant.get("b"));
+
+        return response.statusResponse("success", "initialized trilateration model successfully");
     }
 }
