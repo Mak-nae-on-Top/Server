@@ -60,8 +60,8 @@ public class BlueprintUtil {
     }
 
     public String getRoute(List<HashMap<String, Float>> location, List<HashMap<String, Object>> roomList) throws IOException, InterruptedException {
-        String locationString = location.toString().trim();
-        String roomListString = roomList.toString().trim();
+        String locationString = location.toString().replace(" ","");
+        String roomListString = roomList.toString().replace(" ","");
         return processBuilder.executeFindRouteModule(locationString, roomListString);
     }
 }

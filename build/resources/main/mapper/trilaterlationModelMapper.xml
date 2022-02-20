@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maknaeontop.communication.mapper.TrilaterationModelMapper">
+    <insert id="insertConstants">
+        INSERT INTO trilateration_model VALUES(#{uuid}, #{a}, #{b})
+            ON DUPLICATE KEY UPDATE a = #{a}, b = #{b};
+    </insert>
+
+    <select id="selectConstants" resultType="hashMap">
+        SELECT a, b FROM trilateration_model WHERE uuid = #{uuid};
+    </select>
+</mapper>
