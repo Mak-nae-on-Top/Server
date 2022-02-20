@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maknaeontop.communication.mapper.RoomMapper">
+    <select id="selectRoom" resultType="hashMap">
+        SELECT * from room;
+    </select>
+
+    <select id="selectLocationByUuidAndFloorAndRoomName" resultType="hashMap">
+        SELECT x,y FROM room WHERE (uuid = #{uuid} AND floor = #{floor} AND room_name = #{roomName});
+    </select>
+
+    <select id="selectByUuidAndFloor" resultType="hashMap">
+        SELECT x, y, room_name, id FROM room WHERE (uuid = #{uuid} and floor = #{floor});
+    </select>
+    
+    <insert id="insertRoom">
+        INSERT INTO room(id, uuid, floor, room_name, x, y)
+        VALUES (#{id}, #{uuid}, #{floor}, #{roomName}, #{x}, #{y})
+            ON DUPLICATE KEY UPDATE room_name = #{roomName}, x = #{x}, y = #{y};
+    </insert>
+    
+    <delete id="deleteByUuidAndFloor">
+        DELETE FROM room WHERE (uuid = #{uuid} and floor = #{floor})
+    </delete>
+</mapper>
