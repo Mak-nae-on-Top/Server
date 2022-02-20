@@ -1,11 +1,5 @@
 package com.maknaeontop.communication.jwt;
 
-/**
- * @author Namho Kim
- * @since 1.0
- * @version 1.0
- */
-
 import com.maknaeontop.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,7 +16,7 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = 1845785136697313752L;
-    public static final long JWT_TOKEN_VALIDITY = 2512 * 60 * 60 * 1000;
+    public static final long JWT_TOKEN_VALIDITY = 2512L * 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;

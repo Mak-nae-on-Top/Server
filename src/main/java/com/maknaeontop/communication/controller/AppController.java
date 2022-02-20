@@ -1,11 +1,5 @@
 package com.maknaeontop.communication.controller;
 
-/**
- * @author Namho Kim
- * @since 1.0
- * @version 1.0
- */
-
 import com.maknaeontop.blueprint.BlueprintUtil;
 import com.maknaeontop.communication.Response;
 import com.maknaeontop.communication.jwt.JwtTokenUtil;
@@ -39,7 +33,7 @@ public class AppController {
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
     private static final MessageRepository messageRepository = new MessageRepository();
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      *  Method to log in by receiving id and password

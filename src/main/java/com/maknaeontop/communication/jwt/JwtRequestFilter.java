@@ -1,13 +1,6 @@
 package com.maknaeontop.communication.jwt;
 
-/**
- * @author Namho Kim
- * @since 1.0
- * @version 1.0
- */
-
 import com.maknaeontop.communication.sevice.UserService;
-import com.maknaeontop.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
