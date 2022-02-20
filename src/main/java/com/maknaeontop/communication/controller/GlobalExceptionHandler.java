@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-@AllArgsConstructor
 public class GlobalExceptionHandler {
-    private final Response response;
+    private final Response response = new Response();
 
     @ExceptionHandler(Exception.class)
     public String handleLineException(Exception e) {
