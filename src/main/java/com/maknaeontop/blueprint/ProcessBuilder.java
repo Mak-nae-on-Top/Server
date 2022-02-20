@@ -13,7 +13,7 @@ public class ProcessBuilder {
     }
 
     public String executeFindRouteModule(String arg1, String arg2) throws IOException, InterruptedException {
-        return buildProcess( PYTHON_MODULE_PATH + "findRoute.py", arg1 + " " + arg2);
+        return buildProcess( PYTHON_MODULE_PATH + "Astar.py", arg1 + " " + arg2);
     }
 
     private String buildProcess(String command, String arg) throws IOException, InterruptedException {
