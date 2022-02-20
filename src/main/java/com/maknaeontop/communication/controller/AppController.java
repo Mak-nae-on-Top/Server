@@ -70,7 +70,7 @@ public class AppController {
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(uuid, beaconList);
         // 리스트 사이즈가 3보다 작으면 fail
         if(beaconListIncludeLocation == null) return response.statusResponse("fail", "beacon wasn't searched enough");
-        int floor = beaconListIncludeLocation.get(0).getFloor();
+        int floor = Integer.parseInt(beaconListIncludeLocation.get(0).getFloor());
 
         // 사용자 위치 계산
         HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
@@ -87,6 +87,18 @@ public class AppController {
     public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
         String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
         return response.base64Response("success", base64Image);
+    }
+
+    @PostMapping("/loadRoute")
+    public String loadRoute(@RequestBody RouteRequest routeRequest, HttpServletRequest request) throws IOException, InterruptedException {
+        final String deviceId = request.getHeader("Device");
+
+        // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
+        List<HashMap<String, Float>> location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
+        // 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
+        List<HashMap<String, Object>> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
+
+        return blueprintUtil.getRoute(location, roomList);
     }
 
     @PostMapping("/manager/saveMap")
@@ -130,8 +142,8 @@ public class AppController {
     }
 
     @PostMapping("/manager/enterBeaconLocation")
-    public String enterBeaconLocation(@RequestBody List<Beacon> beaconList){
-        beaconService.addBeaconList(beaconList);
+    public String enterBeaconLocation(@RequestBody EnterBeaconRequest enterBeaconRequest){
+        beaconService.addBeaconList(enterBeaconRequest);
         return response.statusResponse("success","saved beacon info");
     }
 
@@ -149,9 +161,10 @@ public class AppController {
 
             for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
                 try {
+                    List<HashMap<String, Object>> beaconInfo = beaconService.selectByUuidAndFloor(uuid, floor); // 비콘 리스트 가져오기
                     List<HashMap<String, Object>> coordinate = roomService.selectByUuidAndFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName, id) 가져오기
                     String base64Image = blueprintUtil.loadImage(uuid, Integer.toString(floor));
-                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, coordinate); // 싹 다 저장
+                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, coordinate, beaconInfo); // 싹 다 저장
                     mapList.add(floorInfo);
                 }catch (NullPointerException | IOException e){
                     continue;
@@ -167,17 +180,5 @@ public class AppController {
         String uuid = beaconList.get(0).get(0).getUuid();
         HashMap<String, Float> modelConstant = location.createModel(beaconList, realX, realY);
         trilaterationModelService.insertConstants(uuid, modelConstant.get("a"), modelConstant.get("b"));
-    }
-
-    @PostMapping("/loadRoute")
-    public String loadRoute(@RequestBody RouteRequest routeRequest, HttpServletRequest request) throws IOException, InterruptedException {
-        final String deviceId = request.getHeader("Device");
-
-        // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
-        List<HashMap<String, Float>> location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
-        // TODO: 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
-        List<HashMap<String, Object>> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
-
-        return blueprintUtil.getRoute(location, roomList);
     }
 }

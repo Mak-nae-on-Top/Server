@@ -16,5 +16,6 @@ public class FloorInfo {
     private String floor;
     private String base64;
     private List<HashMap<String, Object>> coordinate;
+    private List<HashMap<String, Object>> beaconInfo;
 
 }
