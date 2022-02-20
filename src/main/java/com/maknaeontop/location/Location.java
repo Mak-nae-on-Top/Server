@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Location {
-    private Distance distance = Distance.getInstance();
     private Trilateration trilateration = Trilateration.getInstance();
 
     public static Location getInstance() {

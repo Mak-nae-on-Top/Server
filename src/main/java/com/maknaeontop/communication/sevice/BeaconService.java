@@ -2,6 +2,7 @@ package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.BeaconMapper;
 import com.maknaeontop.dto.Beacon;
+import com.maknaeontop.dto.EnterBeaconRequest;
 import com.maknaeontop.dto.UuidAndFloor;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,15 @@ public class BeaconService {
         return beaconMapper.selectLocation(uuid, major, minor);
     }
 
-    public void addBeacon(String uuid, String major, String minor, float x, float y, int floor){
-        beaconMapper.addBeacon(uuid, major, minor, x, y, floor);
+    public void addBeacon(long id, String uuid, String major, String minor, float x, float y, int floor){
+        beaconMapper.addBeacon(id, uuid, major, minor, x, y, floor);
     }
 
-    public void addBeaconList(List<Beacon> beaconList){
-        for(Beacon beacon : beaconList){
-            addBeacon(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), beacon.getFloor());
+    public void addBeaconList(EnterBeaconRequest enterBeaconRequest){
+        String uuid = enterBeaconRequest.getUuid();
+        int floor = Integer.parseInt(enterBeaconRequest.getFloor());
+        for(Beacon beacon : enterBeaconRequest.getBeaconInfo()){
+            addBeacon(beacon.getId(), uuid, beacon.getMajor(), beacon.getMinor(), beacon.getX(), beacon.getY(), floor);
         }
     }
 
@@ -47,7 +50,7 @@ public class BeaconService {
         for(Beacon beacon : beaconList){
             HashMap<String, Object> location = selectLocation(uuid, beacon.getMajor(), beacon.getMinor());
             if(location != null){
-                beacon.setFloor((int)location.get("floor"));
+                beacon.setFloor((String)location.get("floor"));
                 beacon.setLocation((float)location.get("x"), (float)location.get("y"));
             }
             if(++count == 3) return beaconList;
@@ -61,5 +64,9 @@ public class BeaconService {
 
     public void deleteByUuidAndFloor(UuidAndFloor uuidAndFloor){
         beaconMapper.deleteByUuidAndFloor(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
+    }
+
+    public List<HashMap<String, Object>> selectByUuidAndFloor(String uuid, int floor){
+        return beaconMapper.selectByUuidAndFloor(uuid, floor);
     }
 }

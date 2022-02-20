@@ -19,7 +19,9 @@ public interface BeaconMapper {
 
     HashMap<String, Float> selectMaxXYByUuidAndFloor(String uuid, int floor);
 
-    List<HashMap<String, Object>> addBeacon(String uuid, String major, String minor, float x, float y, int floor);
+    List<HashMap<String, Object>> addBeacon(long id, String uuid, String major, String minor, float x, float y, int floor);
 
     void deleteByUuidAndFloor(String uuid, String floor);
+
+    List<HashMap<String, Object>> selectByUuidAndFloor(String uuid, int floor);
 }
