@@ -1,5 +1,11 @@
 package com.maknaeontop.communication.jwt;
 
+/**
+ * @author Namho Kim
+ * @since 1.0
+ * @version 1.0
+ */
+
 import com.maknaeontop.communication.sevice.UserService;
 import com.maknaeontop.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +30,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * Method to verify that the user is normally logged in
+     * by checking the token when connecting to http communication.
+     *
+     * @param request       HttpServletRequest to get token
+     * @param response      HttpServletResponse
+     * @param chain         FilterChain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -55,5 +71,3 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 }
-
-// teststart

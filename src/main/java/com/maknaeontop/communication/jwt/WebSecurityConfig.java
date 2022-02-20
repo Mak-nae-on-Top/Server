@@ -1,5 +1,11 @@
 package com.maknaeontop.communication.jwt;
 
+/**
+ * @author Namho Kim
+ * @since 1.0
+ * @version 1.0
+ */
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    /**
+     * Method to encode the password.
+     *
+     * @return the encoded password
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -38,6 +49,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * Method for setting about token check.
+     *
+     * @param httpSecurity  HttpSecurity
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // For CORS error
