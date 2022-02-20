@@ -147,6 +147,7 @@ public class Trilateration {
             put("finalY",finalY);
         }};
     }
+
     private HashMap<String, Float> createHashMap(float x, float y){
         return new HashMap<String,Float>(){{
             put("x",x);

@@ -31,7 +31,7 @@
 
     <select id="selectLocationInSameFloor" resultType="hashmap">
         SELECT x, y FROM population
-        WHERE (uuid = #{uuid} AND floor = #{floor})
+            WHERE (uuid = #{uuid} AND floor = #{floor})
         ORDER BY FIELD(device_id, #{deviceId}) DESC;
     </select>
 

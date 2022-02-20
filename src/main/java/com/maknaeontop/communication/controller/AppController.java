@@ -27,6 +27,7 @@ public class AppController {
     private final PopulationService populationService;
     private final RoomService roomService;
     private final BuildingService buildingService;
+    private final TrilaterationModelService trilaterationModelService;
     private final Location location = Location.getInstance();
     private final Response response = new Response();
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
@@ -158,6 +159,14 @@ public class AppController {
             }
         }
         return response.allMapResponse(mapList);
+    }
+
+    // a, b 계산을 위한 init, 앱에서 데이터 n번 모아서 보내줘야 함 
+    @PostMapping("/manager/init")
+    public void initBeacon(List<List<Beacon>> beaconList, float realX, float realY){
+        String uuid = beaconList.get(0).get(0).getUuid();
+        HashMap<String, Float> modelConstant = location.createModel(beaconList, realX, realY);
+        trilaterationModelService.insertConstants(uuid, modelConstant.get("a"), modelConstant.get("b"));
     }
 
     @PostMapping("/loadRoute")
