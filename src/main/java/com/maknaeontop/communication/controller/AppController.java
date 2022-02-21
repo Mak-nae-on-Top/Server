@@ -147,7 +147,10 @@ public class AppController {
         }
         String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
 
-        return response.routeResponse("success", coordinates);
+        // TEST
+        String coordinatesTest = "[{\"x\":\"100\", \"y\":\"100\"},{\"x\":\"200\", \"y\":\"200\"}, {\"x\":\"300\", \"y\":\"300\"}]";
+
+        return response.routeResponse("success", coordinatesTest);
     }
 
     /**
@@ -262,15 +265,15 @@ public class AppController {
     /**
      * Method to obtain a model for correcting position measurements using trilateration.
      *
-     * @param beaconList    list of beacons obtained by the app
-     * @param realX         x value where the user is actually located
-     * @param realY         x value where the user is actually located
-     * @return              status and message in json format
+     * @param rangedBeacons     list of beacons obtained by the app
+     * @param x                 x value where the user is actually located
+     * @param y                 x value where the user is actually located
+     * @return                  status and message in json format
      */
     @PostMapping("/manager/init")
-    public String initBeacon(@RequestBody List<List<Beacon>> beaconList, float realX, float realY){
-        String uuid = beaconList.get(0).get(0).getUuid();
-        HashMap<String, Float> modelConstant = location.createModel(beaconList, realX, realY);
+    public String initBeacon(@RequestBody List<List<Beacon>> rangedBeacons, float x, float y){
+        String uuid = rangedBeacons.get(0).get(0).getUuid();
+        HashMap<String, Float> modelConstant = location.createModel(rangedBeacons, x, y);
         trilaterationModelService.insertConstants(uuid, modelConstant.get("a"), modelConstant.get("b"));
 
         return response.statusResponse("success", "initialized trilateration model successfully");
@@ -281,7 +284,8 @@ public class AppController {
      * @param uuid  building uuid
      */
     @GetMapping("/admin/createWebsocketRoom")
-    public void initBeacon(@RequestParam String uuid){
+    public String initBeacon(@RequestParam String uuid){
         messageRepository.createRoom(uuid, new WebSocketRoom());
+        return response.statusResponse("success", "successfully created websocket room");
     }
 }

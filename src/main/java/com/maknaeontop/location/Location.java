@@ -50,6 +50,10 @@ public class Location {
         }};
     }
 
+    public HashMap<String, Float> applyModel(float a, float b, HashMap<String, Float> coordinate){
+        return null;
+    }
+
     private Location(){}
 
     // LazyHolder
