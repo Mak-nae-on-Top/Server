@@ -145,19 +145,12 @@ public class AppController {
         for(Coordinate coordinate:roomList){
             roomArray.add(coordinate.toStringCoordinate());
         }
-        String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
+        //String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
 
         // TEST
-        List<HashMap<String, Float>> test = new ArrayList<>();
-        for(int i=1;i<=3;i++){
-            HashMap<String, Float> tmp = new HashMap<>();
-            tmp.put("x", 100.0F * i);
-            tmp.put("y", 100.0F * i);
-            test.add(tmp);
-        }
-        String coordinatesTest = response.testResponse(test);
+        return "{\"status\":\"success\",\"coordinates\":[{\"x\":100.0, \"y\":100.0}, {\"x\":200.0, \"y\":200.0}, {\"x\":300.0, \"y\":300.0}]}";
 
-        return response.routeResponse("success", coordinatesTest);
+        //return response.routeResponse("success", coordinates);
     }
 
     /**

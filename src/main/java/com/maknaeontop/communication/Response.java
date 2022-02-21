@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.maknaeontop.dto.FloorInfo;
 import com.maknaeontop.dto.Population;
 
+import java.awt.image.Kernel;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class Response {
         return gson.toJson(jsonObject);
     }
 
-    public String testResponse(List<HashMap<String, Float>> test){
+    public String testResponse(String test){
         return gson.toJson(test);
     }
 }
