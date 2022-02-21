@@ -28,7 +28,7 @@ public class ProcessBuilder {
             sb.append(line);
         }
         if(exitVal != 0) {
-            System.out.println("process terminated abnormally");
+            System.out.println("process terminated abnormally: " + sb.toString());
             return null;
         }
 
