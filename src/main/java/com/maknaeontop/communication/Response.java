@@ -53,4 +53,8 @@ public class Response {
 
         return gson.toJson(jsonObject);
     }
+
+    public String testResponse(List<HashMap<String, Float>> test){
+        return gson.toJson(test);
+    }
 }
