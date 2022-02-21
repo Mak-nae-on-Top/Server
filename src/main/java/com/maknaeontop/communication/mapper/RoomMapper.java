@@ -1,5 +1,6 @@
 package com.maknaeontop.communication.mapper;
 
+import com.maknaeontop.dto.Coordinate;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RoomMapper {
-    float[][] selectLocationByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
+    List<Coordinate> selectLocationByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
 
     boolean insertRoom(Long id, String uuid, int floor, String roomName, float x, float y);
 

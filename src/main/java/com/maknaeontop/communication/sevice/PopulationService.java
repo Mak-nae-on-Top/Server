@@ -1,6 +1,7 @@
 package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.PopulationMapper;
+import com.maknaeontop.dto.Coordinate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class PopulationService {
         return populationMapper.selectLocationAfterInsert(deviceId, uuid, x, y, floor);
     }
 
-    public float[][] selectLocationInSameFloor(String uuid, int floor, String deviceId){
+    public List<Coordinate> selectLocationInSameFloor(String uuid, int floor, String deviceId){
         return populationMapper.selectLocationInSameFloor(uuid, floor, deviceId);
     }
 }
