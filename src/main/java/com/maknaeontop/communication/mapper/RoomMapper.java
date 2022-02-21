@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RoomMapper {
-    List<HashMap<String, Object>> selectLocationByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
+    float[][] selectLocationByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
 
     boolean insertRoom(Long id, String uuid, int floor, String roomName, float x, float y);
 

@@ -132,9 +132,9 @@ public class AppController {
         final String deviceId = request.getHeader("Device");
 
         // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
-        List<HashMap<String, Float>> location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
+        float[][] location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
         // 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
-        List<HashMap<String, Object>> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
+        float[][] roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
 
         String coordinates = blueprintUtil.getRoute(location, roomList);
 

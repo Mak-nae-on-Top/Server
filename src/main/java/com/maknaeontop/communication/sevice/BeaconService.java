@@ -38,7 +38,7 @@ public class BeaconService {
         for(Beacon beacon : beaconList){
             HashMap<String, Object> location = selectLocation(uuid, beacon.getMajor(), beacon.getMinor());
             if(location != null){
-                beacon.setFloor((String)location.get("floor"));
+                beacon.setFloor(Integer.toString((int)location.get("floor")));
                 beacon.setLocation((float)location.get("x"), (float)location.get("y"));
             }
             if(++count == 3) return beaconList;
