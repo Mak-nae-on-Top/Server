@@ -11,5 +11,5 @@ import java.util.List;
 public interface PopulationMapper {
     List<HashMap<String, Float>> selectLocationAfterInsert(String deviceId, String uuid, float x, float y, int floor);
 
-    List<HashMap<String, Float>> selectLocationInSameFloor(String uuid, int floor, String deviceId);
+    float[][] selectLocationInSameFloor(String uuid, int floor, String deviceId);
 }

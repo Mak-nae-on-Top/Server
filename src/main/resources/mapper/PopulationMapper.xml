@@ -14,7 +14,7 @@
         ORDER BY FIELD(device_id, #{deviceId}) DESC;
     </select>
 
-    <select id="selectLocationInSameFloor" resultType="hashmap">
+    <select id="selectLocationInSameFloor" resultType="float">
         SELECT x, y FROM population
             WHERE (uuid = #{uuid} AND floor = #{floor})
         ORDER BY FIELD(device_id, #{deviceId}) DESC;

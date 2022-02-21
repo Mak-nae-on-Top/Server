@@ -3,21 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.maknaeontop.communication.mapper.PopulationMapper">
-    <select id="selectAllUserLocation" resultType="hashMap">
-        SELECT * from population;
-    </select>
-
-    <select id="selectByUuid" resultType="hashMap">
-        SELECT * from population WHERE uuid = #{uuid};
-    </select>
-
-    <select id="selectLocationByDeviceId" resultType="hashMap">
-        SELECT x, y, floor from population WHERE device_id = #{deviceId};
-    </select>
-
-    <select id="selectUuidAndFloorByDeviceId" resultType="hashmap">
-        SELECT uuid, floor from population WHERE device_id = #{deviceId};
-    </select>
 
     <select id="selectLocationAfterInsert" resultType="hashmap">
         INSERT INTO population
@@ -29,16 +14,9 @@
         ORDER BY FIELD(device_id, #{deviceId}) DESC;
     </select>
 
-    <select id="selectLocationInSameFloor" resultType="hashmap">
+    <select id="selectLocationInSameFloor" resultType="float">
         SELECT x, y FROM population
             WHERE (uuid = #{uuid} AND floor = #{floor})
         ORDER BY FIELD(device_id, #{deviceId}) DESC;
     </select>
-
-    <insert id="insertUserLocation">
-        INSERT INTO population
-        VALUES (#{deviceId}, #{uuid}, #{x}, #{y}, #{floor})
-        ON DUPLICATE KEY UPDATE
-        x = #{x}, y = #{y}, floor = #{floor};
-    </insert>
 </mapper>

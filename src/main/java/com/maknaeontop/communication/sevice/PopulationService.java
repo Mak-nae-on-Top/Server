@@ -18,7 +18,7 @@ public class PopulationService {
         return populationMapper.selectLocationAfterInsert(deviceId, uuid, x, y, floor);
     }
 
-    public List<HashMap<String, Float>> selectLocationInSameFloor(String uuid, int floor, String deviceId){
+    public float[][] selectLocationInSameFloor(String uuid, int floor, String deviceId){
         return populationMapper.selectLocationInSameFloor(uuid, floor, deviceId);
     }
 }
