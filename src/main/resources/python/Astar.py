@@ -3,6 +3,8 @@ import cv2 as cv
 import json
 temp = [] #
 BluePrint = [] #0 은 통로, 1은 벽
+UL = "[154:230]"
+RL = "[109:30,105:340]"
 img = cv.imread('/Users/sunminsu/study/temp/aa.png')
 Img = img.tolist()
 image1 = Image.open('/Users/sunminsu/study/temp/aa.png')
@@ -28,18 +30,16 @@ def heuristic(node, goal):
     dx = abs(node.position[0] - goal.position[0])
     dy = abs(node.position[1] - goal.position[1])
     return dx + dy
-def UserList():
+def UseRomListist(Ustr):
     User_List = []
-    Ustr = "[154:230]"
     Ustr = Ustr.replace('[','')
     Ustr = Ustr.replace(']','')
     Ustr = Ustr.split(',')
     for i in Ustr:
         User_List.append(tuple(map(int,i.split(':'))))
     return User_List
-def RoomList():
+def RoomList(Rstr):
     Room_List = []
-    Rstr = "[109:30,105:340]"
     Rstr = Rstr.replace('[','')
     Rstr = Rstr.replace(']','')
     Rstr = Rstr.split(',')
@@ -118,22 +118,22 @@ def Astar(maze, start, end):
                 continue
             openList.append(child)
 def Compare():
-    RL  = RoomList()
-    end = RL[0][0],RL[0][1]
-    userX,userY = UserList()[0]
-    temp = abs(userX - RL[0][0]) + abs(userY - RL[0][1])
-    for i in range(1,len(RL)):
-        if temp>abs(userX - RL[i][0]) + abs(userY - RL[i][1]):
-            end = RL[i][1],RL[i][0]
+    RomList  = RoomList(RL)
+    end = RomList[0][0],RomList[0][1]
+    userX,userY = UseRomListist(UL)[0]
+    temp = abs(userX - RomList[0][0]) + abs(userY - RomList[0][1])
+    for i in range(1,len(RomList)):
+        if temp>abs(userX - RomList[i][0]) + abs(userY - RomList[i][1]):
+            end = RomList[i][1],RomList[i][0]
     return end
 
 def startAstar():
+
     ax = []
     ay = []
     data = []
-    RoomList()
     maze = BluePrint
-    start = UserList()[0][1],UserList()[0][0]
+    start = UseRomListist(UL)[0][1],UseRomListist(UL)[0][0]
     # start = y,x
     end = Compare()
     # end = y,x
@@ -145,5 +145,5 @@ def startAstar():
         data.append({'x':ax[i],'y':ay[i]})
     return (json.dumps(data,ensure_ascii=False,indent='\t'))
 if __name__ == '__main__':
-    startAstar()
+    print(startAstar())
 
