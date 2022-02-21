@@ -21,14 +21,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws JsonProcessingException {
-        // For test
-        System.out.println(session.toString());
-        System.out.println(message.toString());
-
         String payload = message.getPayload();
         Message msg = objectMapper.readValue(payload, Message.class);
         String roomName = msg.getUuid();
         WebSocketRoom webSocketRoom = messageRepository.getWebSocketRoomHashMap().get(roomName);
+        if(webSocketRoom == null){
+            System.out.println("WARN : webSocket room is null");
+        }
         webSocketRoom.socketCommunication(session, msg.getType());
     }
 }
