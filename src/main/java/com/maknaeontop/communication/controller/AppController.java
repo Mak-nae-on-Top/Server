@@ -275,4 +275,13 @@ public class AppController {
 
         return response.statusResponse("success", "initialized trilateration model successfully");
     }
+
+    /**
+     * Method to create websocket room
+     * @param uuid  building uuid
+     */
+    @PostMapping("/admin/createWebsocketRoom")
+    public void initBeacon(String uuid){
+        messageRepository.createRoom(uuid, new WebSocketRoom());
+    }
 }
