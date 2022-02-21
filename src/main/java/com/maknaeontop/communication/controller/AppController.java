@@ -268,7 +268,7 @@ public class AppController {
      * @return              status and message in json format
      */
     @PostMapping("/manager/init")
-    public String initBeacon(List<List<Beacon>> beaconList, float realX, float realY){
+    public String initBeacon(@RequestBody List<List<Beacon>> beaconList, float realX, float realY){
         String uuid = beaconList.get(0).get(0).getUuid();
         HashMap<String, Float> modelConstant = location.createModel(beaconList, realX, realY);
         trilaterationModelService.insertConstants(uuid, modelConstant.get("a"), modelConstant.get("b"));
@@ -280,8 +280,8 @@ public class AppController {
      * Method to create websocket room
      * @param uuid  building uuid
      */
-    @PostMapping("/admin/createWebsocketRoom")
-    public void initBeacon(String uuid){
+    @GetMapping("/admin/createWebsocketRoom")
+    public void initBeacon(@RequestParam String uuid){
         messageRepository.createRoom(uuid, new WebSocketRoom());
     }
 }
