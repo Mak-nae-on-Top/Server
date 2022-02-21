@@ -9,8 +9,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface UserMapper {
-    List<HashMap<String, Object>> selectUser();
-
     String selectPwUsingId(String id);
 
     int addUser(String id, String password, String name);

@@ -16,14 +16,6 @@ public class BuildingService {
         this.buildingMapper = buildingMapper;
     }
 
-    public String getNameByUuid(){
-        return buildingMapper.selectnamebyUuid();
-    }
-
-    public String[] getManagerByUuid(){
-        return buildingMapper.selectManagerByUuid();
-    }
-
     public List<HashMap<String, Object>> selectByManager(String manager){
         return buildingMapper.selectByManager(manager);
     }

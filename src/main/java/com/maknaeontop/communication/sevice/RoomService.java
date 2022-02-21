@@ -18,10 +18,6 @@ public class RoomService {
         this.roomMapper = roomMapper;
     }
 
-    public List<HashMap<String, Object>> selectRoom(){
-        return roomMapper.selectRoom();
-    }
-
     public List<HashMap<String, Object>> selectLocationByUuidAndFloorAndRoomName(RouteRequest routeRequest){
         return roomMapper.selectLocationByUuidAndFloorAndRoomName(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), routeRequest.getDestination());
     }

@@ -2,15 +2,12 @@ package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.dto.User;
 import com.maknaeontop.communication.mapper.UserMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -18,21 +15,6 @@ public class UserService implements UserDetailsService {
 
     public UserService(UserMapper userMapper){
         this.userMapper = userMapper;
-    }
-
-    public List<HashMap<String, Object>> getUsers(){
-        return userMapper.selectUser();
-    }
-
-    public String validateUser(User user){
-        String pwInDatabase = selectPwUsingId(user.getId());
-        if(pwInDatabase.equals("")){
-            return "fail: no matching ID exist";
-        }
-        if(!pwInDatabase.equals(user.getPassword())){
-            return "fail: password does not match";
-        }
-        return null;
     }
 
     public boolean addUser(User user){

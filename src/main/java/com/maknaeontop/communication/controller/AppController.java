@@ -33,8 +33,14 @@ public class AppController {
     private final BlueprintUtil blueprintUtil = new BlueprintUtil();
     private static final MessageRepository messageRepository = new MessageRepository();
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
+    /**
+     *  Method to log in by receiving id and password
+     *
+     * @param user  the user information including id and password
+     * @return      status and message in json format
+     */
     @PostMapping("/login")
     public String login(@RequestBody User user){
         String pwInDatabase = userService.selectPwUsingId(user.getId());
@@ -48,6 +54,13 @@ public class AppController {
         return response.tokenResponse("fail","id does not exist","");
     }
 
+    /**
+     * Method that receives id, password, and password2,
+     * and sign up if password and password2 are the same and the ID does not already exist
+     *
+     * @param user  the user information including id, password, and password2
+     * @return      status and message in json format
+     */
     @PostMapping("/join")
     public String join(@RequestBody User user) {
         if (user.getPassword().equals(user.getPassword2())) {
@@ -59,6 +72,15 @@ public class AppController {
         return response.statusResponse("fail","password and password2 do not match");
     }
 
+    /**
+     * Method to measure the user's location based on the beacon list obtained by the app
+     *
+     * @param beaconList    list of beacons obtained by the app, sorted by distance from the user
+     * @param request       HttpServletRequest to get device id
+     * @return              uuid, floor and the coordinates of the location of all users
+     *                      on the same building and floor as user.
+     *                      0th in the list is the user's location
+     */
     @PostMapping("/location")
     public String estimateLocation(@RequestBody List<Beacon> beaconList, HttpServletRequest request) {
         final String deviceId = request.getHeader("Device");
@@ -83,12 +105,28 @@ public class AppController {
         return response.locationResponse(population);
     }
 
+    /**
+     * Method that takes the uuid and floor of a building and returns a map of that location.
+     *
+     * @param uuidAndFloor  uuid and floor of user
+     * @return              image encoded in base64
+     * @throws IOException
+     */
     @PostMapping(value = "/loadMap")
     public String loadMap(@RequestBody UuidAndFloor uuidAndFloor) throws IOException {
         String base64Image = blueprintUtil.loadImage(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
         return response.base64Response("success", base64Image);
     }
 
+    /**
+     * Method that returns an optimized route from the user's location to the destination.
+     *
+     * @param routeRequest  uuid and floor of user and destination that user wants to go
+     * @param request       HttpServletRequest to get device id
+     * @return              array of coordinates in the optimized route
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @PostMapping("/loadRoute")
     public String loadRoute(@RequestBody RouteRequest routeRequest, HttpServletRequest request) throws IOException, InterruptedException {
         final String deviceId = request.getHeader("Device");
@@ -103,6 +141,15 @@ public class AppController {
         return response.routeResponse("success", coordinates);
     }
 
+    /**
+     * Method to receive a base64-encoded blueprint image, convert it to a map,
+     * and save it to the server.
+     *
+     * @param base64Image   base64-encoded blueprint image
+     * @param request       HttpServletRequest to get id
+     * @return              status and message in json format
+     * @throws IOException
+     */
     @PostMapping("/manager/saveMap")
     public String saveMap(@RequestBody Base64Image base64Image, HttpServletRequest request) throws IOException {
         String id = jwtTokenUtil.getIdFromToken(request);
@@ -125,6 +172,12 @@ public class AppController {
         return response.statusResponse("success","image save success");
     }
 
+    /**
+     * Method to set the name and coordinates of a room on the corresponding floor of the building.
+     *
+     * @param roomListOnFloor   uuid, floor and room list contains coordinate and room name.
+     * @return                  status and message in json format
+     */
     @PostMapping("/manager/modifyCoordinates")
     public String enterRoomName(@RequestBody RoomListOnFloor roomListOnFloor){
         roomService.insertRoom(roomListOnFloor);
@@ -132,6 +185,12 @@ public class AppController {
         return response.statusResponse("success", "saved successfully");
     }
 
+    /**
+     * Method to delete all information in the floor.
+     *
+     * @param uuidAndFloor  uuid and floor
+     * @return              status and message in json format
+     */
     @PostMapping("/manager/deleteFloor")
     public String deleteFloor(@RequestBody UuidAndFloor uuidAndFloor){
         // 이미지 찾아서 지우기
@@ -144,6 +203,12 @@ public class AppController {
         return response.statusResponse("success", "floor data is deleted");
     }
 
+    /**
+     * Method to register information including location of beacon.
+     * @param enterBeaconRequest    uuid, floor and beacon's information list
+     *                              including major, minor, coordinate
+     * @return                      status and message in json format
+     */
     @PostMapping("/manager/enterBeaconLocation")
     public String enterBeaconLocation(@RequestBody EnterBeaconRequest enterBeaconRequest){
         beaconService.addBeaconList(enterBeaconRequest);
@@ -151,6 +216,13 @@ public class AppController {
         return response.statusResponse("success","saved beacon info");
     }
 
+    /**
+     * Method that returns all information including floor maps of all buildings
+     * where the user id is registered as an manager.
+     *
+     * @param request   HttpServletRequest to get id
+     * @return          all information of buildings
+     */
     @PostMapping("/manager/loadAllMap")
     public String loadAllMap(HttpServletRequest request) {
         String id = jwtTokenUtil.getIdFromToken(request);
@@ -178,7 +250,14 @@ public class AppController {
         return response.allMapResponse(mapList);
     }
 
-    // a, b 계산을 위한 init, 앱에서 데이터 n번 모아서 보내줘야 함 
+    /**
+     * Method to obtain a model for correcting position measurements using trilateration.
+     *
+     * @param beaconList    list of beacons obtained by the app
+     * @param realX         x value where the user is actually located
+     * @param realY         x value where the user is actually located
+     * @return              status and message in json format
+     */
     @PostMapping("/manager/init")
     public String initBeacon(List<List<Beacon>> beaconList, float realX, float realY){
         String uuid = beaconList.get(0).get(0).getUuid();

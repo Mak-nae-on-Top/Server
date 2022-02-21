@@ -5,14 +5,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,47 +15,72 @@ import java.util.Map;
 
 @Component
 public class JwtTokenUtil implements Serializable {
-    //private static final long serialVersionUID = -2550185165626007488L;
     private static final long serialVersionUID = 1845785136697313752L;
-    public static final long JWT_TOKEN_VALIDITY = 2512 * 60 * 60 * 1000;
+    public static final long JWT_TOKEN_VALIDITY = 2512L * 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    //retrieve username from jwt token
+    /**
+     * Method to get user id from jwt token.
+     *
+     * @param token the jwt token
+     * @return      the user id
+     */
     public String getIdByToken(String token) {
         Claims claims = getClaimByToken(token);
         return claims.getSubject();
     }
 
-    //retrieve expiration date from jwt token
+    /**
+     * Method to get expiration date from jwt token.
+     *
+     * @param token the jwt token
+     * @return      the expiration date
+     */
     public Date getExpirationByToken(String token) {
         Claims claims = getClaimByToken(token);
         return claims.getExpiration();
     }
 
-    //for retrieveing any information from token we will need the secret key
+    /**
+     * Method to get claims from token.
+     *
+     * @param token the jwt token
+     * @return      the claims
+     */
     private Claims getClaimByToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    //check if the token has expired
+    /**
+     * Method to check if the token has expired.
+     *
+     * @param token the jwt token
+     * @return      whether token has expired
+     */
     private Boolean isTokenExpired(String token) {
         Date expiration = getExpirationByToken(token);
         return expiration.before(new Date());
     }
 
-    //generate token for user
+    /**
+     * Method to generate token.
+     *
+     * @param user  user information including user id
+     * @return      generated token
+     */
     public String generateToken(User user) {
-        return doGenerateToken(user.getId());
+        return createToken(user.getId());
     }
 
-    //while creating the token -
-//1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
-//2. Sign the JWT using the HS512 algorithm and secret key.
-//3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
-//   compaction of the JWT to a URL-safe string
-    private String doGenerateToken(String subject) {
+    /**
+     * Method to create token.
+     *
+     * @param subject   the user id
+     * @return          created token
+     */
+    private String createToken(String subject) {
         Map<String, Object> claims = new HashMap<>();
         Date now = new Date(System.currentTimeMillis());
         Date validity = new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY);
@@ -74,11 +94,22 @@ public class JwtTokenUtil implements Serializable {
                 .compact();
     }
 
-    //validate token
+    /**
+     * Method to validate token.
+     *
+     * @param token the jwt token
+     * @return      false if token is expired, true if token is not expired
+     */
     public Boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
 
+    /**
+     * Method to get id from the token.
+     *
+     * @param request   HttpServletRequest to get token
+     * @return          the user id
+     */
     public String getIdFromToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         String userId = null;
