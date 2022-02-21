@@ -148,7 +148,14 @@ public class AppController {
         String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
 
         // TEST
-        String coordinatesTest = "[{\"x\":\"100\", \"y\":\"100\"},{\"x\":\"200\", \"y\":\"200\"}, {\"x\":\"300\", \"y\":\"300\"}]";
+        List<HashMap<String, Float>> test = new ArrayList<>();
+        for(int i=1;i<=3;i++){
+            HashMap<String, Float> tmp = new HashMap<>();
+            tmp.put("x", 100.0F * i);
+            tmp.put("y", 100.0F * i);
+            test.add(tmp);
+        }
+        String coordinatesTest = response.testResponse(test);
 
         return response.routeResponse("success", coordinatesTest);
     }
