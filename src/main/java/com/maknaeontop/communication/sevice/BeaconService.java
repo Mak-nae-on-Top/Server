@@ -17,14 +17,6 @@ public class BeaconService {
         this.beaconMapper = beaconMapper;
     }
 
-    public List<HashMap<String, Object>> selectAllBeacons(){
-        return beaconMapper.selectAllBeacons();
-    }
-
-    public List<HashMap<String, Object>> selectBeaconsUsingUUID(String uuid){
-        return beaconMapper.selectBeaconsUsingUUID(uuid);
-    }
-
     public HashMap<String, Object> selectLocation(String uuid, String major, String minor){
         return beaconMapper.selectLocation(uuid, major, minor);
     }
@@ -41,10 +33,6 @@ public class BeaconService {
         }
     }
 
-    public int selectFloor(Beacon beacon){
-        return beaconMapper.selectFloor(beacon.getUuid(), beacon.getMajor(), beacon.getMinor());
-    }
-
     public List<Beacon> loadBeaconLocation(String uuid, List<Beacon> beaconList){
         int count = 0;
         for(Beacon beacon : beaconList){
@@ -56,10 +44,6 @@ public class BeaconService {
             if(++count == 3) return beaconList;
         }
         return null;
-    }
-
-    public HashMap<String, Float> selectMaxXYByUuidAndFloor(String uuid, int floor){
-        return beaconMapper.selectMaxXYByUuidAndFloor(uuid, floor);
     }
 
     public void deleteByUuidAndFloor(UuidAndFloor uuidAndFloor){

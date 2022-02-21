@@ -9,11 +9,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface BuildingMapper {
-    List<HashMap<String, Object>> selectAllBuildings();
-
-    String selectnamebyUuid();
-
-    String[] selectManagerByUuid();
 
     List<HashMap<String, Object>> selectByManager(String manager);
 

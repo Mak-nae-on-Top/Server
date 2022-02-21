@@ -7,14 +7,6 @@
         SELECT * from building;
     </select>
 
-    <select id="selectnamebyUuid" resultType="String">
-        SELECT name from building WHERE uuid = #{uuid};
-    </select>
-
-    <select id="selectManagerByUuid" resultType="String">
-        SELECT manager from building WHERE uuid = #{uuid};
-    </select>
-
     <select id="selectByManager" resultType="hashMap">
         SELECT uuid, name, lowest_floor, highest_floor from building WHERE manager = #{manager};
     </select>
