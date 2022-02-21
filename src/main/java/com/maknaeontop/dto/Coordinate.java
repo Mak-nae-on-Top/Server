@@ -10,6 +10,6 @@ public class Coordinate {
     private float y;
 
     public String toStringCoordinate(){
-        return Float.toString(this.x) + ":" + Float.toString(this.y);
+        return (int) this.x + ":" + (int) this.y;
     }
 }
