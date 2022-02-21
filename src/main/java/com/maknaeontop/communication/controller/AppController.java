@@ -132,11 +132,20 @@ public class AppController {
         final String deviceId = request.getHeader("Device");
 
         // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
-        float[][] location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
+        List<Coordinate> location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
         // 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
-        float[][] roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
+        List<Coordinate> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
 
-        String coordinates = blueprintUtil.getRoute(location, roomList);
+        // TODO: for문 말고 다른방법은 없을까?
+        List<String> locationArray = new ArrayList<>();
+        List<String> roomArray = new ArrayList<>();
+        for(Coordinate coordinate:location){
+            locationArray.add(coordinate.toStringCoordinate());
+        }
+        for(Coordinate coordinate:roomList){
+            roomArray.add(coordinate.toStringCoordinate());
+        }
+        String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
 
         return response.routeResponse("success", coordinates);
     }

@@ -59,7 +59,7 @@ public class BlueprintUtil {
         return true;
     }
 
-    public String getRoute(float[][] location, float[][] roomList) throws IOException, InterruptedException {
+    public String getRoute(List<String> location, List<String> roomList) throws IOException, InterruptedException {
         String locationString = location.toString().replace(" ","");
         String roomListString = roomList.toString().replace(" ","");
         return processBuilder.executeFindRouteModule(locationString, roomListString);

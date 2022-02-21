@@ -1,10 +1,7 @@
 package com.maknaeontop.communication.sevice;
 
 import com.maknaeontop.communication.mapper.RoomMapper;
-import com.maknaeontop.dto.RoomListOnFloor;
-import com.maknaeontop.dto.Room;
-import com.maknaeontop.dto.RouteRequest;
-import com.maknaeontop.dto.UuidAndFloor;
+import com.maknaeontop.dto.*;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,7 +15,7 @@ public class RoomService {
         this.roomMapper = roomMapper;
     }
 
-    public float[][] selectLocationByUuidAndFloorAndRoomName(RouteRequest routeRequest){
+    public List<Coordinate> selectLocationByUuidAndFloorAndRoomName(RouteRequest routeRequest){
         return roomMapper.selectLocationByUuidAndFloorAndRoomName(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), routeRequest.getDestination());
     }
 
