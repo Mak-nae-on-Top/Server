@@ -27,7 +27,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         WebSocketRoom webSocketRoom = messageRepository.getWebSocketRoomHashMap().get(roomName);
         if(webSocketRoom == null){
             System.out.println("WARN : webSocket room is null");
+        }else{
+            webSocketRoom.socketCommunication(session, msg.getType());
         }
-        webSocketRoom.socketCommunication(session, msg.getType());
     }
 }
