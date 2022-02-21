@@ -1,149 +1,55 @@
-from PIL import Image
+#!/usr/bin/python3
+
+import sys
+
 import cv2 as cv
-import json
-temp = [] #
-BluePrint = [] #0 은 통로, 1은 벽
-img = cv.imread('/Users/sunminsu/study/temp/aa.png')
-Img = img.tolist()
-image1 = Image.open('/Users/sunminsu/study/temp/aa.png')
-X,Y = image1.size[0], image1.size[1]
-for y in range(Y):
-    for x in range(X):
-        if Img[y][x] == [255,255,255]:
-            temp.append(0)
-        else:
-            temp.append(1)
-    BluePrint.append(temp)
-    temp = []
-class Node:
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-        self.g = 0
-        self.h = 0
-        self.f = 0
-    def __eq__(self, other):
-        return self.position == other.position
-def heuristic(node, goal):  
-    dx = abs(node.position[0] - goal.position[0])
-    dy = abs(node.position[1] - goal.position[1])
-    return dx + dy
-def UserList():
-    User_List = []
-    Ustr = "[154:230]"
-    Ustr = Ustr.replace('[','')
-    Ustr = Ustr.replace(']','')
-    Ustr = Ustr.split(',')
-    for i in Ustr:
-        User_List.append(tuple(map(int,i.split(':'))))
-    return User_List
-def RoomList():
-    Room_List = []
-    Rstr = "[109:30,105:340]"
-    Rstr = Rstr.replace('[','')
-    Rstr = Rstr.replace(']','')
-    Rstr = Rstr.split(',')
-    for i in Rstr:
-       Room_List.append(tuple(map(int,i.split(':'))))
-    return Room_List
-def Astar(maze, start, end):
-    # startNode와 endNode 초기화
-    startNode = Node(None, start)
-    endNode = Node(None, end)
-    # openList, closedList 초기화
-    openList = []
-    closedList = []
-    # openList에 시작 노드 추가
-    openList.append(startNode)
-    # endNode를 찾을 때까지 실행
-    while openList:
-        # 현재 노드 지정
-        currentNode = openList[0]
-        currentIdx = 0
-        # 이미 같은 노드가 openList에 있고, f 값이 더 크면
-        # currentNode를 openList안에 있는 값으로 교체
-        for index, item in enumerate(openList):
-            if item.f < currentNode.f:
-                currentNode = item
-                currentIdx = index
-        # openList에서 제거하고 closedList에 추가
-        openList.pop(currentIdx)
-        closedList.append(currentNode)
-        # 현재 노드가 목적지면 current.position 추가하고
-        # current의 부모로 이동
-        if currentNode == endNode:
-            path = []
-            current = currentNode
-            while current is not None:
-                # maze 길을 표시하려면 주석 해제
-                # x, y = current.position
-                # maze[x][y] = 7 
-                path.append(current.position)
-                current = current.parent
-            return path[::-1]  # reverse
-        children = []
-        # 인접한 xy좌표 전부
-        for newPosition in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]:
-            # 노드 위치 업데이트
-            nodePosition = (
-                currentNode.position[0] + newPosition[0],  # X
-                currentNode.position[1] + newPosition[1])  # Y       
-            # 미로 maze index 범위 안에 있어야함
-            within_range_criteria = [
-                nodePosition[0] > (len(maze) - 1),
-                nodePosition[0] < 0,
-                nodePosition[1] > (len(maze[len(maze) - 1]) - 1),
-                nodePosition[1] < 0,
-            ]
-            if any(within_range_criteria):  # 하나라도 true면 범위 밖임
-                continue
-            # 장애물이 있으면 다른 위치 불러오기
-            if maze[nodePosition[0]][nodePosition[1]] != 0:
-                continue
-            new_node = Node(currentNode, nodePosition)
-            children.append(new_node)
-        # 자식들 모두 loop
-        for child in children:
-            # 자식이 closedList에 있으면 continue
-            if child in closedList:
-                continue
-            # f, g, h값 업데이트
-            child.g = currentNode.g + 1
-            child.h = heuristic(child, endNode) #다른 휴리스틱
-            #print("position:", child.position) #거리 추정 값 보기
-            child.f = child.g + child.h
-            # 자식이 openList에 있으고, g값이 더 크면 continue
-            if len([openNode for openNode in openList
-                    if child == openNode and child.g > openNode.g]) > 0:
-                continue
-            openList.append(child)
-def Compare():
-    RL  = RoomList()
-    end = RL[0][0],RL[0][1]
-    userX,userY = UserList()[0]
-    temp = abs(userX - RL[0][0]) + abs(userY - RL[0][1])
-    for i in range(1,len(RL)):
-        if temp>abs(userX - RL[i][0]) + abs(userY - RL[i][1]):
-            end = RL[i][1],RL[i][0]
-    return end
+import numpy as np
+import PIL.Image as Image
+import io
+import base64
+from PIL import ImageFile
 
-def startAstar():
-    ax = []
-    ay = []
-    data = []
-    RoomList()
-    maze = BluePrint
-    start = UserList()[0][1],UserList()[0][0]
-    # start = y,x
-    end = Compare()
-    # end = y,x
-    path = Astar(maze,start,end)
-    for i in path:
-        ax.append(i[1])
-        ay.append(i[0])
-    for i in range(len(ax)):
-        data.append({'x':ax[i],'y':ay[i]})
-    return (json.dumps(data,ensure_ascii=False,indent='\t'))
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
+def convert_image_to_map(file_path):
+    # Open base64 file and decode it to gray image file
+    base64_data = open(file_path, 'r').read()
+    b = base64.b64decode(base64_data)
+    img = Image.open(io.BytesIO(b))
+    im_gray = cv.cvtColor(np.array(img), cv.COLOR_BGR2GRAY)
+
+    thresh, im_bw = cv.threshold(im_gray,128,255,cv.THRESH_BINARY | cv.THRESH_OTSU)
+    thresh = 127
+    im_bw = cv.threshold(im_gray,thresh,255,cv.THRESH_BINARY)[1]
+
+    # find all your connected components
+    nb_components,output,stats,centroids = cv.connectedComponentsWithStats(im_bw,connectivity=8)
+    sizes = stats[1:,-1]; nb_components = nb_components - 1
+    min_size = 150
+
+    img2 = np.zeros(output.shape)
+
+    for i in range(nb_components):
+        if sizes[i] >= min_size:
+            img2[output == i + 1] = 255
+
+    kernel = np.ones((5, 5), np.uint8)
+    blueprint = cv.dilate(img2, kernel)
+
+    im_uint8 = cv.normalize(blueprint, None, 0, 255, cv.NORM_MINMAX, dtype=cv.CV_8U)
+
+    dst = cv.fastNlMeansDenoising(im_uint8, None, 40.0, 7, 21)
+    dst = cv.pyrDown(dst)
+    dst = cv.pyrDown(dst)
+
+    dst_base64 = base64.b64encode(cv.imencode('.jpg', dst)[1]).decode()
+    dst_file = open(file_path, 'w')
+    dst_file.write(str(dst_base64))
+    dst_file.close()
+
+
 if __name__ == '__main__':
-    startAstar()
-
+    # Get image file name through argv
+    file_path = sys.argv[1]
+    convert_image_to_map(file_path)
