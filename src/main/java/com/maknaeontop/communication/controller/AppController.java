@@ -145,7 +145,7 @@ public class AppController {
         for(Coordinate coordinate:roomList){
             roomArray.add(coordinate.toStringCoordinate());
         }
-        //String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
+        String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
 
         // TEST
         if(routeRequest.getDestination().equals("exit")){
