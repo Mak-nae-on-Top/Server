@@ -157,7 +157,9 @@ public class AppController {
         }
         return null;
          */
-
+        if(coordinates==null){
+            return response.routeResponse("fail", "can't get route");
+        }
         return response.routeResponse("success", coordinates);
     }
 
