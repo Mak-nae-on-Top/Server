@@ -1,6 +1,6 @@
 import sys
 
-from PIL import Image
+from PIL.Image import Image
 import cv2 as cv
 import json
 import io
