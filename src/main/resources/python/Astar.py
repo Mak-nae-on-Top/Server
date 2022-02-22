@@ -14,7 +14,7 @@ RL = sys.argv[2]
 
 def read_img(file_path):
     temp = [] #
-    blueprint = [] #0 은 통로, 1은 벽
+    blueprint = [] #0 is path, 1is block
     base64_data = open(file_path,'r').read()
     b = base64.b64decode(base64_data)
     img = cv.imread(io.BytesIO(b))
@@ -71,48 +71,43 @@ def RoomList(Rstr):
 
 
 def Astar(maze, start, end):
-    # startNode와 endNode 초기화
+    # Create start and end node
     startNode = Node(None, start)
     endNode = Node(None, end)
-    # openList, closedList 초기화
+     # Initialize both open and closed list
     openList = []
     closedList = []
-    # openList에 시작 노드 추가
+    # Add the start node
     openList.append(startNode)
-    # endNode를 찾을 때까지 실행
+    #Loop until you find the end
     while openList:
-        # 현재 노드 지정
+        # Get the current node
         currentNode = openList[0]
         currentIdx = 0
-        # 이미 같은 노드가 openList에 있고, f 값이 더 크면
-        # currentNode를 openList안에 있는 값으로 교체
         for index, item in enumerate(openList):
             if item.f < currentNode.f:
                 currentNode = item
                 currentIdx = index
-        # openList에서 제거하고 closedList에 추가
+        # Pop current off open list, add to closed list
         openList.pop(currentIdx)
         closedList.append(currentNode)
-        # 현재 노드가 목적지면 current.position 추가하고
-        # current의 부모로 이동
+        # Found the goal
         if currentNode == endNode:
             path = []
             current = currentNode
             while current is not None:
-                # maze 길을 표시하려면 주석 해제
-                # x, y = current.position
-                # maze[x][y] = 7 
                 path.append(current.position)
                 current = current.parent
             return path[::-1]  # reverse
+         # Generate children
         children = []
         # 인접한 xy좌표 전부
         for newPosition in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]:
-            # 노드 위치 업데이트
+            # Get node position
+
             nodePosition = (
                 currentNode.position[0] + newPosition[0],  # X
                 currentNode.position[1] + newPosition[1])  # Y       
-            # 미로 maze index 범위 안에 있어야함
             within_range_criteria = [
                 nodePosition[0] > (len(maze) - 1),
                 nodePosition[0] < 0,
@@ -126,17 +121,14 @@ def Astar(maze, start, end):
                 continue
             new_node = Node(currentNode, nodePosition)
             children.append(new_node)
-        # 자식들 모두 loop
+        # loop all children
         for child in children:
-            # 자식이 closedList에 있으면 continue
             if child in closedList:
                 continue
-            # f, g, h값 업데이트
+            # update value f, g, h
             child.g = currentNode.g + 1
-            child.h = heuristic(child, endNode) #다른 휴리스틱
-            #print("position:", child.position) #거리 추정 값 보기
+            child.h = heuristic(child, endNode)
             child.f = child.g + child.h
-            # 자식이 openList에 있으고, g값이 더 크면 continue
             if len([openNode for openNode in openList
                     if child == openNode and child.g > openNode.g]) > 0:
                 continue
