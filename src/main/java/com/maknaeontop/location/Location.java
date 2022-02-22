@@ -1,12 +1,15 @@
 package com.maknaeontop.location;
 
+import com.maknaeontop.communication.sevice.BeaconService;
 import com.maknaeontop.dto.Beacon;
 import com.maknaeontop.dto.InitRequest;
+import lombok.AllArgsConstructor;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class Location {
+
     private Trilateration trilateration = Trilateration.getInstance();
 
     public static Location getInstance() {
@@ -32,7 +35,7 @@ public class Location {
         return new float[]{xData / beaconList.size(), yData / beaconList.size()};
     }
 
-    public HashMap<String, Float> createModel(InitRequest coordinateAndRangedBeacons){
+    public HashMap<String, Float> createModel(float x, float y, List<List<Beacon>> rangedBeacons){
         // xMean 값과 yMean값 두개를 이용하여 모델 만들기(측정 평균 값을 실제 값과 맞추기 위하여)
         // * f(x) = realX, x = x1, f(y) = realY, y = y1
         // 1. realX == ax1 + b , realY == ay1 + b
@@ -43,10 +46,7 @@ public class Location {
 
         HashMap<String,Float> hashMap = new HashMap<>();
 
-        float[] meanXY = calculateMeanXY(coordinateAndRangedBeacons.getRangedBeacons());
-
-        float x = coordinateAndRangedBeacons.getX();
-        float y = coordinateAndRangedBeacons.getY();
+        float[] meanXY = calculateMeanXY(rangedBeacons);
 
         float x1 = meanXY[0];
         float y1 = meanXY[1];
