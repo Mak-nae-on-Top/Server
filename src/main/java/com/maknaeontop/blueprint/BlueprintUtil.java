@@ -16,7 +16,7 @@ public class BlueprintUtil {
     private final ProcessBuilder processBuilder = new ProcessBuilder();
 
     public boolean saveImage(Base64Image base64Image) throws IOException{
-        String pathName = PATH_PREFIX + base64Image.getUuid() + "_" + base64Image.getFloor() + EXTENSION;
+        String pathName = getImageFilePath(base64Image.getUuid(), base64Image.getFloor());
         File file = new File(pathName);
         if (!file.exists()) {
             file.createNewFile();
@@ -35,7 +35,7 @@ public class BlueprintUtil {
     }
 
     public boolean deleteMap(String uuid, String floor){
-        String pathName = PATH_PREFIX + uuid + "_" + floor + EXTENSION;
+        String pathName = getImageFilePath(uuid, floor);
         File file = new File(pathName);
         if(file.exists()){
             file.delete();
@@ -45,7 +45,7 @@ public class BlueprintUtil {
     }
 
     public String loadImage(String uuid, String floor) throws IOException {
-        Path path = Paths.get(PATH_PREFIX + uuid + "_" + floor + EXTENSION);
+        Path path = Paths.get(getImageFilePath(uuid, floor));
         return new String(Files.readAllBytes(path));
     }
 
@@ -59,9 +59,14 @@ public class BlueprintUtil {
         return true;
     }
 
-    public String getRoute(List<String> location, List<String> roomList) throws IOException, InterruptedException {
+    public String getRoute(List<String> location, List<String> roomList, String uuid, String floor) throws IOException, InterruptedException {
         String locationString = location.toString().replace(" ","");
         String roomListString = roomList.toString().replace(" ","");
-        return processBuilder.executeFindRouteModule(locationString, roomListString);
+        String imagePathString = getImageFilePath(uuid, floor);
+        return processBuilder.executeFindRouteModule(locationString, roomListString, imagePathString);
+    }
+
+    private String getImageFilePath(String uuid, String floor){
+        return PATH_PREFIX + uuid + "_" + floor + EXTENSION;
     }
 }
