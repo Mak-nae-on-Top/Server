@@ -11,7 +11,7 @@ import java.util.List;
 public interface BeaconMapper {
     HashMap<String, Object> selectCoordinate(String uuid, String major, String minor);
 
-    List<HashMap<String, Object>> addBeacon(long id, String uuid, String major, String minor, float x, float y, int floor);
+    void addBeacon(long id, String uuid, String major, String minor, float x, float y, int floor);
 
     void deleteByUuidAndFloor(String uuid, String floor);
 
