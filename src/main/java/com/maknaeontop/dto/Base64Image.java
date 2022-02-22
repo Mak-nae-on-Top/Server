@@ -10,6 +10,4 @@ public class Base64Image {
     private String floor;
     private String base64;
     private String building_name;
-    private int image_width;
-    private int image_height;
 }

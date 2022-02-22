@@ -2,12 +2,10 @@ package com.maknaeontop.blueprint;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ProcessBuilder {
     private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
-    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/";
 
     public boolean executeConvertImageToMapModule(String arg) throws IOException, InterruptedException {
         String response = buildProcess( PYTHON_MODULE_PATH + "convertImageToMap.py", arg);
