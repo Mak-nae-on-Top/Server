@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 public class ProcessBuilder {
     private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
+    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/";
 
     /**
      * Method to execute 'convertImageToMap.py' to create map using base64 image.
@@ -31,7 +32,7 @@ public class ProcessBuilder {
      * @throws InterruptedException
      */
     public String executeFindRouteModule(String arg1, String arg2, String arg3) throws IOException, InterruptedException {
-        return buildProcess( PYTHON_MODULE_PATH + "Astar.py", arg1 + " " + arg2 + " " + arg3);
+        return buildProcess( PYTHON_MODULE_PATH + "Astar.exe", arg1 + " " + arg2 + " " + arg3);
     }
 
     /**
