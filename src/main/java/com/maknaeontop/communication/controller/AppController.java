@@ -97,7 +97,7 @@ public class AppController {
         // 사용자 위치 계산 with 모델
         HashMap<String, Float> constants = trilaterationModelService.selectConstants(uuid);
         HashMap<String, Float> userLocation;
-        if(constants == null){
+        if(constants != null){
             userLocation = location.calculateUserLocationWithModel(constants.get("x"), constants.get("y"), beaconListIncludeLocation);
         }else {
             userLocation = location.calculateUserLocation(beaconListIncludeLocation);

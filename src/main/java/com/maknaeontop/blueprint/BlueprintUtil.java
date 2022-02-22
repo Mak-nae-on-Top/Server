@@ -102,6 +102,7 @@ public class BlueprintUtil {
         String locationString = location.toString().replace(" ","");
         String roomListString = roomList.toString().replace(" ","");
         String imagePathString = getImageFilePath(uuid, floor);
+        //String imagePathString = "C:/Users/namu/Desktop/test/image.txt";
         return processBuilder.executeFindRouteModule(locationString, roomListString, imagePathString);
     }
 
