@@ -1,26 +1,30 @@
-import sys
-
 from PIL import Image
 import cv2 as cv
 import json
-temp = [] #
-BluePrint = [] #0 은 통로, 1은 벽
-UL = sys.argv[1]
-RL = sys.argv[2]
-img = cv.imread(sys.argv[3])
-Img = img.tolist()
-image1 = Image.open(sys.argv[3])
-X,Y = image1.size[0], image1.size[1]
-for y in range(Y):
-    for x in range(X):
-        if Img[y][x] == [255,255,255]:
-            temp.append(0)
+import io
+import base64
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+UL = "[154:230]"
+RL = "[109:30,105:340]"
+def read_img(file_path):
+    temp = [] #
+    BluePrint = [] #0 은 통로, 1은 벽
+    base64_data = open(file_path,'r').read()
+    b = base64.b64decode(base64_data)
+    img = cv.imread(io.BytesIO(b))
+    Img = img.tolist()
+    image1 = Image.open(io.BytesIO(b))
+    X,Y = image1.size[0], image1.size[1]
+    for y in range(Y):
+        for x in range(X):
+            if Img[y][x] == [255,255,255]:
+                temp.append(0)
         else:
-            temp.append(1)
-    BluePrint.append(temp)
+                temp.append(1)
+        BluePrint.append(temp)
     temp = []
-
-
+    return BluePrint
 class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
@@ -28,17 +32,12 @@ class Node:
         self.g = 0
         self.h = 0
         self.f = 0
-
     def __eq__(self, other):
         return self.position == other.position
-
-
-def heuristic(node, goal):
+def heuristic(node, goal):  
     dx = abs(node.position[0] - goal.position[0])
     dy = abs(node.position[1] - goal.position[1])
     return dx + dy
-
-
 def UseRomListist(Ustr):
     User_List = []
     Ustr = Ustr.replace('[','')
@@ -47,18 +46,14 @@ def UseRomListist(Ustr):
     for i in Ustr:
         User_List.append(tuple(map(int,i.split(':'))))
     return User_List
-
-
 def RoomList(Rstr):
     Room_List = []
     Rstr = Rstr.replace('[','')
     Rstr = Rstr.replace(']','')
     Rstr = Rstr.split(',')
     for i in Rstr:
-        Room_List.append(tuple(map(int,i.split(':'))))
+       Room_List.append(tuple(map(int,i.split(':'))))
     return Room_List
-
-
 def Astar(maze, start, end):
     # startNode와 endNode 초기화
     startNode = Node(None, start)
@@ -107,7 +102,7 @@ def Astar(maze, start, end):
                 nodePosition[0] < 0,
                 nodePosition[1] > (len(maze[len(maze) - 1]) - 1),
                 nodePosition[1] < 0,
-                ]
+            ]
             if any(within_range_criteria):  # 하나라도 true면 범위 밖임
                 continue
             # 장애물이 있으면 다른 위치 불러오기
@@ -130,8 +125,6 @@ def Astar(maze, start, end):
                     if child == openNode and child.g > openNode.g]) > 0:
                 continue
             openList.append(child)
-
-
 def Compare():
     RomList  = RoomList(RL)
     end = RomList[0][0],RomList[0][1]
@@ -142,13 +135,12 @@ def Compare():
             end = RomList[i][1],RomList[i][0]
     return end
 
-
 def startAstar():
 
     ax = []
     ay = []
     data = []
-    maze = BluePrint
+    maze = read_img(file_path)
     start = UseRomListist(UL)[0][1],UseRomListist(UL)[0][0]
     # start = y,x
     end = Compare()
@@ -160,7 +152,6 @@ def startAstar():
     for i in range(len(ax)):
         data.append({'x':ax[i],'y':ay[i]})
     return (json.dumps(data,ensure_ascii=False,indent='\t'))
-
-
 if __name__ == '__main__':
     print(startAstar())
+
