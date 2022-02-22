@@ -18,5 +18,5 @@ public interface BuildingMapper {
 
     void updateLowestFloor(String uuid, String lowestFloor);
 
-    boolean insertBuilding(String uuid, String name, String manager, int lowest_floor, int highest_floor);
+    boolean insertBuilding(String uuid, String name, String manager, int lowestFloor, int highestFloor);
 }

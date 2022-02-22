@@ -20,11 +20,11 @@
     </update>
 
     <update id="updateLowestFloor">
-        UPDATE building SET lowest_floor = #{lowest_floor} WHERE uuid = #{uuid};
+        UPDATE building SET lowest_floor = #{lowestFloor} WHERE uuid = #{uuid};
     </update>
 
     <insert id="insertBuilding">
-        INSERT INTO building VALUES (#{uuid}, #{name}, #{manager}, #{lowest_floor}, #{highest_floor})
-            ON DUPLICATE KEY UPDATE name = #{name}, manager = #{manager}, lowest_floor = #{lowest_floor}, highest_floor = #{highest_floor};
+        INSERT INTO building VALUES (#{uuid}, #{name}, #{manager}, #{lowestFloor}, #{highestFloor})
+            ON DUPLICATE KEY UPDATE name = #{name}, manager = #{manager}, lowest_floor = #{lowestFloor}, highest_floor = #{highestFloor};
     </insert>
 </mapper>
