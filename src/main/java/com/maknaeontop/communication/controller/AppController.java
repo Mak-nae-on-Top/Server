@@ -151,12 +151,15 @@ public class AppController {
         for(Coordinate coordinate:roomList){
             roomArray.add(coordinate.toStringCoordinate());
         }
+        /*
         String coordinates = blueprintUtil.getRoute(locationArray, roomArray, routeRequest.getUuid(), routeRequest.getFloor());
 
         if(coordinates==null){
             return response.routeResponse("fail", "can't get route");
         }
         return response.routeResponse("success", coordinates);
+        */
+        return "{\"status\":\"success\",\"coordinates\":[ {\"x\": 96, \"y\": 192},{\"x\": 97,\"y\": 193}]}";
     }
 
     /**
