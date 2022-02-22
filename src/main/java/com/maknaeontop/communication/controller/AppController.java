@@ -98,7 +98,7 @@ public class AppController {
         HashMap<String, Float> constants = trilaterationModelService.selectConstants(uuid);
         HashMap<String, Float> userLocation;
         if(constants != null){
-            userLocation = location.calculateUserLocationWithModel(constants.get("x"), constants.get("y"), beaconListIncludeLocation);
+            userLocation = location.calculateUserLocationWithModel(constants.get("a"), constants.get("b"), beaconListIncludeLocation);
         }else {
             userLocation = location.calculateUserLocation(beaconListIncludeLocation);
         }
@@ -282,6 +282,9 @@ public class AppController {
         for(int i=0;i<coordinateAndRangedBeacons.getRangedBeacons().size();i++){
             List<Beacon> beaconList = coordinateAndRangedBeacons.getRangedBeacons().get(i);
             List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(beaconList.get(0).getUuid(), beaconList);
+            if(beaconListIncludeLocation == null){
+                continue;
+            }
             testList.add(beaconListIncludeLocation);
         }
         HashMap<String, Float> modelConstant = location.createModel(coordinateAndRangedBeacons.getX(), coordinateAndRangedBeacons.getY(), testList);
