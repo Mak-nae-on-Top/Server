@@ -17,6 +17,11 @@ public class Location {
         return trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
     }
 
+    public HashMap<String, Float> calculateUserLocationWithModel(float a, float b, List<Beacon> beaconList){
+        HashMap<String, Float> calculatedCoordinate = trilateration.calculateTrilateration(beaconList.get(0), beaconList.get(1), beaconList.get(2));
+        return applyModel(a, b, calculatedCoordinate);
+    }
+
     public float[] calculateMeanXY(List<List<Beacon>> beaconList){
         float xData = 0, yData = 0;
         for(int i=0;i<beaconList.size(); i++){
@@ -50,8 +55,11 @@ public class Location {
         }};
     }
 
-    public HashMap<String, Float> applyModel(float a, float b, HashMap<String, Float> coordinate){
-        return null;
+    private HashMap<String, Float> applyModel(float a, float b, HashMap<String, Float> coordinate){
+        HashMap<String, Float> fixedCoordinate = new HashMap<>();
+        fixedCoordinate.put("x", coordinate.get("x") * a + b);
+        fixedCoordinate.put("y", coordinate.get("y") * a + b);
+        return fixedCoordinate;
     }
 
     private Location(){}

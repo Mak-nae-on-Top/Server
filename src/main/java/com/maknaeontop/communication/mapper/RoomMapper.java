@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RoomMapper {
-    List<Coordinate> selectLocationByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
+    List<Coordinate> selectCoordinateByUuidAndFloorAndRoomName(String uuid, int floor, String roomName);
 
     boolean insertRoom(Long id, String uuid, int floor, String roomName, float x, float y);
 

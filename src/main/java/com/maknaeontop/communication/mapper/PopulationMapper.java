@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface PopulationMapper {
-    List<HashMap<String, Float>> selectLocationAfterInsert(String deviceId, String uuid, float x, float y, int floor);
+    List<HashMap<String, Float>> selectCoordinateAfterInsert(String deviceId, String uuid, float x, float y, int floor);
 
-    List<Coordinate> selectLocationInSameFloor(String uuid, int floor, String deviceId);
+    List<Coordinate> selectCoordinateInSameFloor(String uuid, int floor, String deviceId);
 }

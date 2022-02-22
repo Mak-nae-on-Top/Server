@@ -94,10 +94,12 @@ public class AppController {
         if(beaconListIncludeLocation == null) return response.statusResponse("fail", "beacon wasn't searched enough");
         int floor = Integer.parseInt(beaconListIncludeLocation.get(0).getFloor());
 
-        // 사용자 위치 계산
-        HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
+        // 사용자 위치 계산 with 모델
+        //HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
+        HashMap<String, Float> constants = trilaterationModelService.selectConstants(uuid);
+        HashMap<String, Float> userLocation = location.calculateUserLocationWithModel(constants.get("x"), constants.get("y"), beaconListIncludeLocation);
         // 사용자 위치 저장 후 같은 층 사람들 위치 반환 (사용자 위치가 0번째)
-        List<HashMap<String, Float>> locationList = populationService.selectLocationAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
+        List<HashMap<String, Float>> locationList = populationService.selectCoordinateAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
         Population population = new Population("success", uuid, floor);
         population.setLocation_list(locationList);
@@ -132,9 +134,9 @@ public class AppController {
         final String deviceId = request.getHeader("Device");
 
         // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
-        List<Coordinate> location = populationService.selectLocationInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
+        List<Coordinate> location = populationService.selectCoordinateInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
         // 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
-        List<Coordinate> roomList = roomService.selectLocationByUuidAndFloorAndRoomName(routeRequest);
+        List<Coordinate> roomList = roomService.selectCoordinateByUuidAndFloorAndRoomName(routeRequest);
 
         // TODO: for문 말고 다른방법은 없을까?
         List<String> locationArray = new ArrayList<>();
@@ -294,7 +296,7 @@ public class AppController {
      * @param uuid  building uuid
      */
     @GetMapping("/admin/createWebsocketRoom")
-    public String initBeacon(@RequestParam String uuid){
+    public String createWebsocketRoom(@RequestParam String uuid){
         messageRepository.createRoom(uuid, new WebSocketRoom());
         return response.statusResponse("success", "successfully created websocket room");
     }

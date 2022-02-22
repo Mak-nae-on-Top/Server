@@ -17,8 +17,8 @@ public class BeaconService {
         this.beaconMapper = beaconMapper;
     }
 
-    public HashMap<String, Object> selectLocation(String uuid, String major, String minor){
-        return beaconMapper.selectLocation(uuid, major, minor);
+    public HashMap<String, Object> selectCoordinate(String uuid, String major, String minor){
+        return beaconMapper.selectCoordinate(uuid, major, minor);
     }
 
     public void addBeacon(long id, String uuid, String major, String minor, float x, float y, int floor){
@@ -36,7 +36,7 @@ public class BeaconService {
     public List<Beacon> loadBeaconLocation(String uuid, List<Beacon> beaconList){
         int count = 0;
         for(Beacon beacon : beaconList){
-            HashMap<String, Object> location = selectLocation(uuid, beacon.getMajor(), beacon.getMinor());
+            HashMap<String, Object> location = selectCoordinate(uuid, beacon.getMajor(), beacon.getMinor());
             if(location != null){
                 beacon.setFloor(Integer.toString((int)location.get("floor")));
                 beacon.setLocation((float)location.get("x"), (float)location.get("y"));
