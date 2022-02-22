@@ -4,7 +4,7 @@
 
 <mapper namespace="com.maknaeontop.communication.mapper.PopulationMapper">
 
-    <select id="selectLocationAfterInsert" resultType="hashmap">
+    <select id="selectCoordinateAfterInsert" resultType="hashmap">
         INSERT INTO population
         VALUES (#{deviceId}, #{uuid}, #{x}, #{y}, #{floor})
             ON DUPLICATE KEY UPDATE
@@ -14,7 +14,7 @@
         ORDER BY FIELD(device_id, #{deviceId}) DESC;
     </select>
 
-    <select id="selectLocationInSameFloor" resultType="com.maknaeontop.dto.Coordinate">
+    <select id="selectCoordinateInSameFloor" resultType="com.maknaeontop.dto.Coordinate">
         SELECT x, y FROM population
             WHERE (uuid = #{uuid} AND floor = #{floor})
         ORDER BY FIELD(device_id, #{deviceId}) DESC;

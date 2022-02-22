@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.maknaeontop.communication.mapper.BeaconMapper">
-    <select id="selectLocation" resultType="hashMap">
+    <select id="selectCoordinate" resultType="hashMap">
         SELECT x, y, floor FROM beacon WHERE (uuid = #{uuid} and major = #{major} and minor = #{minor});
     </select>
 

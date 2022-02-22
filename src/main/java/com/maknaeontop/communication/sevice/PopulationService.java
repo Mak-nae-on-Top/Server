@@ -15,11 +15,11 @@ public class PopulationService {
         this.populationMapper = populationMapper;
     }
 
-    public List<HashMap<String, Float>> selectLocationAfterInsert(String deviceId, String uuid, float x, float y, int floor){
-        return populationMapper.selectLocationAfterInsert(deviceId, uuid, x, y, floor);
+    public List<HashMap<String, Float>> selectCoordinateAfterInsert(String deviceId, String uuid, float x, float y, int floor){
+        return populationMapper.selectCoordinateAfterInsert(deviceId, uuid, x, y, floor);
     }
 
-    public List<Coordinate> selectLocationInSameFloor(String uuid, int floor, String deviceId){
-        return populationMapper.selectLocationInSameFloor(uuid, floor, deviceId);
+    public List<Coordinate> selectCoordinateInSameFloor(String uuid, int floor, String deviceId){
+        return populationMapper.selectCoordinateInSameFloor(uuid, floor, deviceId);
     }
 }

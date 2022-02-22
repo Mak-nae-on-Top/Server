@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface BeaconMapper {
-    HashMap<String, Object> selectLocation(String uuid, String major, String minor);
+    HashMap<String, Object> selectCoordinate(String uuid, String major, String minor);
 
     List<HashMap<String, Object>> addBeacon(long id, String uuid, String major, String minor, float x, float y, int floor);
 

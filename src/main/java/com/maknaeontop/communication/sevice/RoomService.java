@@ -15,8 +15,8 @@ public class RoomService {
         this.roomMapper = roomMapper;
     }
 
-    public List<Coordinate> selectLocationByUuidAndFloorAndRoomName(RouteRequest routeRequest){
-        return roomMapper.selectLocationByUuidAndFloorAndRoomName(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), routeRequest.getDestination());
+    public List<Coordinate> selectCoordinateByUuidAndFloorAndRoomName(RouteRequest routeRequest){
+        return roomMapper.selectCoordinateByUuidAndFloorAndRoomName(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), routeRequest.getDestination());
     }
 
     public void insertRoom(RoomListOnFloor roomListOnFloor){
