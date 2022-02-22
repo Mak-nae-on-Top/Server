@@ -95,9 +95,13 @@ public class AppController {
         int floor = Integer.parseInt(beaconListIncludeLocation.get(0).getFloor());
 
         // 사용자 위치 계산 with 모델
-        //HashMap<String, Float> userLocation = location.calculateUserLocation(beaconListIncludeLocation);
         HashMap<String, Float> constants = trilaterationModelService.selectConstants(uuid);
-        HashMap<String, Float> userLocation = location.calculateUserLocationWithModel(constants.get("x"), constants.get("y"), beaconListIncludeLocation);
+        HashMap<String, Float> userLocation;
+        if(constants == null){
+            userLocation = location.calculateUserLocationWithModel(constants.get("x"), constants.get("y"), beaconListIncludeLocation);
+        }else {
+            userLocation = location.calculateUserLocation(beaconListIncludeLocation);
+        }
         // 사용자 위치 저장 후 같은 층 사람들 위치 반환 (사용자 위치가 0번째)
         List<HashMap<String, Float>> locationList = populationService.selectCoordinateAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
@@ -149,16 +153,6 @@ public class AppController {
         }
         String coordinates = blueprintUtil.getRoute(locationArray, roomArray, routeRequest.getUuid(), routeRequest.getFloor());
 
-        // TEST
-        /*
-        if(routeRequest.getDestination().equals("exit")){
-            return "{\"status\":\"success\",\"coordinates\":[{\"x\":100.0, \"y\":100.0}, {\"x\":200.0, \"y\":200.0}, {\"x\":300.0, \"y\":300.0}]}";
-        }
-        else if(routeRequest.getDestination().equals("toilet")){
-            return "{\"status\":\"success\",\"coordinates\":[{\"x\":50.0, \"y\":50.0}, {\"x\":150.0, \"y\":150.0}, {\"x\":250.0, \"y\":250.0}]}";
-        }
-        return null;
-         */
         if(coordinates==null){
             return response.routeResponse("fail", "can't get route");
         }
