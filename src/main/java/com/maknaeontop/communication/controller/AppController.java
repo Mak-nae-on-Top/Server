@@ -145,9 +145,10 @@ public class AppController {
         for(Coordinate coordinate:roomList){
             roomArray.add(coordinate.toStringCoordinate());
         }
-        String coordinates = blueprintUtil.getRoute(locationArray, roomArray);
+        String coordinates = blueprintUtil.getRoute(locationArray, roomArray, routeRequest.getUuid(), routeRequest.getFloor());
 
         // TEST
+        /*
         if(routeRequest.getDestination().equals("exit")){
             return "{\"status\":\"success\",\"coordinates\":[{\"x\":100.0, \"y\":100.0}, {\"x\":200.0, \"y\":200.0}, {\"x\":300.0, \"y\":300.0}]}";
         }
@@ -155,8 +156,9 @@ public class AppController {
             return "{\"status\":\"success\",\"coordinates\":[{\"x\":50.0, \"y\":50.0}, {\"x\":150.0, \"y\":150.0}, {\"x\":250.0, \"y\":250.0}]}";
         }
         return null;
+         */
 
-        //return response.routeResponse("success", coordinates);
+        return response.routeResponse("success", coordinates);
     }
 
     /**
