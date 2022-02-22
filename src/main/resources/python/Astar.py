@@ -150,6 +150,7 @@ def startAstar(file_path):
     ax = []
     ay = []
     data = []
+    rpath = []
     maze = read_img(file_path)
     start = UseRomListist(UL)[0][1],UseRomListist(UL)[0][0]
     # start = y,x
@@ -157,6 +158,8 @@ def startAstar(file_path):
     # end = y,x
     path = Astar(maze,start,end)
     for i in path:
+        rpath.append(tuple(4*elem for elem in i))
+    for i in rpath:
         ax.append(i[1])
         ay.append(i[0])
     for i in range(len(ax)):
