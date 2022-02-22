@@ -101,7 +101,8 @@ public class BlueprintUtil {
     public String getRoute(List<String> location, List<String> roomList, String uuid, String floor) throws IOException, InterruptedException {
         String locationString = location.toString().replace(" ","");
         String roomListString = roomList.toString().replace(" ","");
-        String imagePathString = getImageFilePath(uuid, floor);
+        //String imagePathString = getImageFilePath(uuid, floor);
+        String imagePathString = "C:/Users/namu/Desktop/test/image.txt";
         return processBuilder.executeFindRouteModule(locationString, roomListString, imagePathString);
     }
 
