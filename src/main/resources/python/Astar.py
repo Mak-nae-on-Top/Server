@@ -1,15 +1,20 @@
+import sys
+
 from PIL import Image
 import cv2 as cv
 import json
 import io
 import base64
 from PIL import ImageFile
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-UL = "[154:230]"
-RL = "[109:30,105:340]"
+UL = sys.argv[1]
+RL = sys.argv[2]
+
+
 def read_img(file_path):
     temp = [] #
-    BluePrint = [] #0 은 통로, 1은 벽
+    blueprint = [] #0 은 통로, 1은 벽
     base64_data = open(file_path,'r').read()
     b = base64.b64decode(base64_data)
     img = cv.imread(io.BytesIO(b))
@@ -22,9 +27,11 @@ def read_img(file_path):
                 temp.append(0)
         else:
                 temp.append(1)
-        BluePrint.append(temp)
+        blueprint.append(temp)
     temp = []
-    return BluePrint
+    return blueprint
+
+
 class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
@@ -32,12 +39,17 @@ class Node:
         self.g = 0
         self.h = 0
         self.f = 0
+
     def __eq__(self, other):
         return self.position == other.position
+
+
 def heuristic(node, goal):  
     dx = abs(node.position[0] - goal.position[0])
     dy = abs(node.position[1] - goal.position[1])
     return dx + dy
+
+
 def UseRomListist(Ustr):
     User_List = []
     Ustr = Ustr.replace('[','')
@@ -46,6 +58,8 @@ def UseRomListist(Ustr):
     for i in Ustr:
         User_List.append(tuple(map(int,i.split(':'))))
     return User_List
+
+
 def RoomList(Rstr):
     Room_List = []
     Rstr = Rstr.replace('[','')
@@ -54,6 +68,8 @@ def RoomList(Rstr):
     for i in Rstr:
        Room_List.append(tuple(map(int,i.split(':'))))
     return Room_List
+
+
 def Astar(maze, start, end):
     # startNode와 endNode 초기화
     startNode = Node(None, start)
@@ -125,6 +141,8 @@ def Astar(maze, start, end):
                     if child == openNode and child.g > openNode.g]) > 0:
                 continue
             openList.append(child)
+
+
 def Compare():
     RomList  = RoomList(RL)
     end = RomList[0][0],RomList[0][1]
@@ -135,8 +153,8 @@ def Compare():
             end = RomList[i][1],RomList[i][0]
     return end
 
-def startAstar():
 
+def startAstar(file_path):
     ax = []
     ay = []
     data = []
@@ -153,5 +171,5 @@ def startAstar():
         data.append({'x':ax[i],'y':ay[i]})
     return (json.dumps(data,ensure_ascii=False,indent='\t'))
 if __name__ == '__main__':
-    print(startAstar())
-
+    file_path = sys.argv[3]
+    print(startAstar(file_path))
