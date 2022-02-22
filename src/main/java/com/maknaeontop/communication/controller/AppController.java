@@ -271,15 +271,15 @@ public class AppController {
     /**
      * Method to obtain a model for correcting position measurements using trilateration.
      *
-     * @param rangedBeacons     list of beacons obtained by the app
+     * @param coordinateAndRangedBeacons     list of beacons obtained by the app
      * @param x                 x value where the user is actually located
      * @param y                 x value where the user is actually located
      * @return                  status and message in json format
      */
     @PostMapping("/manager/init")
-    public String initBeacon(@RequestBody List<List<Beacon>> rangedBeacons, float x, float y){
-        String uuid = rangedBeacons.get(0).get(0).getUuid();
-        HashMap<String, Float> modelConstant = location.createModel(rangedBeacons, x, y);
+    public String initBeacon(@RequestBody InitRequest coordinateAndRangedBeacons){
+        String uuid = coordinateAndRangedBeacons.getRangedBeacons().get(0).get(0).getUuid();
+        HashMap<String, Float> modelConstant = location.createModel(coordinateAndRangedBeacons);
         trilaterationModelService.insertConstants(uuid, modelConstant.get("a"), modelConstant.get("b"));
 
         return response.statusResponse("success", "initialized trilateration model successfully");

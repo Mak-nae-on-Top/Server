@@ -4,7 +4,7 @@
 
 <mapper namespace="com.maknaeontop.communication.mapper.TrilaterationModelMapper">
     <insert id="insertConstants">
-        INSERT INTO trilateration_model VALUES(#{uuid}, #{a}, #{b})
+        INSERT INTO trilateration_model(uuid, a, b) VALUES(#{uuid}, #{a}, #{b})
             ON DUPLICATE KEY UPDATE a = #{a}, b = #{b};
     </insert>
 

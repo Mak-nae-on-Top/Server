@@ -1,8 +1,8 @@
 package com.maknaeontop.location;
 
 import com.maknaeontop.dto.Beacon;
+import com.maknaeontop.dto.InitRequest;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Location {
         return new float[]{xData / beaconList.size(), yData / beaconList.size()};
     }
 
-    public HashMap<String, Float> createModel(List<List<Beacon>> beaconList, float realX, float realY){
+    public HashMap<String, Float> createModel(InitRequest coordinateAndRangedBeacons){
         // xMean 값과 yMean값 두개를 이용하여 모델 만들기(측정 평균 값을 실제 값과 맞추기 위하여)
         // * f(x) = realX, x = x1, f(y) = realY, y = y1
         // 1. realX == ax1 + b , realY == ay1 + b
@@ -41,18 +41,21 @@ public class Location {
         // 4. b == realX - ax1
         // 5. f(x) == (realX - realY)/(x1 - y1)*x + realX - ax1
 
-        float[] meanXY = calculateMeanXY(beaconList);
+        HashMap<String,Float> hashMap = new HashMap<>();
+
+        float[] meanXY = calculateMeanXY(coordinateAndRangedBeacons.getRangedBeacons());
+
+        float x = coordinateAndRangedBeacons.getX();
+        float y = coordinateAndRangedBeacons.getY();
 
         float x1 = meanXY[0];
         float y1 = meanXY[1];
 
-        float a = (realX - realY)/(x1 - y1);
-        float b  = realX - a * x1;
+        float a  = (x - y)/(x1 - y1);
+        hashMap.put("a", a);
+        hashMap.put("b", x - a * x1);
 
-        return new HashMap<String,Float>(){{
-            put("a",a);
-            put("b",b);
-        }};
+        return hashMap;
     }
 
     private HashMap<String, Float> applyModel(float a, float b, HashMap<String, Float> coordinate){
