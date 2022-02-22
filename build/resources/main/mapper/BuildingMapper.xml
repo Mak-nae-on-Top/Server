@@ -24,6 +24,7 @@
     </update>
 
     <insert id="insertBuilding">
-        INSERT INTO building VALUES (#{uuid}, #{name}, #{manager}, #{lowest_floor}, #{highest_floor});
+        INSERT INTO building VALUES (#{uuid}, #{name}, #{manager}, #{lowest_floor}, #{highest_floor})
+            ON DUPLICATE KEY UPDATE name = #{name}, manager = #{manager}, lowest_floor = #{lowest_floor}, highest_floor = #{highest_floor};
     </insert>
 </mapper>
