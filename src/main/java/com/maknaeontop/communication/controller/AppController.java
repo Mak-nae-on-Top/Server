@@ -161,10 +161,10 @@ public class AppController {
             roomArray.add(coordinate.toStringCoordinate());
         }
 
-        String coordinates = blueprintUtil.getRoute(locationArray, roomArray, routeRequest.getUuid(), routeRequest.getFloor());
+        List<HashMap<String, Float>> coordinates = blueprintUtil.getRouteDemo(locationArray, roomArray, routeRequest.getUuid(), routeRequest.getFloor());
 
-        //return response.routeResponse(coordinates);
-        return coordinates;
+        return response.routeResponse(coordinates);
+        //return coordinates;
     }
 
     /**

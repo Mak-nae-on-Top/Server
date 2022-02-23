@@ -2,6 +2,7 @@ package com.maknaeontop.communication;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.maknaeontop.dto.CoordinateList;
 import com.maknaeontop.dto.FloorInfo;
 import com.maknaeontop.dto.Population;
 
