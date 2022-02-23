@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessBuilder {
-    private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
-    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/";
-
     /**
      * Method to generate and execute a sub-process with arg.
      *
@@ -31,7 +28,7 @@ public class ProcessBuilder {
             sb.append(line);
         }
         if(exitVal != 0) {
-            System.out.println("process terminated abnormally");
+            System.out.println("process terminated abnormally: " );
             return null;
         }
         return sb.toString();
