@@ -108,7 +108,16 @@ public class AppController {
         Population population = new Population("success", uuid, floor);
         population.setLocation_list(locationList);
 
-        return response.locationResponse(population);
+        //for test
+        HashMap<String, Float> tmp = new HashMap<>();
+        tmp.put("x",58F);
+        tmp.put("y",200F);
+        List<HashMap<String, Float>> testLocationList = new ArrayList<>();
+        testLocationList.add(tmp);
+        Population testPopulation = new Population("success", uuid, 1);
+        testPopulation.setLocation_list(testLocationList);
+
+        return response.locationResponse(testPopulation);
     }
 
     /**
@@ -159,7 +168,13 @@ public class AppController {
         }
         return response.routeResponse("success", coordinates);
         */
-        return "{\"status\":\"success\",\"coordinates\":[ {\"x\": 96, \"y\": 192},{\"x\": 97,\"y\": 193}]}";
+        return "{\"status\":\"success\",\"coordinates\":[" +
+                " {\"x\": 58, \"y\": 200}," +
+                "{\"x\": 73,\"y\": 184}," +
+                "{\"x\": 98,\"y\": 200}," +
+                "{\"x\": 120,\"y\": 201}," +
+                "{\"x\": 122,\"y\": 35}," +
+                "]}";
     }
 
     /**
