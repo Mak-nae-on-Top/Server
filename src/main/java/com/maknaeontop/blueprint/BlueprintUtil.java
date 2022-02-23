@@ -6,11 +6,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class BlueprintUtil {
     private final String PATH_PREFIX = "/home/ubuntu/image/blueprint/";
+    private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
     private final String EXTENSION = ".txt";
 
     private final ProcessBuilder processBuilder = new ProcessBuilder();
@@ -78,8 +80,12 @@ public class BlueprintUtil {
      * @return          true if creating map is successful
      */
     public boolean createMap(String pathName) {
+        List<String> args = new ArrayList<>();
+        args.add(PYTHON_MODULE_PATH+"convertImageToMap.py");
+        args.add(pathName);
+
         try {
-            processBuilder.executeConvertImageToMapModule(pathName);
+            processBuilder.buildProcess(args);
         }catch (Exception e){
             System.out.println("create map error: "+e.toString());
             return false;
@@ -99,11 +105,12 @@ public class BlueprintUtil {
      * @throws InterruptedException
      */
     public String getRoute(List<String> location, List<String> roomList, String uuid, String floor) throws IOException, InterruptedException {
-        String locationString = location.toString().replace(" ","");
-        String roomListString = roomList.toString().replace(" ","");
-        String imagePathString = getImageFilePath(uuid, floor);
-        //String imagePathString = "C:/Users/namu/Desktop/test/image.txt";
-        return processBuilder.executeFindRouteModule(locationString, roomListString, imagePathString);
+        List<String> args = new ArrayList<>();
+        args.add(location.toString().replace(" ",""));
+        args.add(roomList.toString().replace(" ",""));
+        args.add(getImageFilePath(uuid, floor));
+
+        return processBuilder.buildProcess(args);
     }
 
     /**
