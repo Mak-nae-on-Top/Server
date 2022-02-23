@@ -190,7 +190,7 @@ public class AppController {
         tmp6.put("y", 35F);
         tmp.add(tmp6);
 
-        return response.routeResponse("success", tmp.toString());
+        return response.routeResponse(tmp);
     }
 
     /**
