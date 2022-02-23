@@ -1,7 +1,5 @@
 package com.maknaeontop.blueprint;
 
-import com.google.gson.Gson;
-import com.maknaeontop.dto.CoordinateList;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 import java.io.BufferedReader;
@@ -14,21 +12,41 @@ import java.util.List;
 public class HttpRequest {
     private static final String BASE_URL = "http://18.224.181.65:5000/";
 
+    /**
+     * Method to request http for find route.
+     *
+     * @param userList  the users location list
+     * @param roomList  the rooms location list
+     * @param path      the file path
+     * @return          the coordinate of route
+     */
     public List<HashMap<String, Float>> findRoute(String userList, String roomList, String path){
         List<String> paramList = new ArrayList<>();
         paramList.add("ul="+userList);
         paramList.add("rl="+roomList);
         paramList.add("path="+path);
         String param = paramBuilder(paramList);
-        String response = testHttpRequest(BASE_URL+"findRoute?"+param);
+        String response = httpRequest(BASE_URL+"findRoute?"+param);
         return stringToArray(response);
 
     }
 
+    /**
+     * Method to http request for convert image to map.
+     *
+     * @param path      the file path
+     * @return          true if there is no error
+     */
     public String convertImageToMap(String path){
-        return testHttpRequest(BASE_URL+"convertImageToMap?"+path);
+        return httpRequest(BASE_URL+"convertImageToMap?"+path);
     }
 
+    /**
+     * Method to convert string to array.
+     *
+     * @param targetString  the target string
+     * @return              converted array
+     */
     private List<HashMap<String, Float>> stringToArray(String targetString){
         List<HashMap<String, Float>> newList = new ArrayList<>();
         String replacedString = targetString.replaceAll("(\r\n|\r|\n|\n\r|\\p{Z}|\\t|\t)", "");
@@ -46,6 +64,12 @@ public class HttpRequest {
         return newList;
     }
 
+    /**
+     * Method to build param string.
+     *
+     * @param params    the list of params
+     * @return          the built param string
+     */
     private String paramBuilder(List<String> params){
         StringBuilder sb = new StringBuilder();
         sb.append(params.get(0));
@@ -56,7 +80,13 @@ public class HttpRequest {
         return sb.toString();
     }
 
-    public static String testHttpRequest(String targetUrl) {
+    /**
+     * Method to request other server.
+     *
+     * @param targetUrl     the target url
+     * @return              the response
+     */
+    public static String httpRequest(String targetUrl) {
         HttpURLConnection connection = null;
 
         try {
