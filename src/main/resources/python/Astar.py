@@ -1,15 +1,13 @@
-import sys
-
-from PIL.Image import Image
+import PIL.Image as Image
 import cv2 as cv
 import json
-import io
+import numpy as np
 import base64
 from PIL import ImageFile
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-UL = sys.argv[1]
-RL = sys.argv[2]
+UL = '[0:0]'
+RL = '[1:1,0:1]'
 
 
 def read_img(file_path):
@@ -17,19 +15,22 @@ def read_img(file_path):
     blueprint = [] #0 is path, 1is block
     base64_data = open(file_path,'r').read()
     b = base64.b64decode(base64_data)
-    img = cv.imread(io.BytesIO(b))
+    nparr = np.fromstring(b,np.uint8)
+    img = cv.imdecode(nparr,cv.IMREAD_COLOR)
     Img = img.tolist()
-    image1 = Image.open(io.BytesIO(b))
-    X,Y = image1.size[0], image1.size[1]
+    X,Y = len(Img[1]),len(Img)
     for y in range(Y):
         for x in range(X):
             if Img[y][x] == [255,255,255]:
                 temp.append(0)
-        else:
+            else:
                 temp.append(1)
         blueprint.append(temp)
     temp = []
     return blueprint
+
+    
+    
 
 
 class Node:
@@ -166,5 +167,5 @@ def startAstar(file_path):
         data.append({'x':ax[i],'y':ay[i]})
     return (json.dumps(data,ensure_ascii=False,indent='\t'))
 if __name__ == '__main__':
-    file_path = sys.argv[3]
+    file_path = '/Users/sunminsu/study/Purdue_code/image.txt'
     print(startAstar(file_path))
