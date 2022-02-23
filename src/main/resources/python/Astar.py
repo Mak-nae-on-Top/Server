@@ -167,7 +167,7 @@ def startAstar(file_path):
         fstpath.append(tuple(4*elem for elem in i))
     user = UseRomListist(UL)
     for i in user:
-        w +=fstpath.count(i)
+        w +=(fstpath.count(i)**2)//2
     comp = w + len(fstpath)
     w = 0
     for i in range(1,len(Compare())):
@@ -177,7 +177,7 @@ def startAstar(file_path):
             rpath.append(tuple(4*elem for elem in i))
         user = UseRomListist(UL)
         for i in user:
-            w +=fstpath.count(i)
+            w +=(fstpath.count(i)**2)//2
         if comp> w+len(rpath):
             answer = rpath
         else:
