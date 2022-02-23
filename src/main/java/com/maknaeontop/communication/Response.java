@@ -47,12 +47,8 @@ public class Response {
         return gson.toJson(jsonObject);
     }
 
-    public String routeResponse(String status, String route){
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("status", status);
-        jsonObject.addProperty("coordinates", route);
-
-        return gson.toJson(jsonObject);
+    public String routeResponse(List<HashMap<String, Float>> route){
+        return gson.toJson(route);
     }
 
     public String testResponse(String test){
