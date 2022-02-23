@@ -13,6 +13,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JwtTokenUtil is a class in which methods to retrieve desired information
+ * using tokens are implemented.
+ */
 @Component
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = 1845785136697313752L;

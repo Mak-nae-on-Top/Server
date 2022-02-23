@@ -14,6 +14,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * FireAlarmController is the controller for the functions
+ * that communicate with the app.
+ */
 @RestController
 @AllArgsConstructor
 public class FireAlarmController {

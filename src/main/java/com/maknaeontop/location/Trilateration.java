@@ -5,6 +5,10 @@ import com.maknaeontop.dto.Beacon;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Trilateration is a class that finds the user's location
+ * using trilateration and measured beacon lists.
+ */
 public class Trilateration {
     /**
      * Method to calculate user coordinates through trilateration.

@@ -1,15 +1,15 @@
 package com.maknaeontop.communication.websocket;
 
-import com.maknaeontop.communication.websocket.MessageRepository;
+
 import com.maknaeontop.dto.Message;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * WebSocketRoom is the class that implements the action to be performed according to the type of message.
+ */
 public class WebSocketRoom {
     private final Set<WebSocketSession> webSocketSessionSet = new HashSet<>();
 

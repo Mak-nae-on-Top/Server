@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * PopulationService is a class that implements methods declared in populationMapper.
+ * There are methods related to accessing the population table.
+ */
 @Service
 public class PopulationService {
     private PopulationMapper populationMapper;

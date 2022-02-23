@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
+/**
+ * TrilaterationModelService is a class that implements methods declared in TrilaterationModelMapper.
+ * There are methods related to accessing the trilateration_model table.
+ */
 @Service
 @AllArgsConstructor
 public class TrilaterationModelService {

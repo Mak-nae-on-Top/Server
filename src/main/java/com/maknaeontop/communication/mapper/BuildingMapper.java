@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * BuildingMapper is an interface of methods that connect to the building table of DB.
+ */
 @Mapper
 @Repository
 public interface BuildingMapper {

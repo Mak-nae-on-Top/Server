@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * HttpRequest is a class for http request.
+ * Image processing and path finding are called through this class.
+ */
 public class HttpRequest {
     private static final String BASE_URL = "http://18.224.181.65:5000/";
 
@@ -96,8 +100,8 @@ public class HttpRequest {
 
             connection.setRequestMethod("GET");
 
-            connection.setUseCaches(false);// 캐싱데이터를 받을지 말지 세팅합니다.
-            connection.setDoOutput(true); // 쓰기모드를 지정할지 세팅합니다.
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
 
             int responseCode = connection.getResponseCode();
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -107,9 +111,6 @@ public class HttpRequest {
                 response.append(inputLine);
             }
             in.close();
-            // print result
-            System.out.println("HTTP 응답 코드 : " + responseCode);
-            System.out.println("HTTP body : " + response.toString());
 
             return response.toString();
         } catch (Exception e) {

@@ -1,13 +1,13 @@
 package com.maknaeontop.location;
 
-import com.maknaeontop.communication.sevice.BeaconService;
 import com.maknaeontop.dto.Beacon;
-import com.maknaeontop.dto.InitRequest;
-import lombok.AllArgsConstructor;
-
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Location is a class that obtains the user's location using the beacon list.
+ * In this study, it is calculated by calling the trilateration class.
+ */
 public class Location {
 
     private Trilateration trilateration = Trilateration.getInstance();

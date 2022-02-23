@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * RoomListOnFloor is a class
+ * including a list of room information on one floor, building information, and uuid.
+ */
 @Getter
 @Setter
 public class RoomListOnFloor {

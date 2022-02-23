@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * PopulationMapper is an interface of methods that connect to the population table of DB.
+ */
 @Mapper
 @Repository
 public interface PopulationMapper {

@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * EnterBeaconRequest is a dto class that includes beacon information, uuid, and floor information.
+ */
 @Getter
 @Setter
 public class EnterBeaconRequest {

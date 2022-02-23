@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * BeaconService is a class that implements methods declared in beaconMapper.
+ * There are methods related to accessing the beacon table.
+ */
 @Service
 public class BeaconService {
     private static BeaconMapper beaconMapper;
