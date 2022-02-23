@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * BuildingService is a class that implements methods declared in buildingMapper.
+ * There are methods related to accessing the building table.
+ */
 @Service
 public class BuildingService {
     private static BuildingMapper buildingMapper;

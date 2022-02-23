@@ -7,6 +7,10 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * FloorInfo dto class that contains information about the building
+ * and a base64-encoded image of its floor.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

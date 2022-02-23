@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 
+/**
+ * TrilaterationModelMapper is an interface of methods that connect to the trilateration_model table of DB.
+ */
 @Mapper
 @Repository
 public interface TrilaterationModelMapper {

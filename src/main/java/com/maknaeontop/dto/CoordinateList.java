@@ -3,9 +3,9 @@ package com.maknaeontop.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.List;
-
+/**
+ * Coordinate is a dto class used when communicating using coordinates.
+ */
 @Getter
 @Setter
 public class CoordinateList {

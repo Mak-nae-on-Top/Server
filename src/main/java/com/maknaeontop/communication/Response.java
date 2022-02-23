@@ -2,14 +2,15 @@ package com.maknaeontop.communication;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.maknaeontop.dto.CoordinateList;
 import com.maknaeontop.dto.FloorInfo;
 import com.maknaeontop.dto.Population;
-
-import java.awt.image.Kernel;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Response is a class that creates a message to deliver the response value to the object
+ * that sent the http request.
+ */
 public class Response {
     Gson gson = new Gson();
 

@@ -1,7 +1,6 @@
 package com.maknaeontop.blueprint;
 
 import com.maknaeontop.dto.Base64Image;
-import com.maknaeontop.dto.CoordinateList;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,11 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * BlueprintUtil class that implements methods related to the blueprint.
+ */
 public class BlueprintUtil {
     private final String PATH_PREFIX = "/home/ubuntu/image/blueprint/";
-    //private final String PATH_PREFIX = "C:/Users/namu/Desktop/test/";
     private final String PYTHON_MODULE_PATH = "/home/ubuntu/Server/src/main/resources/python/";
-    //private final String PYTHON_MODULE_PATH = "C:/Users/namu/Documents/gitWorkspace/Server/src/main/resources/python/";
     private final String EXTENSION = ".txt";
 
     private final ProcessBuilder processBuilder = new ProcessBuilder();

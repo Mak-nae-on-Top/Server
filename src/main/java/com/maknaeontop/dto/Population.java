@@ -6,6 +6,9 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Population is a class for storing user list.
+ */
 @Setter
 @Getter
 public class Population {

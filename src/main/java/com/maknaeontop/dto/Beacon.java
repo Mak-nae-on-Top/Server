@@ -3,6 +3,9 @@ package com.maknaeontop.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Beacon is a dto class used when communicating using beacon information.
+ */
 @Setter
 @Getter
 public class Beacon {

@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * AppController is the controller for the functions
+ * that communicate with the app.
+ */
 @RestController
 @RequestMapping("app")
 @AllArgsConstructor
@@ -87,14 +91,14 @@ public class AppController {
 
         String uuid = beaconList.get(0).getUuid();
 
-        // 비콘들의 xy정보 가져와서 저장 및 uuid, floor 추출
-        // 0번째 비콘과 같은 층의 비콘들의 좌표 3개만 가져옴. 3개 미만이면 null 반환
+        // Get and store the xy information of beacons and extract uuid and floor
+        // Get only 3 coordinates of the beacons on the same floor as the 0th beacon. Returns null if less than 3
         List<Beacon> beaconListIncludeLocation = beaconService.loadBeaconLocation(uuid, beaconList);
-        // 리스트 사이즈가 3보다 작으면 fail
+        // fail if list size is less than 3
         if(beaconListIncludeLocation == null) return response.statusResponse("fail", "beacon wasn't searched enough");
         int floor = Integer.parseInt(beaconListIncludeLocation.get(0).getFloor());
 
-        // 사용자 위치 계산 with 모델
+        //Calculate user location with model
         HashMap<String, Float> constants = trilaterationModelService.selectConstants(uuid);
         HashMap<String, Float> userLocation;
         if(constants != null){
@@ -102,22 +106,12 @@ public class AppController {
         }else {
             userLocation = location.calculateUserLocation(beaconListIncludeLocation);
         }
-        // 사용자 위치 저장 후 같은 층 사람들 위치 반환 (사용자 위치가 0번째)
         List<HashMap<String, Float>> locationList = populationService.selectCoordinateAfterInsert(deviceId, uuid, userLocation.get("x"), userLocation.get("y"), floor);
 
         Population population = new Population("success", uuid, floor);
         population.setLocation_list(locationList);
 
-        //for test
-        HashMap<String, Float> tmp = new HashMap<>();
-        tmp.put("x",58F);
-        tmp.put("y",200F);
-        List<HashMap<String, Float>> testLocationList = new ArrayList<>();
-        testLocationList.add(tmp);
-        Population testPopulation = new Population("success", uuid, 1);
-        testPopulation.setLocation_list(testLocationList);
-
-        return response.locationResponse(testPopulation);
+        return response.locationResponse(population);
     }
 
     /**
@@ -146,12 +140,11 @@ public class AppController {
     public String loadRoute(@RequestBody RouteRequest routeRequest, HttpServletRequest request) throws IOException, InterruptedException {
         final String deviceId = request.getHeader("Device");
 
-        // 사용자와 같은 건물,층에 있는 모든 사용자를 가져오되, 사용자가 0번째가 되도록
+        //Get all users in the same building/floor as the user, but make the user 0
         List<Coordinate> location = populationService.selectCoordinateInSameFloor(routeRequest.getUuid(), Integer.parseInt(routeRequest.getFloor()), deviceId);
-        // 목적지 리스트 가져오기 - 사용자 uuid, floor, 목적지이름을 통해서
+        // Get destination list - through user uuid, floor, destination name
         List<Coordinate> roomList = roomService.selectCoordinateByUuidAndFloorAndRoomName(routeRequest);
 
-        // TODO: for문 말고 다른방법은 없을까?
         List<String> locationArray = new ArrayList<>();
         List<String> roomArray = new ArrayList<>();
         for(Coordinate coordinate:location){
@@ -180,9 +173,9 @@ public class AppController {
     public String saveMap(@RequestBody Base64Image base64Image, HttpServletRequest request) throws IOException {
         String id = jwtTokenUtil.getIdFromToken(request);
         HashMap<String, Integer> floorRange = buildingService.selectFloorRangeByUuid(base64Image.getUuid());
-        if(floorRange == null){ // 새로 등록하는 빌딩인 경우
+        if(floorRange == null){ // In the case of a newly registered building
             messageRepository.createRoom(base64Image.getUuid(), new WebSocketRoom());
-        }else { // 기존에 존재하는 빌딩을 수정하는 경우
+        }else { // When modifying an existing building
             if(floorRange.get("lowest_floor") > Integer.parseInt(base64Image.getFloor())){
                 buildingService.updateLowestFloor(base64Image.getUuid(), base64Image.getFloor());
             }
@@ -219,9 +212,9 @@ public class AppController {
      */
     @PostMapping("/manager/deleteFloor")
     public String deleteFloor(@RequestBody UuidAndFloor uuidAndFloor){
-        // 이미지 찾아서 지우기
+        // Find and delete images
         blueprintUtil.deleteMap(uuidAndFloor.getUuid(), uuidAndFloor.getFloor());
-        // 디비에서 지우기
+        // delete from db
         beaconService.deleteByUuidAndFloor(uuidAndFloor);       // beacon table
         buildingService.deleteFloor(uuidAndFloor);              // building table
         roomService.deleteByUuidAndFloor(uuidAndFloor);         // room table
@@ -252,21 +245,21 @@ public class AppController {
     @PostMapping("/manager/loadAllMap")
     public String loadAllMap(HttpServletRequest request) {
         String id = jwtTokenUtil.getIdFromToken(request);
-        List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);   // 빌딩 리스트 가져오기
+        List<HashMap<String, Object>> buildingList = buildingService.selectByManager(id);   // Get Building List
         List<FloorInfo> mapList = new ArrayList<>();
 
-        for(HashMap<String, Object> buildingHashMap : buildingList){    // 빌딩 돌면서 uuid, 건물이름, 가장 낮은층, 가장 높은층 가져오기
+        for(HashMap<String, Object> buildingHashMap : buildingList){    // Go around the building and get the uuid, building name, lowest floor, highest floor
             String uuid = buildingHashMap.get("uuid").toString();
             String buildingName = buildingHashMap.get("name").toString();
             int lowestFloor = (int) buildingHashMap.get("lowest_floor");
             int highestFloor = (int) buildingHashMap.get("highest_floor");
 
-            for(int floor=lowestFloor; floor<=highestFloor;floor++){    // 건물 각 층 돌면서
+            for(int floor=lowestFloor; floor<=highestFloor;floor++){
                 try {
-                    List<HashMap<String, Object>> beaconInfo = beaconService.selectByUuidAndFloor(uuid, floor); // 비콘 리스트 가져오기
-                    List<HashMap<String, Object>> coordinate = roomService.selectByUuidAndFloor(uuid, floor);   // 각 층별 방 정보(x, y, roomName, id) 가져오기
+                    List<HashMap<String, Object>> beaconInfo = beaconService.selectByUuidAndFloor(uuid, floor); //Get beacon list
+                    List<HashMap<String, Object>> coordinate = roomService.selectByUuidAndFloor(uuid, floor);   // Get room information (x, y, roomName, id) for each floor
                     String base64Image = blueprintUtil.loadImage(uuid, Integer.toString(floor));
-                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, coordinate, beaconInfo); // 싹 다 저장
+                    FloorInfo floorInfo = new FloorInfo(uuid, buildingName, Integer.toString(floor), base64Image, coordinate, beaconInfo); // Save all
                     mapList.add(floorInfo);
                 }catch (NullPointerException | IOException e){
                     continue;

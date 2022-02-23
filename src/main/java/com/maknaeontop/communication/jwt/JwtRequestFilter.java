@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * JwtRequestFilter is a class related to verifying a token
+ * when a communication request is made in an app.
+ */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired

@@ -3,9 +3,12 @@ package com.maknaeontop.blueprint;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ProcessBuilder is a class for creating sub-processes in the server
+ * and executing .py files related to image processing.
+ */
 public class ProcessBuilder {
     /**
      * Method to generate and execute a sub-process with arg.

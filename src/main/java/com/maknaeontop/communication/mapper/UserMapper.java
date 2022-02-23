@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * UserMapper is an interface of methods that connect to the user table of DB.
+ */
 @Mapper
 @Repository
 public interface UserMapper {

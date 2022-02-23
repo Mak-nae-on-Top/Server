@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+/**
+ * UserService is a class that implements methods declared in UserMapper.
+ * There are methods related to accessing the user table.
+ */
 @Service
 public class UserService implements UserDetailsService {
     private static UserMapper userMapper;

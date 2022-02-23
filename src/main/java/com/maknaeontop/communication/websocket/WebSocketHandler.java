@@ -12,6 +12,10 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class extends TextWebSocketHandler and runs when a message is received through WebSocket.
+ * How to handle messages is implemented.
+ */
 @Component
 @AllArgsConstructor
 public class WebSocketHandler extends TextWebSocketHandler {
