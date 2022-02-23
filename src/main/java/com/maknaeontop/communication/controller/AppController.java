@@ -168,13 +168,29 @@ public class AppController {
         }
         return response.routeResponse("success", coordinates);
         */
-        return "{\"status\":\"success\",\"coordinates\":[" +
-                " {\"x\": 58, \"y\": 200}," +
-                "{\"x\": 73,\"y\": 184}," +
-                "{\"x\": 98,\"y\": 200}," +
-                "{\"x\": 120,\"y\": 201}," +
-                "{\"x\": 122,\"y\": 35}," +
-                "]}";
+        List<HashMap<String, Float>> tmp = new ArrayList<>();
+        HashMap<String, Float> tmp2 = new HashMap<>();
+        tmp2.put("x", 58F);
+        tmp2.put("y", 200F);
+        tmp.add(tmp2);
+        HashMap<String, Float> tmp3 = new HashMap<>();
+        tmp3.put("x", 73F);
+        tmp3.put("y", 184F);
+        tmp.add(tmp3);
+        HashMap<String, Float> tmp4 = new HashMap<>();
+        tmp4.put("x", 98F);
+        tmp4.put("y", 200F);
+        tmp.add(tmp4);
+        HashMap<String, Float> tmp5 = new HashMap<>();
+        tmp5.put("x", 120F);
+        tmp5.put("y", 201F);
+        tmp.add(tmp5);
+        HashMap<String, Float> tmp6 = new HashMap<>();
+        tmp6.put("x", 122F);
+        tmp6.put("y", 35F);
+        tmp.add(tmp6);
+
+        return response.routeResponse("success", tmp.toString());
     }
 
     /**
