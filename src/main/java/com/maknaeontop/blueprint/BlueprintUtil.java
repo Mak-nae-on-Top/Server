@@ -106,6 +106,7 @@ public class BlueprintUtil {
      */
     public String getRoute(List<String> location, List<String> roomList, String uuid, String floor) throws IOException, InterruptedException {
         List<String> args = new ArrayList<>();
+        args.add(PYTHON_MODULE_PATH+"Astar.py");
         args.add(location.toString().replace(" ",""));
         args.add(roomList.toString().replace(" ",""));
         args.add(getImageFilePath(uuid, floor));
